@@ -1,24 +1,3 @@
-# SIBEM Web
-
-Sistema para Inventário de Bens Móveis (CCB) — versão web. Laravel 10 com multi-banco (global `sibem_adm` + bancos locais por administração).
-
-## Configuração
-
-1. **Banco global:** Configure `.env` com `DB_DATABASE=sibem_adm` (e host/usuário/senha do MySQL).
-2. **Tabelas:** Crie as tabelas no `sibem_adm` conforme o schema oficial (usuarios, perfis, usuario_perfil, admrg, admlc, usuario_admlc, setores, igrejas, dependencias, logs). Crie também os bancos locais (ex.: sibem_cps) com bens, igrejas, inventarios, inventario_detalhes, versiculos.
-3. **Rotas:** Login → Selecionar administração (se mais de uma ADMLC) → Dashboard (com conexão tenant ativa).
-
-## O que foi implementado (Etapas 1 e 2)
-
-- **Conexão tenant:** `config/database.php` com conexão `tenant`; `TenantConnectionService` para configurar em runtime com `admlc.database_name`.
-- **Middleware:** `EnsureTenantConnection` — exige `session('id_admlc_ativo')` e configura tenant; alias `tenant` nas rotas.
-- **Models globais:** Usuario, Admlc, Admrg, Perfil, Igreja, Setor, Dependencia, LogSibem (tabela `logs`).
-- **Models tenant:** `App\Models\Tenant\Bem`, Igreja (espelho), Inventario, InventarioDetalhe.
-- **Auth:** Provider usa `App\Models\Usuario` (tabela `usuarios`).
-- **Telas:** Login, Selecionar administração, Dashboard (com “Trocar administração”).
-
----
-
 <p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
 
 <p align="center">
