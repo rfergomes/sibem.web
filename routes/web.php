@@ -59,6 +59,14 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/bens-import', [App\Http\Controllers\BemController::class, 'showImportForm'])->name('bens.import');
     Route::post('/bens-import', [App\Http\Controllers\BemController::class, 'import'])->name('bens.import.post');
 
+    // SIGA Reports Routes (Section 14)
+    Route::get('/report/14-3/{detalheId}', [App\Http\Controllers\ReportController::class, 'generate143'])->name('report.14-3');
+    Route::get('/report/14-4/{detalheId}', [App\Http\Controllers\ReportController::class, 'generate144'])->name('report.14-4');
+    Route::get('/report/14-5/{inventarioId}', [App\Http\Controllers\ReportController::class, 'generate145'])->name('report.14-5');
+    Route::get('/report/14-6/{detalheId}', [App\Http\Controllers\ReportController::class, 'generate146'])->name('report.14-6');
+    Route::get('/report/14-7/{detalheId}', [App\Http\Controllers\ReportController::class, 'generate147'])->name('report.14-7');
+    Route::get('/report/14-8/{inventarioId}', [App\Http\Controllers\ReportController::class, 'generate148'])->name('report.14-8');
+
     // Profile Routes (Access for all authenticated users)
     Route::get('/profile', [App\Http\Controllers\ProfileController::class, 'edit'])->name('profile.edit');
     Route::put('/profile', [App\Http\Controllers\ProfileController::class, 'update'])->name('profile.update');

@@ -22,7 +22,13 @@ class Inventario extends Model
         'is_sincronizado',
         'user_id_abertura',
         'responsavel',
-        'inventariante'
+        'inventariante',
+        'documentos_gerados'
+    ];
+
+    protected $casts = [
+        'is_sincronizado' => 'boolean',
+        'documentos_gerados' => 'array'
     ];
 
     public function detalhes()

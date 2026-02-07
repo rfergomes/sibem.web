@@ -100,6 +100,7 @@ class ScanningController extends Controller
         $ids = $request->detalhe_ids;
         $tratativa = $request->tratativa;
         $observacao = $request->observacao;
+        $generatedForms = [];
 
         DB::connection('tenant')->beginTransaction();
 
@@ -188,6 +189,24 @@ class ScanningController extends Controller
                 }
 
                 $detalhe->save();
+
+                // Logic to Suggest Forms based on Tratativa
+                if ($tratativa === 'excluir') {
+                    $generatedForms[] = [
+                        'label' => "Termo de Saída (14.3) - Item #{$detalhe->id_bem}",
+                        'url' => route('report.14-3', $detalheId)
+                    ];
+                } elseif ($tratativa === 'transferir') {
+                    $generatedForms[] = [
+                        'label' => "Mov. Interna (14.7) - Item #{$detalhe->id_bem}",
+                        'url' => route('report.14-7', $detalheId)
+                    ];
+                } elseif ($tratativa === 'alterar') {
+                    $generatedForms[] = [
+                        'label' => "Alteração (14.6) - Item #{$detalhe->id_bem}",
+                        'url' => route('report.14-6', $detalheId)
+                    ];
+                }
             }
 
             DB::connection('tenant')->commit();
@@ -209,7 +228,8 @@ class ScanningController extends Controller
             return response()->json([
                 'status' => 'success',
                 'message' => $count > 1 ? "{$count} tratativas salvas com sucesso." : 'Tratativa salva com sucesso.',
-                'donation_pdfs' => $donationPdfs
+                'donation_pdfs' => $donationPdfs,
+                'generated_forms' => $generatedForms
             ]);
 
         } catch (\Exception $e) {

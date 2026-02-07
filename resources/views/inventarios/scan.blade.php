@@ -616,7 +616,24 @@
                                     `,
                                     confirmButtonText: 'OK'
                                 });
-                            } else {
+                            } 
+                            
+                            // Handle Generated Forms (14.3, 14.6, 14.7)
+                            if (data.generated_forms && data.generated_forms.length > 0) {
+                                let formHtml = '<div class="bg-gray-50 p-4 rounded border border-gray-200 text-left mt-4">';
+                                formHtml += '<p class="font-bold text-sm mb-2 text-gray-700">📄 Documentos Sugeridos:</p>';
+                                data.generated_forms.forEach(f => {
+                                    formHtml += `<a href="${f.url}" target="_blank" class="block bg-gray-700 text-white px-4 py-2 rounded mb-2 hover:bg-black text-[10px] font-bold uppercase transition">📥 ${f.label}</a>`;
+                                });
+                                formHtml += '</div>';
+
+                                Swal.fire({
+                                    icon: 'info',
+                                    title: 'Tratativa Registrada',
+                                    html: `<p>${data.message}</p>` + formHtml,
+                                    confirmButtonText: 'Fechar'
+                                });
+                            } else if (!data.donation_pdfs) {
                                 Toast.fire({ icon: 'success', title: data.message, timer: 1500 });
                             }
 

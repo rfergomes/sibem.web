@@ -20,7 +20,15 @@ class InventarioDetalhe extends Model
         'observacao',
         'id_dependencia_original',
         'user_id_conferencia',
-        'timestamp_leitura'
+        'timestamp_leitura',
+        'is_doacao',
+        'documento_doacao_path',
+        'documentos_gerados'
+    ];
+
+    protected $casts = [
+        'is_doacao' => 'boolean',
+        'documentos_gerados' => 'array'
     ];
 
     public function bem()
