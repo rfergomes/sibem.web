@@ -153,18 +153,16 @@ class ScanningController extends Controller
 
                             // Prepare data for PDF
                             $inventario = Inventario::findOrFail($id);
+                            $headerData = $inventario->header_data;
                             $dependencia = \App\Models\Dependencia::find($request->nova_dependencia);
 
-                            $pdfData = [
+                            $pdfData = array_merge($headerData, [
                                 'dataEmissao' => now()->format('d/m/Y'),
-                                'administracao' => 'CNPJ da Administração',
-                                'cidade' => $dependencia ? $dependencia->nome : 'N/A',
-                                'setor' => $inventario->id_dependencia ?? 'N/A',
                                 'descricaoBem' => strtoupper($request->nova_descricao),
                                 'localData' => ($dependencia ? $dependencia->nome : 'N/A') . ', ' . now()->format('d/m/Y'),
                                 'idBem' => $detalhe->id_bem,
                                 'dependencia' => $dependencia ? $dependencia->nome : 'N/A'
-                            ];
+                            ]);
 
                             // Create directory if not exists
                             $dir = storage_path("app/public/doacoes/{$id}");

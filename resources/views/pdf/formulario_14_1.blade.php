@@ -123,13 +123,23 @@
     <div class="section-title">A - LOCALIDADE RECEBEDORA</div>
     <table>
         <tr>
-            <th style="width: 50%;">Administração</th>
-            <th style="width: 30%;">Cidade</th>
-            <th style="width: 20%;">Setor</th>
+            <th style="width: 40%;">Administração / Localidade</th>
+            <th style="width: 20%;">Código SIGA</th>
+            <th style="width: 40%;">Cidade - UF</th>
         </tr>
         <tr>
-            <td>{{ $administracao }}</td>
-            <td>{{ $cidade }}</td>
+            <td>{{ $administracao }}<br><small>{{ $razao_social ?? '' }}</small></td>
+            <td>{{ $cod_siga ?? 'N/A' }}</td>
+            <td>{{ $cidade }} - {{ $uf ?? '' }}</td>
+        </tr>
+        <tr>
+            <th>CNPJ</th>
+            <th>Endereço</th>
+            <th>Setor</th>
+        </tr>
+        <tr>
+            <td>{{ $cnpj ?? '' }}</td>
+            <td>{{ $logradouro ?? '' }}, {{ $numero ?? '' }}</td>
             <td>{{ $setor }}</td>
         </tr>
     </table>

@@ -5,6 +5,8 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
+use App\Models\Igreja;
+use App\Models\Local;
 
 class Inventario extends Model
 {
@@ -36,17 +38,27 @@ class Inventario extends Model
         return $this->hasMany(InventarioDetalhe::class, 'inventario_id');
     }
 
-    // Helper to get global church name
-    public function getIgrejaNomeAttribute()
+    public function igreja()
     {
-        // Must dynamically query global DB
-        // NOTE: Ideally we replicate basic church info to tenant or cache it.
-        // For now, simple query to global:
-        $globalChurch = DB::connection('mysql')
-            ->table('igrejas_global')
-            ->where('id', $this->id_igreja) // Assuming id_igreja maps to global ID
-            ->first();
+        return $this->belongsTo(Igreja::class, 'id_igreja');
+    }
 
-        return $globalChurch ? $globalChurch->nome : "Igreja #{$this->id_igreja}";
+    public function getHeaderDataAttribute()
+    {
+        $igreja = $this->igreja;
+        $local = $igreja ? $igreja->local : null;
+
+        return [
+            'administracao' => $local ? $local->nome : 'Administração Desconhecida',
+            'codigo_ccb' => $igreja ? $igreja->codigo_ccb : 'N/A',
+            'cod_siga' => $igreja ? $igreja->cod_siga : 'N/A',
+            'razao_social' => $igreja->razao_social ?? $local->razao_social ?? 'RAZÃO SOCIAL NÃO CADASTRADA',
+            'cnpj' => $igreja->cnpj ?? $local->cnpj ?? 'CNPJ NÃO CADASTRADO',
+            'cidade' => $igreja->cidade ?? $local->cidade ?? 'Cidade N/A',
+            'uf' => $igreja->uf ?? $local->uf ?? 'UF',
+            'logradouro' => $igreja->logradouro ?? 'Logradouro N/A',
+            'numero' => $igreja->numero ?? 'S/N',
+            'setor' => $igreja->setor ?? 'Setor N/A'
+        ];
     }
 }

@@ -22,6 +22,23 @@ class AuthServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        //
+        $this->registerPolicies();
+
+        // Gates for CRUD permissions
+        // View is allowed for all authenticated users by default in the controller (or we can add a gate)
+
+        // Create/Edit: Perfil <= 3 (Admin Local, Regional, Sistema)
+        \Illuminate\Support\Facades\Gate::define('create', function ($user, $modelClass) {
+            return $user->perfil_id <= 3;
+        });
+
+        \Illuminate\Support\Facades\Gate::define('update', function ($user, $model) {
+            return $user->perfil_id <= 3;
+        });
+
+        // Delete: Perfil <= 2 (Admin Regional, Sistema)
+        \Illuminate\Support\Facades\Gate::define('delete', function ($user, $model) {
+            return $user->perfil_id <= 2;
+        });
     }
 }

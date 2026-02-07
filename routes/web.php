@@ -93,5 +93,16 @@ Route::middleware(['auth'])->group(function () {
 
         // Administration Switching
         Route::post('/admin/switch-local', [App\Http\Controllers\LocalSwitchController::class, 'switch'])->name('admin.switch-local');
+
+        // CRUD Cadastros
+        Route::resource('admin/igrejas', App\Http\Controllers\IgrejaController::class)
+            ->parameters(['igrejas' => 'igreja'])
+            ->names('igrejas');
+        Route::resource('admin/setores', App\Http\Controllers\SetorController::class)
+            ->parameters(['setores' => 'setor'])
+            ->names('setores');
+        Route::resource('admin/dependencias', App\Http\Controllers\DependenciaController::class)
+            ->parameters(['dependencias' => 'dependencia'])
+            ->names('dependencias');
     });
 });

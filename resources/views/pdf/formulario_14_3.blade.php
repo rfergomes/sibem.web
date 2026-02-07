@@ -72,12 +72,28 @@
         <div>{{ $titulo }} (Modelo SIGA {{ $form_code }})</div>
     </div>
 
-    <div class="section">
-        <h3>Identificação</h3>
-        <p><span class="label">Administração:</span> {{ $administracao }}</p>
-        <p><span class="label">Localidade/Setor:</span> {{ $setor }}</p>
-        <p><span class="label">Data de Emissão:</span> {{ $data_emissao }}</p>
-    </div>
+    <table style="margin-bottom: 20px;">
+        <tr>
+            <th style="width: 40%;">Administração / Localidade</th>
+            <th style="width: 20%;">Código SIGA</th>
+            <th style="width: 40%;">Cidade - UF</th>
+        </tr>
+        <tr>
+            <td>{{ $administracao }}<br><small>{{ $razao_social ?? '' }}</small></td>
+            <td>{{ $cod_siga ?? 'N/A' }}</td>
+            <td>{{ $cidade }} - {{ $uf ?? '' }}</td>
+        </tr>
+        <tr>
+            <th>CNPJ</th>
+            <th>Endereço</th>
+            <th>Setor</th>
+        </tr>
+        <tr>
+            <td>{{ $cnpj ?? '' }}</td>
+            <td>{{ $logradouro ?? '' }}, {{ $numero ?? '' }}</td>
+            <td>{{ $setor }}</td>
+        </tr>
+    </table>
 
     <div class="section">
         <h3>Dados do Bem</h3>

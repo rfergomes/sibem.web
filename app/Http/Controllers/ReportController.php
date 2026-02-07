@@ -37,19 +37,17 @@ class ReportController extends Controller
         $detalhe = InventarioDetalhe::with(['inventario', 'bem'])->findOrFail($detalheId);
         $inventario = $detalhe->inventario;
         $bem = $detalhe->bem;
+        $headerData = $inventario->header_data;
 
-        $data = [
+        $data = array_merge($headerData, [
             'titulo' => 'DECLARAÇÃO DE SAÍDA DE BENS MÓVEIS',
             'form_code' => '14.3',
-            'administracao' => 'CONGREGAÇÃO CRISTÃ NO BRASIL', // Should be dynamic based on config
-            'cidade' => $bem->dependencia->local->nome ?? 'N/A', // Assuming logic
-            'setor' => $inventario->inventory_code ?? 'Setor X',
             'data_emissao' => now()->format('d/m/Y'),
             'descricao_bem' => $bem->descricao,
             'motivo' => $detalhe->observacao ?? 'Descarte / Inservível',
             'responsavel' => $inventario->responsavel,
-            'local_data' => now()->format('d/m/Y'),
-        ];
+            'local_data' => ($headerData['cidade'] ?? 'Local') . ', ' . now()->format('d/m/Y'),
+        ]);
 
         $filename = "form_14_3_{$detalhe->id}_" . time() . ".pdf";
         $path = $this->generateAndStore('pdf.formulario_14_3', $data, $filename, $inventario->id);
@@ -69,13 +67,16 @@ class ReportController extends Controller
     public function generate144($detalheId)
     {
         $detalhe = InventarioDetalhe::with(['inventario', 'bem'])->findOrFail($detalheId);
-        $data = [
+        $inventario = $detalhe->inventario;
+        $headerData = $inventario->header_data;
+
+        $data = array_merge($headerData, [
             'titulo' => 'DECLARAÇÃO DE RETIRADA DE BEM',
             'form_code' => '14.4',
             'content' => 'Declaro que retirei o bem abaixo descrito para fins de manutenção/uso externo.',
             'bem' => $detalhe->bem->descricao,
             'data' => now()->format('d/m/Y'),
-        ];
+        ]);
 
         // Using a generic template for now, or specific 14.4
         $filename = "form_14_4_{$detalhe->id}_" . time() . ".pdf";
@@ -96,6 +97,7 @@ class ReportController extends Controller
     public function generate145($inventarioId)
     {
         $inventario = Inventario::with(['detalhes.bem'])->findOrFail($inventarioId);
+        $headerData = $inventario->header_data;
 
         // Calculate stats
         $totalItems = $inventario->detalhes->count();
@@ -103,13 +105,13 @@ class ReportController extends Controller
         $missing = $inventario->detalhes->where('status_leitura', 'nao_encontrado')->count();
         $new = $inventario->detalhes->where('status_leitura', 'novo_sistema')->count();
 
-        $data = [
+        $data = array_merge($headerData, [
             'titulo' => 'ATA DE INVENTÁRIO DE BENS MÓVEIS',
             'form_code' => '14.5',
             'inventario' => $inventario,
             'stats' => compact('totalItems', 'found', 'missing', 'new'),
             'data_emissao' => now()->format('d/m/Y'),
-        ];
+        ]);
 
         $filename = "ata_14_5_{$inventario->id}_" . time() . ".pdf";
         $path = $this->generateAndStore('pdf.formulario_14_5', $data, $filename, $inventario->id);
@@ -129,15 +131,17 @@ class ReportController extends Controller
     public function generate146($detalheId)
     {
         $detalhe = InventarioDetalhe::with(['inventario', 'bem'])->findOrFail($detalheId);
+        $inventario = $detalhe->inventario;
+        $headerData = $inventario->header_data;
 
-        $data = [
+        $data = array_merge($headerData, [
             'titulo' => 'ALTERAÇÃO DE CADASTRO DE BEM',
             'form_code' => '14.6',
             'bem_antigo' => 'Descrição Anterior (Historico)', // Ideally fetch from audit log if available
             'bem_novo' => $detalhe->bem->descricao,
             'motivo' => $detalhe->observacao,
             'data' => now()->format('d/m/Y'),
-        ];
+        ]);
 
         $filename = "form_14_6_{$detalhe->id}_" . time() . ".pdf";
         $path = $this->generateAndStore('pdf.formulario_14_6', $data, $filename, $detalhe->inventario_id);
@@ -157,17 +161,19 @@ class ReportController extends Controller
     public function generate147($detalheId)
     {
         $detalhe = InventarioDetalhe::with(['inventario', 'bem'])->findOrFail($detalheId);
+        $inventario = $detalhe->inventario;
+        $headerData = $inventario->header_data;
         // Logic to track from/to dependency is needed, usually found in Divergencia or logs
         // For now, using current dependency
 
-        $data = [
+        $data = array_merge($headerData, [
             'titulo' => 'MOVIMENTAÇÃO INTERNA DE BEM',
             'form_code' => '14.7',
             'bem' => $detalhe->bem,
             'origem' => 'Dependencia Anterior', // Placeholder
             'destino' => $detalhe->bem->id_dependencia,
             'data' => now()->format('d/m/Y'),
-        ];
+        ]);
 
         $filename = "form_14_7_{$detalhe->id}_" . time() . ".pdf";
         $path = $this->generateAndStore('pdf.formulario_14_7', $data, $filename, $detalhe->inventario_id);
@@ -187,6 +193,7 @@ class ReportController extends Controller
     public function generate148($inventarioId)
     {
         $inventario = Inventario::with(['detalhes.bem'])->findOrFail($inventarioId);
+        $headerData = $inventario->header_data;
 
         // Filter items that had movements
         // In this simplified logic, we take all 'novos' and 'encontrados' with divergence
@@ -196,14 +203,14 @@ class ReportController extends Controller
                     ->orWhere('observacao', 'like', '%Transferência%');
             })->get();
 
-        $data = [
+        $data = array_merge($headerData, [
             'titulo' => 'MOVIMENTO MENSAL DE BEM',
             'form_code' => '14.8',
             'items' => $items,
             'mes' => $inventario->mes,
             'ano' => $inventario->ano,
             'data' => now()->format('d/m/Y'),
-        ];
+        ]);
 
         $filename = "form_14_8_{$inventario->id}_" . time() . ".pdf";
         $path = $this->generateAndStore('pdf.formulario_14_8', $data, $filename, $inventario->id);
