@@ -40,7 +40,7 @@
                         <select name="regional_id" id="regional_id" required
                             class="w-full px-4 py-2.5 rounded-lg border border-gray-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 outline-none transition-all text-sm bg-white">
                             @foreach($regionais as $regional)
-                                <option value="{{ $regional->id }}" {{ old('regional_id', $local->regional_id) == $regional->id ? 'selected' : '' }}>{{ $regional->nome }}</option>
+                                <option value="{{ $regional->id }}" {{ old('regional_id', $local->regional_id) == $regional->id ? 'selected' : '' }}>{{ $regional->nome }} {{ $regional->uf ? '('.$regional->uf.')' : '' }}</option>
                             @endforeach
                         </select>
                     </div>

@@ -12,6 +12,9 @@
 
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="{{ asset('img/favicon.png') }}">
+
     <!-- Alpine.js -->
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
 
@@ -115,7 +118,8 @@
     </style>
 </head>
 
-<body class="h-full overflow-hidden font-sans text-gray-900 antialiased" x-data="{ sidebarOpen: false }">
+<body class="h-full overflow-hidden font-sans text-gray-900 antialiased"
+    x-data="{ sidebarOpen: window.innerWidth >= 768 }">
     <div class="flex h-screen bg-gray-50 overflow-hidden">
 
         <!-- Sidebar -->
@@ -126,8 +130,46 @@
             <!-- Top Header -->
             <x-header />
 
+            <!-- Subheader -->
+            <div
+                class="bg-gray-50 border-b border-gray-200 px-4 py-3 md:px-8 md:py-4 flex flex-col md:flex-row md:items-center justify-between gap-4 shrink-0">
+                <h1 class="font-bold text-gray-700 text-lg uppercase tracking-wider">@yield('title')</h1>
+                <nav class="flex text-gray-500 text-sm" aria-label="Breadcrumb">
+                    <ol role="list" class="flex items-center space-x-2">
+                        <li>
+                            <a href="{{ route('dashboard') }}" title="Dashboard"
+                                class="text-gray-400 hover:text-gray-600 transition-colors">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6">
+                                    </path>
+                                </svg>
+                            </a>
+                        </li>
+
+                        @if(isset($breadcrumbs))
+                            @foreach($breadcrumbs as $breadcrumb)
+                                <li>
+                                    <div class="flex items-center">
+                                        <svg class="w-4 h-4 text-gray-300 mx-1" fill="none" stroke="currentColor"
+                                            viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                d="M9 5l7 7-7 7"></path>
+                                        </svg>
+                                        <a href="{{ $breadcrumb['url'] }}"
+                                            class="text-sm font-medium {{ $breadcrumb['is_current'] ? 'text-gray-800 font-bold' : 'text-gray-500 hover:text-gray-700' }}">
+                                            {{ $breadcrumb['title'] }}
+                                        </a>
+                                    </div>
+                                </li>
+                            @endforeach
+                        @endif
+                    </ol>
+                </nav>
+            </div>
+
             <!-- View Content -->
-            <div class="flex-1 overflow-y-auto p-6">
+            <div class="flex-1 overflow-y-auto p-4 md:p-6 lg:p-8">
                 @yield('content')
             </div>
 

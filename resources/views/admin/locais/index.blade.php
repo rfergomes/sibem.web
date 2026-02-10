@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Administrações - SIBEM')
+@section('title', 'Administrações')
 
 @section('content')
     <div class="animate-fadeIn">
@@ -51,6 +51,7 @@
                         <h3 class="font-bold text-gray-900 text-lg mb-1">{{ $local->nome }}</h3>
                         <p class="text-xs text-gray-400 font-bold uppercase tracking-wider mb-4">
                             {{ $local->regional->nome ?? 'Regional não definida' }}
+                            {{ optional($local->regional)->uf ? '- ' . $local->regional->uf : '' }}
                         </p>
 
                         <div class="space-y-2 mb-6">

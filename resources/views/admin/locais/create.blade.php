@@ -46,7 +46,8 @@
                             <option value="">Selecione a Regional...</option>
                             @foreach($regionais as $regional)
                                 <option value="{{ $regional->id }}" {{ old('regional_id') == $regional->id ? 'selected' : '' }}>
-                                    {{ $regional->nome }}</option>
+                                    {{ $regional->nome }} {{ $regional->uf ? '(' . $regional->uf . ')' : '' }}
+                                </option>
                             @endforeach
                         </select>
                     </div>

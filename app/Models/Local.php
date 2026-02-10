@@ -14,6 +14,11 @@ class Local extends Model
     protected $fillable = [
         'regional_id',
         'nome',
+        'cidade',
+        'uf',
+        'cnpj',
+        'razao_social',
+        'status',
         'db_host',
         'db_name',
         'db_user',
