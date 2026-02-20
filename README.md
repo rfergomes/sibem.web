@@ -33,23 +33,31 @@ php artisan route:cache
 php artisan view:cache
 ```
 
-### 3. Links Simbólicos
-Garantir que os uploads e avatares funcionem:
+### 3. Links Simbólicos e Permissões
+Garantir que os uploads e avatares funcionem e que as pastas tenham permissões corretas:
 ```bash
 php artisan storage:link
+chmod -R 775 storage bootstrap/cache
 ```
 
 ### 4. Gerenciamento de Bancos (Multi-Tenancy)
 O SIBEM utiliza uma estrutura onde cada localidade possui seu próprio banco de dados de inventários (tenants).
-- O banco principal (`mysql`) contém dados globais (igrejas, usuários, locais).
+- O banco principal (`sibem_global` por padrão) contém dados globais (igrejas, usuários, locais).
 - Os bancos tenants são configurados dinamicamente via `TenancyMiddleware`.
 
-Certifique-se de que o usuário do banco no `.env` tenha permissão para acessar/criar os bancos de dados dos tenants.
+**Importante:** Certifique-se de que o usuário do banco no `.env` tenha permissões `GRANT ALL PRIVILEGES` ou pelo menos permissão para acessar todos os bancos de dados dos tenants configurados na tabela `locais`.
 
-### 5. Notificações Push
-Para o funcionamento das notificações em background, configure as chaves VAPID no `.env`:
+### 5. Notificações Push & SSL
+As notificações WebPush **exigem** HTTPS em produção. Sem SSL, o Service Worker não será registrado.
+Para gerar as chaves VAPID:
 ```bash
 php artisan webpush:vapid
+```
+
+### 6. Tarefas Agendadas (Cron)
+Para notificações de inventários abertos e outras automações, adicione o seguinte ao Crontab do servidor:
+```bash
+* * * * * cd /path-to-your-project && php artisan schedule:run >> /dev/null 2>&1
 ```
 
 ## Licença
