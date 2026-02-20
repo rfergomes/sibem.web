@@ -21,9 +21,9 @@
             @method('PUT')
 
             <div class="mb-4">
-                <label for="nome" class="block text-sm font-medium text-gray-700">Nome da Dependência</label>
+                <label for="nome" class="block text-xs font-bold text-gray-500 uppercase mb-2">Nome da Dependência</label>
                 <input type="text" name="nome" id="nome" value="{{ old('nome', $dependencia->nome) }}"
-                    class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+                    class="w-full bg-gray-50 border border-gray-200 rounded-xl focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 text-sm px-4 py-3 font-medium transition-all duration-300 placeholder-gray-400"
                     required>
             </div>
 
@@ -39,7 +39,7 @@
 
             <div class="flex items-center justify-end gap-4 mt-6 pt-4 border-t border-gray-100">
                 <a href="{{ route('dependencias.index') }}"
-                    class="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors">
+                    class="px-6 py-2.5 text-sm font-bold text-white bg-gray-500 hover:bg-gray-600 rounded-xl shadow-md hover:shadow-lg transition-all active:scale-95">
                     Cancelar
                 </a>
                 <button type="submit"

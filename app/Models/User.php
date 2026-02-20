@@ -7,10 +7,11 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
+use NotificationChannels\WebPush\HasPushSubscriptions;
 
 class User extends Authenticatable
 {
-    use HasApiTokens, HasFactory, Notifiable;
+    use HasApiTokens, HasFactory, Notifiable, HasPushSubscriptions;
 
     /**
      * The attributes that are mass assignable.
@@ -20,12 +21,15 @@ class User extends Authenticatable
     protected $fillable = [
         'nome',
         'email',
+        'avatar',
         'password',
         'perfil_id',
         'regional_id',
         'local_id',
+        'default_local_id',
         'active',
         'must_change_password',
+        'notification_settings',
     ];
 
     /**
@@ -46,6 +50,7 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
+        'notification_settings' => 'array',
     ];
     public function perfil()
     {
@@ -92,5 +97,25 @@ class User extends Authenticatable
     public function scopeActive($query)
     {
         return $query->where('active', true);
+    }
+
+    /**
+     * Get the avatar URL or null if not set.
+     */
+    public function getAvatarUrlAttribute()
+    {
+        return $this->avatar ? asset('storage/' . $this->avatar) : null;
+    }
+
+    /**
+     * Get user initials for avatar fallback.
+     */
+    public function getInitialsAttribute()
+    {
+        $words = explode(' ', trim($this->nome));
+        if (count($words) >= 2) {
+            return strtoupper($words[0][0] . $words[1][0]);
+        }
+        return strtoupper(substr($this->nome, 0, 2));
     }
 }

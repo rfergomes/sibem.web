@@ -31,28 +31,50 @@
                 </div>
                 <div class="p-6 grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div class="md:col-span-2">
-                        <label for="nome" class="block text-xs font-bold text-gray-700 uppercase mb-1">Nome da
+                        <label for="nome" class="block text-xs font-bold text-gray-500 uppercase mb-2">Nome da
                             Administração</label>
                         <input type="text" name="nome" id="nome" required value="{{ old('nome') }}"
-                            class="w-full px-4 py-2.5 rounded-lg border border-gray-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 outline-none transition-all placeholder-gray-400 text-sm"
+                            class="w-full bg-gray-50 border border-gray-200 rounded-xl focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 text-sm px-4 py-3 font-medium transition-all duration-300 placeholder-gray-400"
                             placeholder="Ex: Administração Campinas">
                     </div>
 
                     <div>
-                        <label for="regional_id" class="block text-xs font-bold text-gray-700 uppercase mb-1">Regional
+                        <label for="regional_id" class="block text-xs font-bold text-gray-500 uppercase mb-2">Regional
                             Vinculada</label>
                         <select name="regional_id" id="regional_id" required
-                            class="w-full px-4 py-2.5 rounded-lg border border-gray-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 outline-none transition-all text-sm bg-white">
+                            class="w-full bg-gray-50 border border-gray-200 rounded-xl focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 text-sm px-4 py-3 font-medium transition-all duration-300">
                             <option value="">Selecione a Regional...</option>
                             @foreach($regionais as $regional)
-                                <option value="{{ $regional->id }}" {{ old('regional_id') == $regional->id ? 'selected' : '' }}>
+                                <option value="{{ $regional->id }}" data-uf="{{ $regional->uf }}" {{ old('regional_id') == $regional->id ? 'selected' : '' }}>
                                     {{ $regional->nome }} {{ $regional->uf ? '(' . $regional->uf . ')' : '' }}
+                                </option>
+                            @endforeach
+                        </select>
+                        @if(auth()->user()->perfil_id == 2)
+                            <p class="text-xs text-blue-600 mt-1">Você só pode criar na sua Regional.</p>
+                        @endif
+                    </div>
+
+                    <div>
+                        <label for="cidade" class="block text-xs font-bold text-gray-500 uppercase mb-2">Cidade</label>
+                        <input type="text" name="cidade" id="cidade" required value="{{ old('cidade') }}"
+                            class="w-full bg-gray-50 border border-gray-200 rounded-xl focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 text-sm px-4 py-3 font-medium transition-all duration-300 placeholder-gray-400">
+                    </div>
+
+                    <div>
+                        <label for="uf" class="block text-xs font-bold text-gray-500 uppercase mb-2">UF (Estado)</label>
+                        <select name="uf" id="uf" required
+                            class="w-full bg-gray-50 border border-gray-200 rounded-xl focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 text-sm px-4 py-3 font-medium transition-all duration-300">
+                            <option value="">Selecione...</option>
+                            @foreach($ufs as $estado)
+                                <option value="{{ $estado['sigla'] }}" {{ old('uf') == $estado['sigla'] ? 'selected' : '' }}>
+                                    {{ $estado['nome'] }} ({{ $estado['sigla'] }})
                                 </option>
                             @endforeach
                         </select>
                     </div>
 
-                    <div class="flex items-center gap-4 pt-6">
+                    <div class="flex items-center gap-4 pt-6 md:col-span-2">
                         <label class="flex items-center gap-2 cursor-pointer">
                             <input type="checkbox" name="active" value="1" checked
                                 class="rounded border-gray-300 text-blue-600 focus:ring-blue-500/20">
@@ -61,6 +83,20 @@
                     </div>
                 </div>
             </div>
+
+            <script>
+                document.getElementById('regional_id').addEventListener('change', function () {
+                    const selected = this.options[this.selectedIndex];
+                    const ufInfo = selected.getAttribute('data-uf');
+                    const ufSelect = document.getElementById('uf');
+
+                    if (ufInfo) {
+                        ufSelect.value = ufInfo;
+                        // Optional: Lock field or visualize it's enforced
+                        // ufSelect.style.backgroundColor = '#f3f4f6';
+                    }
+                });
+            </script>
 
             <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
                 <div class="p-6 border-b border-gray-100 bg-gray-50/50">
@@ -74,29 +110,29 @@
                 </div>
                 <div class="p-6 grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div>
-                        <label for="db_host" class="block text-xs font-bold text-gray-700 uppercase mb-1">Host do
+                        <label for="db_host" class="block text-xs font-bold text-gray-500 uppercase mb-2">Host do
                             Banco</label>
                         <input type="text" name="db_host" id="db_host" required value="{{ old('db_host', 'localhost') }}"
-                            class="w-full px-4 py-2.5 rounded-lg border border-gray-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 outline-none transition-all placeholder-gray-400 text-sm">
+                            class="w-full bg-gray-50 border border-gray-200 rounded-xl focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 text-sm px-4 py-3 font-medium transition-all duration-300 placeholder-gray-400">
                     </div>
                     <div>
-                        <label for="db_name" class="block text-xs font-bold text-gray-700 uppercase mb-1">Nome do Banco de
+                        <label for="db_name" class="block text-xs font-bold text-gray-500 uppercase mb-2">Nome do Banco de
                             Dados</label>
                         <input type="text" name="db_name" id="db_name" required value="{{ old('db_name') }}"
-                            class="w-full px-4 py-2.5 rounded-lg border border-gray-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 outline-none transition-all placeholder-gray-400 text-sm"
+                            class="w-full bg-gray-50 border border-gray-200 rounded-xl focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 text-sm px-4 py-3 font-medium transition-all duration-300 placeholder-gray-400"
                             placeholder="Ex: sibemo33_cps">
                     </div>
                     <div>
-                        <label for="db_user" class="block text-xs font-bold text-gray-700 uppercase mb-1">Usuário do
+                        <label for="db_user" class="block text-xs font-bold text-gray-500 uppercase mb-2">Usuário do
                             Banco</label>
                         <input type="text" name="db_user" id="db_user" required value="{{ old('db_user') }}"
-                            class="w-full px-4 py-2.5 rounded-lg border border-gray-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 outline-none transition-all placeholder-gray-400 text-sm">
+                            class="w-full bg-gray-50 border border-gray-200 rounded-xl focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 text-sm px-4 py-3 font-medium transition-all duration-300 placeholder-gray-400">
                     </div>
                     <div>
-                        <label for="db_password" class="block text-xs font-bold text-gray-700 uppercase mb-1">Senha do
+                        <label for="db_password" class="block text-xs font-bold text-gray-500 uppercase mb-2">Senha do
                             Banco</label>
                         <input type="password" name="db_password" id="db_password" value="{{ old('db_password') }}"
-                            class="w-full px-4 py-2.5 rounded-lg border border-gray-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 outline-none transition-all placeholder-gray-400 text-sm">
+                            class="w-full bg-gray-50 border border-gray-200 rounded-xl focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 text-sm px-4 py-3 font-medium transition-all duration-300 placeholder-gray-400">
                     </div>
                 </div>
             </div>
@@ -125,7 +161,7 @@
 
             <div class="pt-4 flex items-center justify-end gap-4">
                 <a href="{{ route('locais.index') }}"
-                    class="px-6 py-2.5 rounded-lg text-gray-600 font-bold hover:bg-gray-100 transition-all">Cancelar</a>
+                    class="px-6 py-2.5 text-sm font-bold text-white bg-gray-500 hover:bg-gray-600 rounded-xl shadow-md hover:shadow-lg transition-all active:scale-95">Cancelar</a>
                 <button type="submit"
                     class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2.5 px-8 rounded-lg shadow-lg shadow-blue-500/30 transition-all active:scale-[0.98]">
                     SALVAR ADMINISTRAÇÃO

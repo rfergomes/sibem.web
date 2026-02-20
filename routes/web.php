@@ -17,6 +17,8 @@ Route::get('/login', [App\Http\Controllers\AuthController::class, 'showLogin'])-
 Route::post('/login', [App\Http\Controllers\AuthController::class, 'login'])->name('login.post');
 Route::post('/logout', [App\Http\Controllers\AuthController::class, 'logout'])->name('logout');
 
+Route::post('/contact', [App\Http\Controllers\ContactController::class, 'store'])->name('contact.store');
+
 // Password Reset Routes
 Route::get('/forgot-password', [App\Http\Controllers\PasswordResetController::class, 'showLinkRequestForm'])->name('password.request');
 Route::post('/forgot-password', [App\Http\Controllers\PasswordResetController::class, 'sendResetLinkEmail'])->name('password.email');
@@ -27,16 +29,34 @@ Route::post('/reset-password', [App\Http\Controllers\PasswordResetController::cl
 Route::get('/solicitar-acesso', [App\Http\Controllers\AccessRequestController::class, 'create'])->name('access-request.create');
 Route::post('/solicitar-acesso', [App\Http\Controllers\AccessRequestController::class, 'store'])->name('access-request.store');
 
-Route::middleware(['auth'])->group(function () {
-    Route::get('/', function () {
+Route::get('/', function () {
+    if (auth()->check()) {
         return redirect()->route('dashboard');
-    });
+    }
 
-    Route::get('/dashboard', function () {
-        // Retrieve stats for the view if needed, or move to Controller
-        // For now, view is static-ish
-        return view('dashboard');
-    })->name('dashboard');
+    $stats = [
+        'users' => \App\Models\User::count(),
+        'regionais' => \App\Models\Regional::where('active', true)->count(),
+        'locais' => \App\Models\Local::where('active', true)->count(),
+        'igrejas' => \App\Models\Igreja::where('id_status', 1)->count(),
+    ];
+
+    return view('landing', $stats);
+});
+
+Route::middleware(['auth'])->group(function () {
+
+    Route::get('/dashboard', [App\Http\Controllers\DashboardController::class, 'index'])->name('dashboard');
+
+    // Notification API Routes
+    Route::prefix('api/notifications')->group(function () {
+        Route::get('/', [App\Http\Controllers\NotificationController::class, 'index'])->name('notifications.index');
+        Route::get('/unread-count', [App\Http\Controllers\NotificationController::class, 'unreadCount'])->name('notifications.unreadCount');
+        Route::post('/{notification}/read', [App\Http\Controllers\NotificationController::class, 'markAsRead'])->name('notifications.markAsRead');
+        Route::post('/read-all', [App\Http\Controllers\NotificationController::class, 'markAllAsRead'])->name('notifications.markAllAsRead');
+        Route::post('/subscribe', [App\Http\Controllers\NotificationController::class, 'subscribe'])->name('notifications.subscribe');
+        Route::post('/unsubscribe', [App\Http\Controllers\NotificationController::class, 'unsubscribe'])->name('notifications.unsubscribe');
+    });
 
     // Switch Administration Routes
     Route::get('/api/switch-options', [App\Http\Controllers\SwitchAdmController::class, 'list'])->name('adm.list');
@@ -90,6 +110,7 @@ Route::middleware(['auth'])->group(function () {
             ->parameters(['locais' => 'local'])
             ->names('locais');
         Route::post('/admin/locais/{local}/provision', [App\Http\Controllers\LocalController::class, 'provision'])->name('locais.provision');
+        Route::post('/admin/locais/test-connection', [App\Http\Controllers\LocalController::class, 'testConnection'])->name('locais.testConnection');
 
         // Administration Switching
         Route::post('/admin/switch-local', [App\Http\Controllers\LocalSwitchController::class, 'switch'])->name('admin.switch-local');
@@ -104,5 +125,15 @@ Route::middleware(['auth'])->group(function () {
         Route::resource('admin/dependencias', App\Http\Controllers\DependenciaController::class)
             ->parameters(['dependencias' => 'dependencia'])
             ->names('dependencias');
+        Route::resource('admin/tipos-imovel', App\Http\Controllers\TipoImovelController::class)
+            ->parameters(['tipos-imovel' => 'tiposImovel'])
+            ->names('tipos-imovel');
+
+        // Appointment Scheduling System
+        Route::resource('admin/agendamentos', App\Http\Controllers\AppointmentController::class)
+            ->parameters(['agendamentos' => 'appointment'])
+            ->names('appointments');
+        Route::post('/admin/agendamentos/{appointment}/status', [App\Http\Controllers\AppointmentController::class, 'updateStatus'])
+            ->name('appointments.status');
     });
 });

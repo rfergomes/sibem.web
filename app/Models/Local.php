@@ -30,4 +30,9 @@ class Local extends Model
     {
         return $this->belongsTo(Regional::class);
     }
+
+    public function igrejas()
+    {
+        return $this->hasMany(Igreja::class);
+    }
 }

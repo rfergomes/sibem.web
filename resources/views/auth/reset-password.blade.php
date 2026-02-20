@@ -11,6 +11,13 @@
 <body class="h-full font-sans antialiased text-gray-900 bg-gray-100 flex items-center justify-center">
 
     <div class="w-full max-w-md bg-white rounded-2xl shadow-xl overflow-hidden animate-scaleIn m-4">
+        <div class="bg-[#111827] px-8 py-10 text-center relative overflow-hidden">
+            <div class="absolute inset-0 bg-gradient-to-br from-blue-900/30 to-transparent"></div>
+            <div class="relative z-10 flex flex-col items-center">
+                <img src="{{ asset('img/SIBEM_Logo_Cinza_Claro.png') }}" alt="SIBEM Logo" class="h-20 object-contain mb-2">
+            </div>
+        </div>
+
         <div class="p-8">
             <div class="text-center mb-8">
                 <h2 class="text-2xl font-bold text-gray-800">Redefinir Senha</h2>

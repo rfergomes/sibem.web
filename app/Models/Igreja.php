@@ -26,7 +26,8 @@ class Igreja extends Model
         'uf',
         'observacao',
         'id_status',
-        'id_tipo'
+        'id_tipo',
+        'legacy_id'
     ];
 
     /**
@@ -56,5 +57,10 @@ class Igreja extends Model
     public function local()
     {
         return $this->belongsTo(Local::class);
+    }
+
+    public function tipoImovel()
+    {
+        return $this->belongsTo(TipoImovel::class, 'id_tipo');
     }
 }
