@@ -11,16 +11,15 @@
 <body class="h-full font-sans antialiased text-gray-900 bg-gray-100 flex items-center justify-center">
 
     <div class="w-full max-w-md bg-white rounded-2xl shadow-xl overflow-hidden animate-scaleIn m-4">
+        <div class="bg-[#111827] px-8 py-10 text-center relative overflow-hidden">
+            <div class="absolute inset-0 bg-gradient-to-br from-blue-900/30 to-transparent"></div>
+            <div class="relative z-10 flex flex-col items-center">
+                <img src="{{ asset('img/SIBEM_Logo_Cinza_Claro.png') }}" alt="SIBEM Logo" class="h-20 object-contain mb-2">
+            </div>
+        </div>
+
         <div class="p-8">
             <div class="text-center mb-8">
-                <div
-                    class="inline-flex items-center justify-center w-12 h-12 rounded-full bg-blue-100 text-blue-600 mb-4">
-                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11.543 22H3v-3m14-14a2 2 0 10-4 0 4 4 0 004 0z">
-                        </path>
-                    </svg>
-                </div>
                 <h2 class="text-2xl font-bold text-gray-800">Recuperar Senha</h2>
                 <p class="text-gray-500 text-sm mt-2">Informe seu e-mail para receber o link de redefinição.</p>
             </div>

@@ -13,6 +13,7 @@ class Regional extends Model
 
     protected $fillable = [
         'nome',
+        'uf',
         'active'
     ];
 

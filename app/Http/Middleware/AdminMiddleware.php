@@ -15,7 +15,7 @@ class AdminMiddleware
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if (auth()->check() && auth()->user()->perfil_id <= 2) {
+        if (auth()->check() && auth()->user()->perfil_id <= 4) {
             return $next($request);
         }
 

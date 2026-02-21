@@ -36,11 +36,33 @@ class AuthController extends Controller
             // Improved Multi-Tenant Session Initialization
             $localToSelect = null;
 
-            if ($user->local_id) {
-                // User has a fixed primary local
-                $localToSelect = DB::table('locais')->where('id', $user->local_id)->where('active', true)->first();
-            } else {
-                // Admin or Regional: Pick the first authorized local as default
+            // Priority 1: Use user's default_local_id if set
+            if ($user->default_local_id) {
+                $localToSelect = DB::table('locais')->where('id', $user->default_local_id)->where('active', true)->first();
+            }
+
+            // Priority 2: Use user's local_id if set and authorized
+            if (!$localToSelect && $user->local_id) {
+                $isAuthorized = false;
+
+                if ($user->perfil_id == 1) {
+                    $isAuthorized = true;
+                } elseif ($user->perfil_id == 2) {
+                    $targetLocal = DB::table('locais')->where('id', $user->local_id)->first();
+                    if ($targetLocal && $targetLocal->regional_id == $user->regional_id) {
+                        $isAuthorized = true;
+                    }
+                } else {
+                    $isAuthorized = $user->locais()->where('locais.id', $user->local_id)->exists();
+                }
+
+                if ($isAuthorized) {
+                    $localToSelect = DB::table('locais')->where('id', $user->local_id)->where('active', true)->first();
+                }
+            }
+
+            // Priority 3: Pick the first authorized local
+            if (!$localToSelect) {
                 $firstLocal = $user->authorized_locais->first();
                 if ($firstLocal) {
                     $localToSelect = DB::table('locais')->where('id', $firstLocal->id)->first();
@@ -48,8 +70,25 @@ class AuthController extends Controller
             }
 
             if ($localToSelect) {
+                // Ensure we have the full local object with regional info
+                if (!isset($localToSelect->regional_id) || !isset($localToSelect->nome)) {
+                    $localToSelect = \App\Models\Local::with('regional')->find($localToSelect->id);
+                }
+
+                // Fetch Regional Name
+                $regionalName = 'Regional';
+                if (isset($localToSelect->regional)) {
+                    $regionalName = $localToSelect->regional->nome;
+                } elseif (isset($localToSelect->regional_id)) {
+                    $regional = DB::table('regionais')->where('id', $localToSelect->regional_id)->first();
+                    if ($regional) {
+                        $regionalName = $regional->nome;
+                    }
+                }
+
                 Session::put('current_local_id', $localToSelect->id);
                 Session::put('current_local_name', $localToSelect->nome);
+                Session::put('current_regional_name', $regionalName);
                 Session::put('current_tenant_id', $localToSelect->id);
                 Session::put('current_tenant_connection_data', $localToSelect);
             }

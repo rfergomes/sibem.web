@@ -36,8 +36,10 @@ class LocalSwitchController extends Controller
         }
 
         // Update Session for TenancyMiddleware
+        // Update Session for TenancyMiddleware
         Session::put('current_local_id', $local->id);
         Session::put('current_local_name', $local->nome);
+        Session::put('current_regional_name', $local->regional ? $local->regional->nome : 'Regional');
         Session::put('current_tenant_id', $local->id);
         Session::put('current_tenant_connection_data', $local);
 

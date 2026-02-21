@@ -43,9 +43,22 @@ class UserController extends Controller
     {
         $this->authorize('create', User::class);
 
+        $currentUser = auth()->user();
         $perfis = Perfil::where('active', true)->get();
-        $regionais = Regional::where('active', true)->orderBy('nome')->get();
-        $locais = Local::where('active', true)->orderBy('nome')->get();
+
+        if ($currentUser->perfil_id == 2) {
+            // Admin Regional: Can only assign to their regional
+            $regionais = Regional::where('id', $currentUser->regional_id)->get();
+            // And only locals in their regional
+            $locais = Local::where('regional_id', $currentUser->regional_id)
+                ->where('active', true)
+                ->orderBy('nome')
+                ->get();
+        } else {
+            // Admin Sistema: All
+            $regionais = Regional::where('active', true)->orderBy('nome')->get();
+            $locais = Local::with('regional')->where('active', true)->orderBy('nome')->get();
+        }
 
         return view('users.create', compact('perfis', 'regionais', 'locais'));
     }
@@ -62,6 +75,8 @@ class UserController extends Controller
             'regional_id' => 'nullable|exists:regionais,id',
             'locais' => 'nullable|array',
             'locais.*' => 'exists:locais,id',
+            'avatar' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
+            'active' => 'nullable|boolean',
         ];
 
         if (!$request->has('auto_generate_password')) {
@@ -80,8 +95,13 @@ class UserController extends Controller
         }
 
         $validated['password'] = Hash::make($plainPassword);
-        $validated['active'] = true;
+        $validated['active'] = $request->has('active') ? true : false;
         $validated['must_change_password'] = $mustChangePassword;
+
+        // Handle Avatar Upload
+        if ($request->hasFile('avatar')) {
+            $validated['avatar'] = $request->file('avatar')->store('avatars', 'public');
+        }
 
         $user = User::create($validated);
 
@@ -91,8 +111,13 @@ class UserController extends Controller
 
         // Send Email if Auto-Generated
         if ($request->has('auto_generate_password')) {
-            Mail::to($user->email)->send(new AccessApproved($user, $plainPassword));
-            $message = 'Usuário criado com sucesso! As credenciais foram enviadas por e-mail.';
+            try {
+                Mail::to($user->email)->send(new AccessApproved($user, $plainPassword));
+                $message = 'Usuário criado com sucesso! As credenciais foram enviadas por e-mail.';
+            } catch (\Exception $e) {
+                // Log error but don't fail request
+                $message = 'Usuário criado, mas falhou ao enviar e-mail: ' . $e->getMessage();
+            }
         } else {
             $message = 'Usuário criado com sucesso!';
         }
@@ -104,9 +129,22 @@ class UserController extends Controller
     {
         $this->authorize('update', $user);
 
+        $currentUser = auth()->user();
         $perfis = Perfil::where('active', true)->get();
-        $regionais = Regional::where('active', true)->orderBy('nome')->get();
-        $locais = Local::where('active', true)->orderBy('nome')->get();
+
+        if ($currentUser->perfil_id == 2) {
+            // Admin Regional
+            $regionais = Regional::where('id', $currentUser->regional_id)->get();
+            $locais = Local::where('regional_id', $currentUser->regional_id)
+                ->where('active', true)
+                ->orderBy('nome')
+                ->get();
+        } else {
+            // Admin Sistema
+            $regionais = Regional::where('active', true)->orderBy('nome')->get();
+            // Optimize filtering: Eager load regional to avoid N+1 in view
+            $locais = Local::with('regional')->where('active', true)->orderBy('nome')->get();
+        }
 
         return view('users.edit', compact('user', 'perfis', 'regionais', 'locais'));
     }
@@ -122,13 +160,37 @@ class UserController extends Controller
             'regional_id' => 'nullable|exists:regionais,id',
             'locais' => 'nullable|array',
             'locais.*' => 'exists:locais,id',
+            'default_local_id' => 'nullable|exists:locais,id',
+            'avatar' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
+            'remove_avatar' => 'nullable|boolean',
+            'active' => 'nullable|boolean',
         ]);
+
+        // Handle checkbox value (unchecked checkboxes don't send value)
+        $validated['active'] = $request->has('active') ? true : false;
 
         if ($request->filled('password')) {
             $request->validate(['password' => 'min:8|confirmed']);
             $validated['password'] = Hash::make($request->password);
         } else {
             unset($validated['password']);
+        }
+
+        // Handle Avatar Upload
+        if ($request->hasFile('avatar')) {
+            // Delete old avatar if exists
+            if ($user->avatar) {
+                \Storage::disk('public')->delete($user->avatar);
+            }
+            $validated['avatar'] = $request->file('avatar')->store('avatars', 'public');
+        }
+
+        // Handle Remove Avatar
+        if ($request->has('remove_avatar') && $request->remove_avatar) {
+            if ($user->avatar) {
+                \Storage::disk('public')->delete($user->avatar);
+                $validated['avatar'] = null;
+            }
         }
 
         $user->update($validated);
@@ -153,6 +215,11 @@ class UserController extends Controller
         // Don't allow self-delete
         if (auth()->id() === $user->id) {
             return back()->with('error', 'Você não pode excluir a si mesmo.');
+        }
+
+        // Delete avatar file if exists
+        if ($user->avatar) {
+            \Storage::disk('public')->delete($user->avatar);
         }
 
         $user->delete();

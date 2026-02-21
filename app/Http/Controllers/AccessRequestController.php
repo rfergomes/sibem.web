@@ -42,7 +42,10 @@ class AccessRequestController extends Controller
 
         $solicitacao = SolicitacaoAcesso::create($validated);
 
-        // Notify Admins
+        // Create notifications for admins
+        app(\App\Services\NotificationService::class)->createAccessRequestNotification($solicitacao);
+
+        // Notify Admins via Email
         // Assuming 'admin' slug for administrators. Adjust as needed.
         $admins = User::whereHas('perfil', function ($q) {
             $q->where('slug', 'admin')->orWhere('slug', 'administrador');
@@ -109,6 +112,9 @@ class AccessRequestController extends Controller
         // Send Email with Credentials
         Mail::to($user->email)->send(new AccessApproved($user, $password));
 
+        // Create notification for the user
+        app(\App\Services\NotificationService::class)->createAccessRequestStatusNotification($solicitacao, 'approved');
+
         return redirect()->route('admin.access-requests.index')->with('success', 'Acesso aprovado e credenciais enviadas.');
     }
 
@@ -129,6 +135,13 @@ class AccessRequestController extends Controller
         ]);
 
         // Option: Send Rejection Email
+
+        // Create notification for the user (if person has a user already or if we want to notify them upon next login attempt/mail)
+        // SolicitacaoAcesso has email. If we want to notify via system, they need to be able to login.
+        // If rejected, they can't login, so system notification is only useful if they were already a user.
+        // But the plan says "Sua solicitação foi indeferida".
+        // Let's assume we create it anyway in case they have a partial account or for audit.
+        app(\App\Services\NotificationService::class)->createAccessRequestStatusNotification($solicitacao, 'rejected');
 
         return redirect()->route('admin.access-requests.index')->with('success', 'Solicitação rejeitada.');
     }

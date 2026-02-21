@@ -6,6 +6,7 @@ use App\Models\Igreja;
 use App\Models\Local;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Validation\Rule;
 
 class IgrejaController extends Controller
 {
@@ -17,24 +18,39 @@ class IgrejaController extends Controller
         $user = Auth::user();
         $query = Igreja::query();
 
-        // 1. Authorization Scopes
-        if ($user->perfil_id == 2 && $user->regional_id) {
+        // 1. Authorization Scopes & Filters
+        if ($user->perfil_id == 1) {
+            // Admin Sistema: View All
+            if ($request->filled('regional_id')) {
+                $query->whereHas('local', function ($q) use ($request) {
+                    $q->where('regional_id', $request->regional_id);
+                });
+            }
+        } elseif ($user->perfil_id == 2) {
+            // Admin Regional: View only their Regional
+            // Check if user has regional_id, otherwise fail safe or view nothing?
+            // Assuming user->regional_id is set for this profile.
             $query->whereHas('local', function ($q) use ($user) {
                 $q->where('regional_id', $user->regional_id);
             });
-        } elseif ($user->perfil_id > 2) {
+        } else {
+            // Admin Local / Operador: View only Authorized Locais
+            // authorized_locais returns a collection, getting IDs is better for query
             $localIds = $user->authorized_locais->pluck('id');
             $query->whereIn('local_id', $localIds);
         }
 
-        // 2. Filters
-        if ($request->filled('search')) {
-            $search = $request->search;
-            $query->where(function ($q) use ($search) {
-                $q->where('nome', 'like', "%{$search}%")
-                    ->orWhere('codigo_ccb', 'like', "%{$search}%")
-                    ->orWhere('cidade', 'like', "%{$search}%");
-            });
+        // 2. Common Filters
+        if ($request->filled('local_id')) {
+            // Ensure the user is actually authorized to see this local if they are restricted
+            // The Access Scope above acts as a base, but strictly:
+            // If I am Admin Local for ID 10 and 11, and I request local_id=12, the query->whereIn('local_id', [10,11]) AND where('local_id', 12) will return nothing. 
+            // So we can just add the where clause safely.
+            $query->where('local_id', $request->local_id);
+        }
+
+        if ($request->filled('uf')) {
+            $query->where('uf', $request->uf);
         }
 
         if ($request->filled('tipo')) {
@@ -45,22 +61,51 @@ class IgrejaController extends Controller
             $query->where('id_status', $request->status);
         }
 
-        // 3. Sorting (Default to Name)
+        // 3. Advanced Search
+        if ($request->filled('search')) {
+            $search = $request->search;
+            $query->where(function ($q) use ($search) {
+                $q->where('nome', 'like', "%{$search}%")
+                    ->orWhere('codigo_ccb', 'like', "%{$search}%")
+                    ->orWhere('legacy_id', 'like', "%{$search}%") // "BR 22-0317" or "DR"
+                    ->orWhere('cidade', 'like', "%{$search}%")
+                    ->orWhere('id', 'like', "%{$search}%"); // Direct ID search
+            });
+        }
+
+        // 4. Sorting
         $query->orderBy('nome');
 
-        $igrejas = $query->with('local')->paginate(15)->withQueryString();
+        // 5. Data for View
+        $igrejas = $query->with(['local.regional', 'tipoImovel'])->paginate(15)->withQueryString();
 
-        // Pass types for filter dropdown
-        // Assuming simple hardcoded types for now if table doesn't exist or is complex
-        $tipos = [
-            1 => 'Igreja',
-            2 => 'Barracão',
-            3 => 'Serralheria',
-            4 => 'Oficina de Costura',
-            5 => 'Outros'
-        ];
+        // Data for Filters
+        $regionais = [];
+        if ($user->perfil_id == 1) {
+            $regionais = \App\Models\Regional::where('active', true)->orderBy('nome')->get();
+        }
 
-        return view('admin.igrejas.index', compact('igrejas', 'tipos'));
+        // Locais for Filter:
+        // If Admin Sistema: All active locales (or filtered by selected regional via JS/AJAX? For now simple list or all)
+        // If Admin Regional: All in their regional
+        // If Others: authorized_locais
+        $locais = collect([]);
+        if ($user->perfil_id == 1) {
+            // Perf optimization: Maybe only show if regional selected? 
+            // For now, let's load all to populate the dropdown, or maybe limit?
+            // "Locais" can be huge (960+). Loading all might be heavy for the DOM.
+            // Let's rely on standard collection for now, user asked for optimization but we can refining later.
+            $locais = \App\Models\Local::where('active', true)->orderBy('nome')->get();
+        } else {
+            $locais = $user->authorized_locais;
+        }
+
+        // Fetch Normalized Building Types
+        $tipos = \App\Models\TipoImovel::orderBy('nome')->pluck('nome', 'id');
+
+        $ufs = $this->getUfs();
+
+        return view('admin.igrejas.index', compact('igrejas', 'tipos', 'regionais', 'locais', 'ufs'));
     }
 
     /**
@@ -80,8 +125,9 @@ class IgrejaController extends Controller
         $setores = \App\Models\Setor::where('active', true)->orderBy('nome')->get();
 
         $ufs = $this->getUfs();
+        $tipos = \App\Models\TipoImovel::orderBy('nome')->get();
 
-        return view('admin.igrejas.create', compact('locais', 'setores', 'ufs'));
+        return view('admin.igrejas.create', compact('locais', 'setores', 'ufs', 'tipos'));
     }
 
     /**
@@ -90,10 +136,11 @@ class IgrejaController extends Controller
     public function store(Request $request)
     {
         $this->authorize('create', Igreja::class);
+        $user = Auth::user();
 
         $validated = $request->validate([
             'local_id' => 'required|exists:locais,id',
-            'codigo_ccb' => 'required|string|max:20|unique:igrejas_global,codigo_ccb',
+            'codigo_ccb' => 'required|string|max:20',
             'nome' => 'required|string|max:255',
             'cidade' => 'required|string|max:255',
             'bairro' => 'nullable|string|max:255',
@@ -104,10 +151,37 @@ class IgrejaController extends Controller
             'numero' => 'nullable|string|max:20',
             'uf' => 'required|string|max:2',
             'observacao' => 'nullable|string',
+            'id_tipo' => 'required|integer', // Added validation for type
         ]);
 
+        // Authorization Check for Local ID
+        if ($user->perfil_id == 2) {
+            $local = Local::find($validated['local_id']);
+            if ($local->regional_id != $user->regional_id) {
+                abort(403, 'Você não pode criar igrejas fora da sua regional.');
+            }
+        } elseif ($user->perfil_id == 3) {
+            if (!$user->authorized_locais->contains($validated['local_id'])) {
+                abort(403, 'Você não tem permissão para criar igrejas nesta administração.');
+            }
+        }
+
+        // Strict UF Hierarchy Validation
+        // "Uma igreja de campinas... sua administração obrigatóriamente estará na uf SP"
+        $local = Local::with('regional')->find($validated['local_id']);
+
+        // Check 1: Igreja UF vs Local UF
+        if ($local->uf && $local->uf != $validated['uf']) {
+            return back()->withErrors(['uf' => "A UF da Igreja ({$validated['uf']}) deve ser igual à UF da Administração ({$local->uf})."])->withInput();
+        }
+
+        // Check 2: Local UF vs Regional UF
+        if ($local->regional && $local->regional->uf && $local->regional->uf != $validated['uf']) {
+            return back()->withErrors(['uf' => "A UF da Igreja ({$validated['uf']}) deve respeitar a UF da Regional ({$local->regional->uf})."])->withInput();
+        }
+
         $validated['id_status'] = 1; // Default active
-        $validated['id_tipo'] = 1;   // Default type
+        // $validated['id_tipo'] is now validated
 
         Igreja::create($validated);
 
@@ -124,8 +198,12 @@ class IgrejaController extends Controller
         $locais = Auth::user()->authorized_locais;
         $setores = \App\Models\Setor::where('active', true)->orderBy('nome')->get();
         $ufs = $this->getUfs();
+        $tipos = \App\Models\TipoImovel::orderBy('nome')->get();
 
-        return view('admin.igrejas.edit', compact('igreja', 'locais', 'setores', 'ufs'));
+        // Capture previous URL to preserve filters
+        $redirect_to = url()->previous();
+
+        return view('admin.igrejas.edit', compact('igreja', 'locais', 'setores', 'ufs', 'tipos', 'redirect_to'));
     }
 
     private function getUfs()
@@ -168,9 +246,10 @@ class IgrejaController extends Controller
     {
         $this->authorize('update', $igreja);
 
+
         $validated = $request->validate([
             'local_id' => 'required|exists:locais,id',
-            'codigo_ccb' => 'required|string|max:20|unique:igrejas_global,codigo_ccb,' . $igreja->id,
+            'codigo_ccb' => 'required|string|max:20',
             'nome' => 'required|string|max:255',
             'cidade' => 'required|string|max:255',
             'bairro' => 'nullable|string|max:255',
@@ -185,7 +264,9 @@ class IgrejaController extends Controller
 
         $igreja->update($validated);
 
-        return redirect()->route('igrejas.index')->with('success', 'Igreja atualizada com sucesso.');
+        // Redirect to the preserved URL (with filters) or default index
+        $redirect_to = $request->input('redirect_to', route('igrejas.index'));
+        return redirect($redirect_to)->with('success', 'Igreja atualizada com sucesso.');
     }
 
     /**

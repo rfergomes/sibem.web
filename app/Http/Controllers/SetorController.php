@@ -10,8 +10,7 @@ class SetorController extends Controller
 {
     public function index()
     {
-        // Scoped to current tenant automatically via connection, but we should double check local_id logic if needed.
-        // For standard tenant structure, selects from 'setores'.
+        // Scoped to current tenant automatically via connection
         $setores = Setor::all();
         return view('admin.setores.index', compact('setores'));
     }

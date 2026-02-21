@@ -16,7 +16,7 @@ export default {
                 // SIBEM Brand Colors based on the request "Premium/Modern"
                 ccb: {
                     dark: '#111827', // Header Color
-                    blue: '#1e40af', 
+                    blue: '#033D60', 
                     green: '#22c55e', 
                 }
             }

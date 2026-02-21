@@ -87,22 +87,44 @@ class TenantProvisioningService
      */
     private function seedDefaultData(Local $local)
     {
-        // Insert Status
-        DB::connection('tenant')->table('status_bens')->updateOrInsert(
-            ['id' => 1],
-            ['nome' => 'Ativo', 'created_at' => now(), 'updated_at' => now()]
-        );
-        DB::connection('tenant')->table('status_bens')->updateOrInsert(
-            ['id' => 0],
-            ['nome' => 'Inativo', 'created_at' => now(), 'updated_at' => now()]
-        );
+        // Seed Status Bens in Tenant DB
+        $status = [
+            ['id' => 1, 'nome' => 'Ativo', 'contabiliza' => true],
+            ['id' => 2, 'nome' => 'Em Manutenção', 'contabiliza' => true],
+            ['id' => 3, 'nome' => 'Baixado', 'contabiliza' => false],
+            ['id' => 4, 'nome' => 'Furtado/Roubado', 'contabiliza' => false],
+        ];
 
-        // 1. Insert Default Sector for this Local (In Global Database DB)
+        foreach ($status as $st) {
+            DB::connection('tenant')->table('status_bens')->updateOrInsert(
+                ['id' => $st['id']],
+                array_merge($st, ['created_at' => now(), 'updated_at' => now()])
+            );
+        }
+
+        // Seed Default Sector in System DB (Global)
         DB::table('setores')->updateOrInsert(
             ['local_id' => $local->id, 'nome' => 'ADM CENTRAL'],
             ['active' => true, 'created_at' => now(), 'updated_at' => now()]
         );
 
-        Log::info("Global sector seeded for local: {$local->id}");
+        // Seed Default Dependencias in System DB (Global)
+        $setor = DB::table('setores')->where('local_id', $local->id)->where('nome', 'ADM CENTRAL')->first();
+        if ($setor) {
+            $defaultDeps = [
+                'Escritório',
+                'Sala de Reunião',
+                'Almoxarifado',
+            ];
+
+            foreach ($defaultDeps as $depNome) {
+                DB::table('dependencias')->updateOrInsert(
+                    ['nome' => $depNome],
+                    ['active' => true, 'created_at' => now(), 'updated_at' => now()]
+                );
+            }
+        }
+
+        Log::info("Tenant data seeded for local: {$local->id}");
     }
 }

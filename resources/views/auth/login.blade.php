@@ -14,13 +14,8 @@
         <div class="bg-[#111827] px-8 py-10 text-center relative overflow-hidden">
             <div class="absolute inset-0 bg-gradient-to-br from-blue-900/30 to-transparent"></div>
             <div class="relative z-10 flex flex-col items-center">
-                <div
-                    class="w-16 h-16 bg-blue-600 rounded-2xl flex items-center justify-center text-white text-3xl font-bold shadow-lg mb-4">
-                    S
-                </div>
-                <h2 class="text-2xl font-bold text-white tracking-tight">SIBEM</h2>
-                <p class="text-blue-200 text-xs font-medium uppercase tracking-widest mt-1">Sistema de Inventário de
-                    Bens Móveis</p>
+                <img src="{{ asset('img/SIBEM_Logo_Cinza_Claro.png') }}" alt="SIBEM Logo"
+                    class="h-25 object-contain mb-2">
             </div>
         </div>
 
@@ -45,21 +40,21 @@
                 @csrf
 
                 <div>
-                    <label for="email" class="block text-xs font-bold text-gray-700 uppercase mb-1">E-mail ou
+                    <label for="email" class="block text-xs font-bold text-gray-500 uppercase mb-2">E-mail ou
                         Usuário</label>
                     <input type="email" name="email" id="email" required autofocus
-                        class="w-full px-4 py-3 rounded-lg border border-gray-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 outline-none transition-all placeholder-gray-400 text-sm font-medium"
+                        class="w-full bg-gray-50 border border-gray-200 rounded-xl focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 text-sm px-4 py-3 font-medium transition-all duration-300 placeholder-gray-400"
                         placeholder="seu.email@sibem.ccb.org.br">
                 </div>
 
                 <div>
                     <div class="flex items-center justify-between mb-1">
-                        <label class="block text-sm font-bold text-gray-700">Senha</label>
+                        <label class="block text-xs font-bold text-gray-500 uppercase mb-2">Senha</label>
                         <a href="{{ route('password.request') }}"
                             class="text-xs font-bold text-blue-600 hover:text-blue-800">Esqueceu sua senha?</a>
                     </div>
                     <input type="password" name="password" required
-                        class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 outline-none transition-all"
+                        class="w-full bg-gray-50 border border-gray-200 rounded-xl focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 text-sm px-4 py-3 font-medium transition-all duration-300 placeholder-gray-400"
                         placeholder="••••••••">
                 </div>
 

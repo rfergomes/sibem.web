@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Bens - SIBEM')
+@section('title', 'Bens')
 
 @section('content')
     <div class="animate-fadeIn">

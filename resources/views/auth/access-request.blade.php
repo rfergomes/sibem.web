@@ -14,13 +14,9 @@
         <div class="bg-[#111827] px-8 py-8 text-center relative overflow-hidden">
             <div class="absolute inset-0 bg-gradient-to-br from-blue-900/30 to-transparent"></div>
             <div class="relative z-10 flex flex-col items-center">
-                <div
-                    class="w-12 h-12 bg-blue-600 rounded-xl flex items-center justify-center text-white text-2xl font-bold shadow-lg mb-3">
-                    A
-                </div>
+                <img src="{{ asset('img/SIBEM_Logo_Cinza_Claro.png') }}" alt="SIBEM Logo"
+                    class="h-16 object-contain mb-3">
                 <h2 class="text-xl font-bold text-white tracking-tight">Solicitação de Acesso</h2>
-                <p class="text-blue-200 text-xs font-medium uppercase tracking-widest mt-1">SIBEM - Sistema de
-                    Inventário</p>
             </div>
         </div>
 
@@ -59,51 +55,52 @@
 
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div>
-                            <label for="nome" class="block text-xs font-bold text-gray-700 uppercase mb-1">Nome
+                            <label for="nome" class="block text-xs font-bold text-gray-500 uppercase mb-2">Nome
                                 Completo</label>
                             <input type="text" name="nome" id="nome" value="{{ old('nome') }}" required
-                                class="w-full px-4 py-2 rounded-lg border border-gray-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 outline-none transition-all placeholder-gray-400 text-sm">
+                                class="w-full bg-gray-50 border border-gray-200 rounded-xl focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 text-sm px-4 py-3 font-medium transition-all duration-300 placeholder-gray-400">
                         </div>
                         <div>
-                            <label for="email" class="block text-xs font-bold text-gray-700 uppercase mb-1">E-mail</label>
+                            <label for="email" class="block text-xs font-bold text-gray-500 uppercase mb-2">E-mail</label>
                             <input type="email" name="email" id="email" value="{{ old('email') }}" required
-                                class="w-full px-4 py-2 rounded-lg border border-gray-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 outline-none transition-all placeholder-gray-400 text-sm">
+                                class="w-full bg-gray-50 border border-gray-200 rounded-xl focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 text-sm px-4 py-3 font-medium transition-all duration-300 placeholder-gray-400">
                         </div>
                     </div>
 
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div>
-                            <label for="telefone" class="block text-xs font-bold text-gray-700 uppercase mb-1">Telefone /
+                            <label for="telefone" class="block text-xs font-bold text-gray-500 uppercase mb-2">Telefone /
                                 Celular</label>
                             <input type="text" name="telefone" id="telefone" value="{{ old('telefone') }}"
-                                class="w-full px-4 py-2 rounded-lg border border-gray-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 outline-none transition-all placeholder-gray-400 text-sm">
+                                class="w-full bg-gray-50 border border-gray-200 rounded-xl focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 text-sm px-4 py-3 font-medium transition-all duration-300 placeholder-gray-400">
                         </div>
                         <div>
-                            <label for="cidade" class="block text-xs font-bold text-gray-700 uppercase mb-1">Cidade /
+                            <label for="cidade" class="block text-xs font-bold text-gray-500 uppercase mb-2">Cidade /
                                 Comum</label>
                             <input type="text" name="cidade" id="cidade" value="{{ old('cidade') }}" required
-                                class="w-full px-4 py-2 rounded-lg border border-gray-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 outline-none transition-all placeholder-gray-400 text-sm">
+                                class="w-full bg-gray-50 border border-gray-200 rounded-xl focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 text-sm px-4 py-3 font-medium transition-all duration-300 placeholder-gray-400">
                         </div>
                     </div>
 
                     <div>
-                        <label for="regional_id" class="block text-xs font-bold text-gray-700 uppercase mb-1">Regional
+                        <label for="regional_id" class="block text-xs font-bold text-gray-500 uppercase mb-2">Regional
                             (Opcional)</label>
                         <select name="regional_id" id="regional_id"
-                            class="w-full px-4 py-2 rounded-lg border border-gray-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 outline-none transition-all text-sm bg-white">
+                            class="w-full bg-gray-50 border border-gray-200 rounded-xl focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 text-sm px-4 py-3 font-medium transition-all duration-300 placeholder-gray-400">
                             <option value="">Selecione uma Regional...</option>
                             @foreach($regionais as $regional)
                                 <option value="{{ $regional->id }}" {{ old('regional_id') == $regional->id ? 'selected' : '' }}>
-                                    {{ $regional->nome }}</option>
+                                    {{ $regional->nome }}
+                                </option>
                             @endforeach
                         </select>
                     </div>
 
                     <div>
-                        <label for="observacoes" class="block text-xs font-bold text-gray-700 uppercase mb-1">Observações /
+                        <label for="observacoes" class="block text-xs font-bold text-gray-500 uppercase mb-2">Observações /
                             Motivo</label>
                         <textarea name="observacoes" id="observacoes" rows="3"
-                            class="w-full px-4 py-2 rounded-lg border border-gray-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 outline-none transition-all placeholder-gray-400 text-sm">{{ old('observacoes') }}</textarea>
+                            class="w-full bg-gray-50 border border-gray-200 rounded-xl focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 text-sm px-4 py-3 font-medium transition-all duration-300 placeholder-gray-400">{{ old('observacoes') }}</textarea>
                     </div>
 
                     <div class="pt-4 flex items-center justify-between">

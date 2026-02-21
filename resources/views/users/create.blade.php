@@ -12,7 +12,7 @@
 
         <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-8">
             <form action="{{ isset($user) ? route('users.update', $user) : route('users.store') }}" method="POST"
-                class="space-y-6">
+                enctype="multipart/form-data" class="space-y-6">
                 @csrf
                 @if(isset($user))
                     @method('PUT')
@@ -20,18 +20,28 @@
 
                 <!-- Nome -->
                 <div>
-                    <label class="block text-sm font-bold text-gray-700 mb-1">Nome Completo</label>
+                    <label class="block text-xs font-bold text-gray-500 uppercase mb-2 tracking-wide">Nome Completo</label>
                     <input type="text" name="nome" value="{{ old('nome', $user->nome ?? '') }}" required
-                        class="w-full rounded-lg border-gray-300 focus:border-blue-500 focus:ring-blue-500 shadow-sm">
+                        class="w-full bg-gray-50 border border-gray-200 rounded-xl focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 text-sm px-4 py-3 font-medium transition-all duration-300">
                     @error('nome') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
                 </div>
 
                 <!-- Email -->
                 <div>
-                    <label class="block text-sm font-bold text-gray-700 mb-1">E-mail</label>
+                    <label class="block text-xs font-bold text-gray-500 uppercase mb-2 tracking-wide">E-mail</label>
                     <input type="email" name="email" value="{{ old('email', $user->email ?? '') }}" required
-                        class="w-full rounded-lg border-gray-300 focus:border-blue-500 focus:ring-blue-500 shadow-sm">
+                        class="w-full bg-gray-50 border border-gray-200 rounded-xl focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 text-sm px-4 py-3 font-medium transition-all duration-300">
                     @error('email') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
+                </div>
+
+                <!-- Avatar -->
+                <div>
+                    <label class="block text-xs font-bold text-gray-500 uppercase mb-2 tracking-wide">Avatar
+                        (Opcional)</label>
+                    <input type="file" name="avatar" accept="image/*"
+                        class="w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 file:font-semibold">
+                    <p class="text-xs text-gray-500 mt-1">Formatos aceitos: JPG, PNG. Tamanho máximo: 2MB</p>
+                    @error('avatar') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
                 </div>
 
                 <!-- Senha (com Alpine.js para toggle) -->
@@ -47,17 +57,18 @@
 
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6" x-show="!autoGenerate" x-transition>
                         <div>
-                            <label class="block text-sm font-bold text-gray-700 mb-1">Senha
+                            <label class="block text-xs font-bold text-gray-500 uppercase mb-2 tracking-wide">Senha
                                 {{ isset($user) ? '(Deixe em branco para manter)' : '' }}</label>
                             <input type="password" name="password" :required="!autoGenerate && '{{ !isset($user) }}'"
-                                class="w-full rounded-lg border-gray-300 focus:border-blue-500 focus:ring-blue-500 shadow-sm">
+                                class="w-full bg-gray-50 border border-gray-200 rounded-xl focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 text-sm px-4 py-3 font-medium transition-all duration-300">
                             @error('password') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
                         </div>
                         <div>
-                            <label class="block text-sm font-bold text-gray-700 mb-1">Confirmar Senha</label>
+                            <label class="block text-xs font-bold text-gray-500 uppercase mb-2 tracking-wide">Confirmar
+                                Senha</label>
                             <input type="password" name="password_confirmation"
                                 :required="!autoGenerate && '{{ !isset($user) }}'"
-                                class="w-full rounded-lg border-gray-300 focus:border-blue-500 focus:ring-blue-500 shadow-sm">
+                                class="w-full bg-gray-50 border border-gray-200 rounded-xl focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 text-sm px-4 py-3 font-medium transition-all duration-300">
                         </div>
                     </div>
                 </div>
@@ -66,9 +77,10 @@
 
                 <!-- Perfil -->
                 <div>
-                    <label class="block text-sm font-bold text-gray-700 mb-1">Perfil de Acesso</label>
+                    <label class="block text-xs font-bold text-gray-500 uppercase mb-2 tracking-wide">Perfil de
+                        Acesso</label>
                     <select name="perfil_id" required
-                        class="w-full rounded-lg border-gray-300 focus:border-blue-500 focus:ring-blue-500 shadow-sm">
+                        class="w-full bg-gray-50 border border-gray-200 rounded-xl focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 text-sm px-4 py-3 font-medium transition-all duration-300">
                         <option value="">Selecione...</option>
                         @foreach($perfis as $perfil)
                             <option value="{{ $perfil->id }}" {{ old('perfil_id', $user->perfil_id ?? '') == $perfil->id ? 'selected' : '' }}>
@@ -82,9 +94,10 @@
                 <!-- Escopo Manual (Simples por enquanto) -->
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div>
-                        <label class="block text-sm font-bold text-gray-700 mb-1">Regional (Opcional)</label>
+                        <label class="block text-xs font-bold text-gray-500 uppercase mb-2 tracking-wide">Regional
+                            (Opcional)</label>
                         <select name="regional_id"
-                            class="w-full rounded-lg border-gray-300 focus:border-blue-500 focus:ring-blue-500 shadow-sm">
+                            class="w-full bg-gray-50 border border-gray-200 rounded-xl focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 text-sm px-4 py-3 font-medium transition-all duration-300">
                             <option value="">Nenhuma (Global)</option>
                             @foreach($regionais as $regional)
                                 <option value="{{ $regional->id }}" {{ old('regional_id', $user->regional_id ?? '') == $regional->id ? 'selected' : '' }}>
@@ -94,7 +107,8 @@
                         </select>
                     </div>
                     <div>
-                        <label class="block text-sm font-bold text-gray-700 mb-1">Localidade (Múltipla Escolha)</label>
+                        <label class="block text-xs font-bold text-gray-500 uppercase mb-2 tracking-wide">Localidade
+                            (Múltipla Escolha)</label>
                         <div class="h-32 overflow-y-auto border border-gray-300 rounded-lg p-2 bg-white">
                             @foreach($locais as $local)
                                 <div class="flex items-center gap-2 mb-1">
