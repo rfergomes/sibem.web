@@ -12,10 +12,10 @@ return new class extends Migration {
     {
         Schema::table('igrejas_global', function (Blueprint $table) {
             // 1. Shift IDs from 0-based to 1-based (Laravel standard)
-            // Only if data exists and hasn't been shifted (safe check difficult here, assuming running once)
-            DB::statement('UPDATE igrejas_global SET id_tipo = id_tipo + 1');
+            // Skip shift if already correct (0-based -> 1-based shift was breaking imported data)
+            // DB::statement('UPDATE igrejas_global SET id_tipo = id_tipo + 1');
 
-            // 2. Change column type to match types_imovel.id (bigint unsigned)
+            // 2. Change column type to match tipos_imovel.id (bigint unsigned)
             $table->unsignedBigInteger('id_tipo')->change();
 
             // 3. Add Foreign Key
