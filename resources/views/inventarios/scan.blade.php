@@ -1,5 +1,33 @@
 @extends('layouts.app')
 
+@push('scripts')
+    <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
+    <script>
+        // Sound Feedback Utility
+        const AudioCtx = window.AudioContext || window.webkitAudioContext;
+        const audioCtx = new AudioCtx();
+
+        window.beep = (frequency = 440, duration = 100, type = 'sine', volume = 0.1) => {
+            const oscillator = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            oscillator.type = type;
+            oscillator.frequency.setValueAtTime(frequency, audioCtx.currentTime);
+            gain.gain.setValueAtTime(volume, audioCtx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.00001, audioCtx.currentTime + duration/1000);
+            oscillator.connect(gain);
+            gain.connect(audioCtx.destination);
+            oscillator.start();
+            oscillator.stop(audioCtx.currentTime + duration/1000);
+        };
+
+        window.playSuccess = () => beep(880, 150, 'sine', 0.2);
+        window.playError = () => {
+            beep(220, 100, 'square', 0.1);
+            setTimeout(() => beep(110, 200, 'square', 0.1), 120);
+        };
+    </script>
+@endpush
+
 @section('title', 'Leitor de Inventário')
 
 @section('content')
@@ -72,6 +100,13 @@
                 </div>
                 
                 <div class="flex items-center gap-6">
+                    <button @click="toggleCamera()" 
+                            :class="cameraActive ? 'bg-red-600 text-white border-red-700' : 'bg-green-600 text-white border-green-700'"
+                            class="p-2.5 px-5 border rounded-lg shadow-sm hover:opacity-90 transition flex items-center gap-2 group">
+                        <span class="text-xs" x-text="cameraActive ? '⏹️' : '📷'"></span>
+                        <span class="text-[10px] font-black uppercase tracking-widest" x-text="cameraActive ? 'Parar Câmera' : 'Usar Câmera'"></span>
+                    </button>
+
                     <label class="flex items-center gap-2 cursor-pointer group">
                         <span class="text-[9px] font-black text-gray-400 uppercase tracking-tighter group-hover:text-blue-900 transition">Auto-foco</span>
                         <div class="relative inline-flex items-center scale-75">
@@ -96,6 +131,18 @@
                     </div>
 
                     <div class="w-full max-w-4xl space-y-6">
+                        <!-- Camera Scanner Container -->
+                        <div x-show="cameraActive" 
+                             x-transition:enter="transition ease-out duration-300"
+                             x-transition:enter-start="opacity-0 -translate-y-4"
+                             x-transition:enter-end="opacity-100 translate-y-0"
+                             class="mb-4 overflow-hidden rounded-2xl border-4 border-blue-100 shadow-inner bg-black relative aspect-video md:aspect-auto md:h-64">
+                            <div id="reader" class="w-full h-full"></div>
+                            <div class="absolute inset-0 pointer-events-none border-2 border-dashed border-white/30 m-8 rounded-lg flex items-center justify-center">
+                                <div class="w-full h-0.5 bg-red-500/50 absolute animate-pulse"></div>
+                            </div>
+                        </div>
+
                         <!-- Main Input -->
                         <div class="relative bg-white border-2 border-gray-100 rounded-2xl shadow-inner p-1">
                             <input type="text" 
@@ -104,9 +151,9 @@
                                    maxlength="12"
                                    placeholder="000000000000"
                                    class="w-full text-4xl md:text-6xl font-mono tracking-tighter text-gray-900 border-none focus:ring-0 text-center uppercase p-4 md:p-6 bg-transparent"
-                                   @input="barcode = barcode.replace(/[^0-9]/g, '').slice(0, 12)"
-                                   id="scannerInput"
-                                   autofocus>
+                                    id="scannerInput"
+                                    @input="if(barcode.length === 12) processScan()"
+                                    autofocus>
                             
                             <div class="absolute -bottom-5 left-0 right-0 text-center">
                                 <p class="text-[8px] font-black text-gray-400 uppercase tracking-[0.4em] animate-pulse">Aguardando Leitura da Etiqueta...</p>
@@ -407,6 +454,8 @@
                 novaDependencia: '',
                 isDoacao: false,
                 savingTratativa: false,
+                cameraActive: false,
+                html5QrCode: null,
                 allPendencias: @json($allDetalhes),
                 lastItem: {
                     barcode: '',
@@ -658,11 +707,58 @@
                 },
 
                 focusScanner() {
-                    if (!this.autoFocus) return; // Respect the toggle
+                    if (!this.autoFocus || this.cameraActive) return; // Respect the toggle and don't steal focus if camera is on
                     this.$nextTick(() => {
                         const input = document.getElementById('scannerInput');
-                        if (input) input.focus();
+                        if (input && document.activeElement !== input) input.focus();
                     });
+                },
+
+                toggleCamera() {
+                    if (this.cameraActive) {
+                        this.stopCamera();
+                    } else {
+                        this.startCamera();
+                    }
+                },
+
+                startCamera() {
+                    this.cameraActive = true;
+                    this.$nextTick(() => {
+                        this.html5QrCode = new Html5Qrcode("reader");
+                        const config = { fps: 10, qrbox: { width: 250, height: 150 } };
+                        
+                        this.html5QrCode.start(
+                            { facingMode: "environment" }, 
+                            config, 
+                            (decodedText) => {
+                                // On Success
+                                this.barcode = decodedText.replace(/[^0-9]/g, '').slice(0, 12);
+                                if (this.barcode.length === 12) {
+                                    this.processScan();
+                                }
+                            },
+                            (errorMessage) => {
+                                // parse error, ignore
+                            }
+                        ).catch((err) => {
+                            console.error("Erro ao iniciar câmera:", err);
+                            this.cameraActive = false;
+                            showAlert('Erro na Câmera', 'error', 'Não foi possível acessar a câmera do dispositivo.');
+                        });
+                    });
+                },
+
+                stopCamera() {
+                    if (this.html5QrCode) {
+                        this.html5QrCode.stop().then(() => {
+                            this.cameraActive = false;
+                            this.html5QrCode = null;
+                            this.focusScanner();
+                        }).catch(err => console.error("Erro ao parar câmera", err));
+                    } else {
+                        this.cameraActive = false;
+                    }
                 },
 
                 confirmFinalize() {
@@ -676,7 +772,7 @@
                 },
 
                 async processScan() {
-                    if (!this.barcode.trim()) return;
+                    if (this.loading || !this.barcode.trim()) return;
                     if (!this.dependenciaId) {
                         showAlert('Atenção', 'warning', 'Selecione a dependência física onde você se encontra.');
                         this.barcode = '';
@@ -684,15 +780,17 @@
                         return;
                     }
 
+                    const codeToProcess = this.barcode.trim();
+                    this.barcode = ''; // Clear immediately to prevent re-triggering from @input or Enter
                     this.loading = true;
-                    this.displayBarcode = this.barcode;
+                    this.displayBarcode = codeToProcess;
 
                     try {
                         const res = await fetch('{{ route("scan.process", $inventario->id) }}', {
                             method: 'POST',
                             headers: { 'Content-Type': 'application/json', 'X-CSRF-TOKEN': '{{ csrf_token() }}' },
                             body: JSON.stringify({
-                                barcode: this.barcode,
+                                barcode: codeToProcess,
                                 id_dependencia_atual: this.dependenciaId
                             })
                         });
@@ -739,14 +837,23 @@
                                 title: data.message,
                                 customClass: data.is_cross_church ? { popup: 'border-2 border-red-500' } : {}
                             });
+                            
+                            if (data.status === 'error') {
+                                playError();
+                            } else {
+                                playSuccess();
+                            }
+                            
                             this.barcode = '';
                             this.focusScanner();
                         } else {
+                            playError();
                             Toast.fire({ icon: 'error', title: data.message });
                             this.barcode = '';
                             this.focusScanner();
                         }
                     } catch (err) {
+                        playError();
                         this.loading = false;
                         showAlert('Erro', 'error', 'Comunicação com o servidor falhou.');
                         this.focusScanner();
