@@ -19,37 +19,37 @@ class ScanningController extends Controller
     {
         $inventario = Inventario::with(['detalhes.bem'])->findOrFail($id);
 
-        // Stats calculation (Strict Rules)
-        // 1. Initial Assets (Those that were in the SIGA sync)
-        $bensInicial = $inventario->detalhes()
-            ->where('status_leitura', '!=', 'novo_sistema')
-            ->count();
+        // Stats calculation (Optimized with consolidated queries)
+        $stats = $inventario->detalhes()
+            ->select('status_leitura', DB::raw('count(*) as total'))
+            ->groupBy('status_leitura')
+            ->pluck('total', 'status_leitura')
+            ->toArray();
 
-        // 2. Located Assets (From the initial list)
-        $localizados = $inventario->detalhes()
-            ->where('status_leitura', 'encontrado')
-            ->count();
-
-        // 3. New Assets (Scanned during inventory, not in initial list)
-        $novos = $inventario->detalhes()
-            ->where('status_leitura', 'novo_sistema')
-            ->count();
-
-        $pendentes = $inventario->detalhes()
-            ->where('status_leitura', 'nao_encontrado')
-            ->count();
+        $bensInicial = ($stats['encontrado'] ?? 0) + ($stats['nao_encontrado'] ?? 0);
+        $localizados = $stats['encontrado'] ?? 0;
+        $novos = $stats['novo_sistema'] ?? 0;
+        $pendentes = $stats['nao_encontrado'] ?? 0;
 
         $prevista = ($bensInicial > 0) ? round(($localizados / $bensInicial) * 100, 2) : 0;
         $bensFinal = $localizados + $novos;
         $resultado = ($bensInicial > 0) ? round(($bensFinal / $bensInicial) * 100, 2) : 0;
 
-        // Tratativa counts
-        $tratativaCounts = [
-            'imprimir' => $inventario->detalhes()->where('tratativa', 'imprimir')->count(),
-            'alterar' => $inventario->detalhes()->where('tratativa', 'alterar')->count(),
-            'excluir' => $inventario->detalhes()->where('tratativa', 'excluir')->count(),
-            'transferir' => $inventario->detalhes()->where('tratativa', 'transferir')->count(),
-        ];
+        // Tratativa counts consolidated
+        $tratativaCounts = $inventario->detalhes()
+            ->whereNotNull('tratativa')
+            ->where('tratativa', '!=', 'nenhuma')
+            ->select('tratativa', DB::raw('count(*) as total'))
+            ->groupBy('tratativa')
+            ->pluck('total', 'tratativa')
+            ->toArray();
+
+        $tratativaCounts = array_merge([
+            'imprimir' => 0,
+            'alterar' => 0,
+            'excluir' => 0,
+            'transferir' => 0
+        ], $tratativaCounts);
 
         $ultimosLeituras = $inventario->detalhes()
             ->whereNotNull('timestamp_leitura')
@@ -70,8 +70,14 @@ class ScanningController extends Controller
             ];
         });
 
-        // Pass all pendencies for the modal
-        $allDetalhes = $inventario->detalhes()->with('bem')->get();
+        // Pass all pendencies for the modal (Optimized payload)
+        $allDetalhes = $inventario->detalhes()
+            ->with([
+                'bem' => function ($q) {
+                    $q->select('id_bem', 'descricao', 'id_dependencia', 'id_igreja', 'id_status', 'origem');
+                }
+            ])
+            ->get(['id', 'inventario_id', 'id_bem', 'status_leitura', 'tratativa', 'observacao', 'is_doacao', 'documento_doacao_path']);
 
         return view('inventarios.scan', compact(
             'inventario',
