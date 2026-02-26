@@ -30,7 +30,7 @@
                 <label for="active" class="inline-flex items-center">
                     <input type="hidden" name="active" value="0">
                     <input type="checkbox" name="active" id="active" value="1"
-                        class="rounded border-gray-300 text-indigo-600 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+                        class="rounded border-gray-300 text-ccb-blue-600 shadow-sm focus:border-ccb-blue-300 focus:ring focus:ring-ccb-blue-200 focus:ring-opacity-50"
                         checked>
                     <span class="ml-2 text-sm text-gray-600">Ativo</span>
                 </label>

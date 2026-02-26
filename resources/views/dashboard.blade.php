@@ -9,7 +9,7 @@
             <form action="{{ route('dashboard') }}" method="GET" class="flex flex-wrap gap-4 items-end">
                 <div>
                     <label class="block text-xs font-bold text-gray-500 uppercase mb-1">Ano</label>
-                    <select name="ano" class="rounded-lg border-gray-300 text-sm focus:ring-indigo-500 focus:border-indigo-500">
+                    <select name="ano" class="rounded-lg border-gray-300 text-sm focus:ring-ccb-blue-500 focus:border-ccb-blue-500">
                         @foreach(range(date('Y'), 2024) as $year)
                             <option value="{{ $year }}" {{ $year == $stats['ano'] ? 'selected' : '' }}>{{ $year }}</option>
                         @endforeach
@@ -18,7 +18,7 @@
                 <div>
                     <label class="block text-xs font-bold text-gray-500 uppercase mb-1">Setor</label>
                     <select name="setor_id"
-                        class="rounded-lg border-gray-300 text-sm focus:ring-indigo-500 focus:border-indigo-500">
+                        class="rounded-lg border-gray-300 text-sm focus:ring-ccb-blue-500 focus:border-ccb-blue-500">
                         <option value="">Todos</option>
                         @if(isset($sectors))
                             @foreach($sectors as $sector)
@@ -30,7 +30,7 @@
                     </select>
                 </div>
                 <button type="submit"
-                    class="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-lg text-sm font-bold transition-colors">
+                    class="bg-ccb-blue-600 hover:bg-ccb-blue-700 text-white px-4 py-2 rounded-lg text-sm font-bold transition-colors">
                     Filtrar
                 </button>
             </form>
@@ -92,11 +92,11 @@
                         <circle cx="48" cy="48" r="40" stroke="currentColor" stroke-width="8" fill="transparent"
                             class="text-gray-100" />
                         <circle cx="48" cy="48" r="40" stroke="currentColor" stroke-width="8" fill="transparent"
-                            class="text-indigo-600" stroke-dasharray="251.2"
+                            class="text-blue-600" stroke-dasharray="251.2"
                             stroke-dashoffset="{{ 251.2 - (251.2 * ($stats['progresso'] ?? 0) / 100) }}" />
                     </svg>
                     <span
-                        class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-xl font-bold text-indigo-900">
+                        class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-xl font-bold text-ccb-blue">
                         {{ $stats['progresso'] ?? 0 }}%
                     </span>
                 </div>
@@ -237,8 +237,8 @@
                     <div class="absolute -top-2 left-4 w-4 h-4 bg-white border-t border-l border-blue-100 rotate-45"></div>
 
                     <div class="flex items-center gap-3 mb-2">
-                        <div class="bg-indigo-50 p-1.5 rounded-lg">
-                            <svg class="w-4 h-4 text-indigo-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <div class="bg-ccb-blue-50 p-1.5 rounded-lg">
+                            <svg class="w-4 h-4 text-ccb-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                     d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.082.477 4 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.082.477-4 1.253" />
                             </svg>
@@ -254,8 +254,8 @@
                     </div>
 
                     <div class="flex items-center justify-between mt-2 pt-2 border-t border-gray-50">
-                        <span class="text-[9px] font-bold text-indigo-400 uppercase tracking-widest">Clique para meditar</span>
-                        <p class="text-[10px] font-bold text-indigo-900">
+                        <span class="text-[9px] font-bold text-ccb-blue-400 uppercase tracking-widest">Clique para meditar</span>
+                        <p class="text-[10px] font-bold text-ccb-blue-900">
                             Versículo do Dia
                         </p>
                     </div>
@@ -271,13 +271,13 @@
                 @click.away="showDevotional = false" style="display: none;">
 
                 <div
-                    class="bg-indigo-900 w-full max-w-3xl rounded-[2rem] shadow-2xl relative max-h-[85vh] flex flex-col overflow-hidden">
+                    class="bg-ccb-blue w-full max-w-3xl rounded-[2rem] shadow-2xl relative max-h-[85vh] flex flex-col overflow-hidden">
                     <!-- Background blobs (Contained by outer overflow-hidden) -->
                     <div
                         class="absolute top-0 right-0 -mt-20 -mr-20 w-64 h-64 bg-white/5 rounded-full blur-3xl pointer-events-none">
                     </div>
                     <div
-                        class="absolute bottom-0 left-0 -mb-20 -ml-20 w-64 h-64 bg-indigo-400/10 rounded-full blur-3xl pointer-events-none">
+                        class="absolute bottom-0 left-0 -mb-20 -ml-20 w-64 h-64 bg-ccb-blue-400/10 rounded-full blur-3xl pointer-events-none">
                     </div>
 
                     <!-- Close Button -->
@@ -292,7 +292,7 @@
                     <div class="overflow-y-auto custom-scrollbar relative z-10 p-6 sm:px-8 sm:pt-10 sm:pb-6">
                         <div class="flex items-center gap-3 mb-8">
                             <div class="bg-white/10 p-2.5 rounded-xl">
-                                <svg class="w-6 h-6 text-indigo-200" fill="currentColor" viewBox="0 0 24 24">
+                                <svg class="w-6 h-6 text-ccb-blue-200" fill="currentColor" viewBox="0 0 24 24">
                                     <path d="M12 2L4.5 20.29l.71.71L12 18l6.79 3 .71-.71L12 2z" />
                                 </svg>
                             </div>
@@ -302,21 +302,21 @@
                         <div class="space-y-6">
                             <div class="text-center py-4 px-4 bg-white/5 rounded-3xl border border-white/10 relative">
                                 <div
-                                    class="absolute -top-4 left-1/2 -translate-x-1/2 bg-indigo-800 px-4 py-1 rounded-full text-[10px] font-bold uppercase tracking-widest text-indigo-200 border border-white/10">
+                                    class="absolute -top-4 left-1/2 -translate-x-1/2 bg-ccb-dark px-4 py-1 rounded-full text-[10px] font-bold uppercase tracking-widest text-ccb-blue-200 border border-white/10">
                                     Palavra de Hoje
                                 </div>
                                 <p class="text-lg sm:text-xl font-serif italic text-white leading-relaxed mb-3 mt-1">
                                     "{{ $dailyData['verse'] }}"
                                 </p>
                                 <span
-                                    class="inline-block px-3 py-1 bg-indigo-500/20 rounded-full text-xs font-bold text-indigo-200 uppercase tracking-wider border border-indigo-500/30">
+                                    class="inline-block px-3 py-1 bg-ccb-blue/40 rounded-full text-xs font-bold text-ccb-blue-100 uppercase tracking-wider border border-white/20">
                                     {{ $dailyData['reference'] ?? '' }}
                                 </span>
                             </div>
 
                             <div>
-                                <h3 class="text-indigo-200 text-xs font-bold uppercase tracking-widest mb-3">A Mensagem</h3>
-                                <p class="text-sm leading-relaxed text-indigo-50/90 font-medium text-justify">
+                                <h3 class="text-ccb-blue-200 text-xs font-bold uppercase tracking-widest mb-3">A Mensagem</h3>
+                                <p class="text-sm leading-relaxed text-ccb-blue-50/90 font-medium text-justify">
                                     {{ $dailyData['reflection'] }}
                                 </p>
                             </div>
@@ -325,23 +325,23 @@
                                 <div
                                     class="p-4 bg-white/5 rounded-2xl border border-white/10 hover:bg-white/10 transition-colors">
                                     <h3
-                                        class="text-indigo-200 text-[10px] font-bold uppercase tracking-widest mb-3 flex items-center gap-2">
+                                        class="text-ccb-blue-200 text-[10px] font-bold uppercase tracking-widest mb-3 flex items-center gap-2">
                                         <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
                                         Oração
                                     </h3>
-                                    <p class="text-indigo-100 text-sm italic leading-relaxed">
+                                    <p class="text-ccb-blue-100 text-sm italic leading-relaxed">
                                         "{{ $dailyData['prayer'] }}"
                                     </p>
                                 </div>
 
                                 <div
-                                    class="p-4 bg-indigo-600/30 rounded-2xl border border-white/10 hover:bg-indigo-600/40 transition-colors">
+                                    class="p-4 bg-ccb-blue-600/30 rounded-2xl border border-white/10 hover:bg-ccb-blue-600/40 transition-colors">
                                     <h3
-                                        class="text-indigo-200 text-[10px] font-bold uppercase tracking-widest mb-3 flex items-center gap-2">
+                                        class="text-ccb-blue-200 text-[10px] font-bold uppercase tracking-widest mb-3 flex items-center gap-2">
                                         <span class="w-1.5 h-1.5 rounded-full bg-amber-400"></span>
                                         Aplicação Prática
                                     </h3>
-                                    <p class="text-indigo-100 text-sm leading-relaxed">
+                                    <p class="text-ccb-blue-100 text-sm leading-relaxed">
                                         {{ $dailyData['application'] }}
                                     </p>
                                 </div>
@@ -358,7 +358,7 @@
                                             </svg>
                                             Você sabia?
                                         </h3>
-                                        <p class="text-indigo-50 text-sm leading-relaxed">
+                                        <p class="text-ccb-blue-50 text-sm leading-relaxed">
                                             {{ $dailyData['curiosity'] }}
                                         </p>
                                     </div>

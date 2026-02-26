@@ -8,7 +8,7 @@
     --color-ccb-green: #22c55e;
 }
 
-/* Fallback/Explicit classes for CCB brand */
+/* Explicit brand utilities to avoid purge/compilation issues on some environments */
 .bg-ccb-blue {
     background-color: #033D60 !important;
 }

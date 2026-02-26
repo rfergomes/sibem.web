@@ -151,11 +151,11 @@
                                 </div>
                                 <div class="flex gap-2 mt-2">
                                      <a href="{{ route('report.14-5', $inventario->id) }}" target="_blank"
-                                        class="bg-indigo-900 text-white px-4 py-2 rounded font-bold text-xs uppercase shadow hover:bg-indigo-800 transition flex items-center gap-2">
+                                        class="bg-ccb-blue-900 text-white px-4 py-2 rounded font-bold text-xs uppercase shadow hover:bg-ccb-blue-800 transition flex items-center gap-2">
                                         📄 SIGA 14.5 (Ata)
                                     </a>
                                     <a href="{{ route('report.14-8', $inventario->id) }}" target="_blank"
-                                        class="bg-indigo-900 text-white px-4 py-2 rounded font-bold text-xs uppercase shadow hover:bg-indigo-800 transition flex items-center gap-2">
+                                        class="bg-ccb-blue-900 text-white px-4 py-2 rounded font-bold text-xs uppercase shadow hover:bg-ccb-blue-800 transition flex items-center gap-2">
                                         📅 SIGA 14.8 (Mensal)
                                     </a>
                                 </div>
