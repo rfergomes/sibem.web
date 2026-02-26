@@ -97,7 +97,7 @@
             </div>
 
             {{-- Account Details (Read-only) --}}
-            <div class="bg-gradient-to-br from-blue-50 to-indigo-50 rounded-xl border border-blue-100 p-8">
+            <div class="bg-gradient-to-br from-blue-50 to-ccb-blue-50 rounded-xl border border-blue-100 p-8">
                 <h2 class="text-lg font-semibold text-gray-900 mb-6">Detalhes da Conta</h2>
                 
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
