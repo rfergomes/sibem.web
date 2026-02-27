@@ -235,7 +235,7 @@
                     x-transition:enter-start="opacity-0 scale-95" x-transition:enter-end="opacity-100 scale-100"
                     x-transition:leave="transition ease-in duration-75" x-transition:leave-start="opacity-100 scale-100"
                     x-transition:leave-end="opacity-0 scale-95"
-                    class="absolute right-0 mt-2 w-96 bg-white rounded-lg shadow-xl ring-1 ring-black ring-opacity-5 origin-top-right z-50 max-h-[500px] flex flex-col">
+                    class="absolute -right-12 sm:right-0 mt-2 w-[calc(100vw-2.5rem)] sm:w-96 bg-white rounded-lg shadow-xl ring-1 ring-black ring-opacity-5 origin-top-right z-50 max-h-[500px] flex flex-col">
 
                     <!-- Header -->
                     <div

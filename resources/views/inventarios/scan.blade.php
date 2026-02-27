@@ -34,7 +34,7 @@
     <!-- Main Container: Uses flex-1 and overflow-hidden to fit between header/footer -->
     <div x-data="inventarioScanner()" 
          @click="focusScanner()"
-         class="flex flex-col lg:flex-row gap-5 h-[calc(100vh-135px)] overflow-hidden p-2">
+         class="flex flex-col lg:flex-row gap-5 h-auto lg:h-[calc(100vh-135px)] overflow-y-auto lg:overflow-hidden p-2">
 
         <!-- SLIM SIDEBAR: Stats & Actions -->
         <div class="lg:w-64 flex flex-col gap-4 overflow-y-auto pr-1">
@@ -86,8 +86,8 @@
         <!-- MAIN AREA: Scanner & History (Expanding more) -->
         <div class="flex-grow flex flex-col gap-4 overflow-hidden">
             <!-- Top Bar (More Compact) -->
-            <div class="bg-white/80 backdrop-blur-md p-3 px-4 rounded-xl shadow-sm border border-gray-200 flex items-center justify-between gap-4">
-                <div class="flex-grow max-w-lg">
+            <div class="bg-white/80 backdrop-blur-md p-3 px-4 rounded-xl shadow-sm border border-gray-200 flex flex-col sm:flex-row items-center justify-between gap-4">
+                <div class="w-full sm:flex-grow max-w-lg">
                     <div class="relative">
                         <span class="absolute left-3 top-3 text-xs opacity-40">📍</span>
                         <select x-model="dependenciaId" class="w-full pl-8 text-[11px] border-gray-100 rounded-lg focus:ring-0 focus:border-blue-600 font-bold uppercase tracking-tight py-2 shadow-inner bg-gray-50/80">
@@ -99,12 +99,12 @@
                     </div>
                 </div>
                 
-                <div class="flex items-center gap-6">
+                <div class="flex flex-wrap items-center justify-center gap-3 sm:gap-6 w-full sm:w-auto">
                     <button @click="toggleCamera()" 
                             :class="cameraActive ? 'bg-red-600 text-white border-red-700' : 'bg-green-600 text-white border-green-700'"
-                            class="p-2.5 px-5 border rounded-lg shadow-sm hover:opacity-90 transition flex items-center gap-2 group">
+                            class="flex-1 sm:flex-none p-2.5 px-3 sm:px-5 border rounded-lg shadow-sm hover:opacity-90 transition flex items-center justify-center gap-2 group">
                         <span class="text-xs" x-text="cameraActive ? '⏹️' : '📷'"></span>
-                        <span class="text-[10px] font-black uppercase tracking-widest" x-text="cameraActive ? 'Parar Câmera' : 'Usar Câmera'"></span>
+                        <span class="text-[10px] font-black uppercase tracking-widest" x-text="cameraActive ? 'Parar' : 'Câmera'"></span>
                     </button>
 
                     <label class="flex items-center gap-2 cursor-pointer group">
@@ -115,9 +115,9 @@
                         </div>
                     </label>
 
-                    <button @click="showPendencias = true" class="p-2.5 px-5 bg-white border border-gray-300 text-blue-900 rounded-lg shadow-sm hover:bg-gray-50 transition flex items-center gap-2 group">
+                    <button @click="showPendencias = true" class="flex-1 sm:flex-none p-2.5 px-3 sm:px-5 bg-white border border-gray-300 text-blue-900 rounded-lg shadow-sm hover:bg-gray-50 transition flex items-center justify-center gap-2 group">
                         <span class="text-xs group-hover:rotate-12 transition">📋</span>
-                        <span class="text-[10px] font-black uppercase tracking-widest">Ver Pendências</span>
+                        <span class="text-[10px] font-black uppercase tracking-widest">Pendências</span>
                     </button>
                 </div>
             </div>
@@ -150,7 +150,7 @@
                                    @keyup.enter="processScan()"
                                    maxlength="12"
                                    placeholder="000000000000"
-                                   class="w-full text-4xl md:text-6xl font-mono tracking-tighter text-gray-900 border-none focus:ring-0 text-center uppercase p-4 md:p-6 bg-transparent"
+                                   class="w-full text-3xl md:text-6xl font-mono tracking-tighter text-gray-900 border-none focus:ring-0 text-center uppercase p-2 md:p-6 bg-transparent"
                                     id="scannerInput"
                                     @input="if(barcode.length === 12) processScan()"
                                     autofocus>
@@ -205,27 +205,27 @@
                         <thead class="bg-gray-50/80 border-b sticky top-0 backdrop-blur-sm z-10">
                             <tr>
                                 <th class="px-6 py-3 text-left font-black text-gray-400 uppercase tracking-tighter">Etiqueta</th>
-                                <th class="px-6 py-3 text-left font-black text-gray-400 uppercase tracking-tighter">Descrição do Bem Móvel</th>
-                                <th class="px-6 py-3 text-left font-black text-gray-400 uppercase tracking-tighter">Loc. Física</th>
-                                <th class="px-6 py-3 text-left font-black text-gray-400 uppercase tracking-tighter">Situação</th>
-                                <th class="px-6 py-3 text-center font-black text-gray-400 uppercase tracking-tighter">Lido</th>
+                                <th class="px-6 py-3 text-left font-black text-gray-400 uppercase tracking-tighter">Descrição</th>
+                                <th class="px-6 py-3 text-left font-black text-gray-400 uppercase tracking-tighter hidden sm:table-cell">Loc. Física</th>
+                                <th class="px-6 py-3 text-left font-black text-gray-400 uppercase tracking-tighter hidden md:table-cell">Situação</th>
+                                <th class="px-6 py-3 text-center font-black text-gray-400 uppercase tracking-tighter hidden sm:table-cell">Lido</th>
                             </tr>
                         </thead>
                         <tbody class="divide-y divide-gray-50">
                             <template x-for="(item, index) in history" :key="index + '-' + item.barcode">
                                 <tr class="hover:bg-blue-50/50 transition-colors group"
                                     :class="item.lido ? 'text-gray-400 bg-gray-50/30' : 'text-gray-900 font-medium'">
-                                    <td class="px-6 py-3 font-mono text-sm tracking-tighter" 
+                                    <td class="px-3 sm:px-6 py-3 font-mono text-sm tracking-tighter" 
                                         :class="item.is_cross_church ? 'text-red-700 font-black' : 'text-blue-900/40'"
                                         x-text="item.barcode"></td>
-                                    <td class="px-6 py-3 uppercase text-xs" x-text="item.descricao"></td>
-                                    <td class="px-6 py-3 text-gray-500 font-bold" x-text="item.dependencia"></td>
-                                    <td class="px-6 py-3">
+                                    <td class="px-3 sm:px-6 py-3 uppercase text-[10px] sm:text-xs" x-text="item.descricao"></td>
+                                    <td class="px-6 py-3 text-gray-500 font-bold hidden sm:table-cell" x-text="item.dependencia"></td>
+                                    <td class="px-6 py-3 hidden md:table-cell">
                                         <span class="px-2 py-0.5 rounded-full font-black text-[9px] uppercase tracking-tighter"
                                               :class="item.situacao.includes('DIVERGÊNCIA') ? 'bg-red-100 text-red-700' : 'bg-green-100 text-green-700'"
                                               x-text="item.situacao"></span>
                                     </td>
-                                    <td class="px-6 py-3 text-center">
+                                    <td class="px-6 py-3 text-center hidden sm:table-cell">
                                         <span class="inline-block w-2 h-2 rounded-full" :class="item.lido ? 'bg-green-500 shadow-sm shadow-green-200' : 'bg-gray-300'"></span>
                                     </td>
                                 </tr>
@@ -244,7 +244,7 @@
                  x-transition:enter-start="opacity-0 scale-95"
                  x-transition:enter-end="opacity-100 scale-100"
                  x-cloak>
-                <div class="bg-[#F0F0F0] rounded-lg shadow-[0_35px_60px_-15px_rgba(0,0,0,0.5)] w-full max-w-6xl h-[650px] border border-gray-400 flex flex-col overflow-hidden">
+                <div class="bg-[#F0F0F0] rounded-lg shadow-[0_35px_60px_-15px_rgba(0,0,0,0.5)] w-full max-w-6xl h-auto md:h-[650px] max-h-[90vh] border border-gray-400 flex flex-col overflow-hidden">
                     <!-- Title Bar -->
                     <div class="bg-gradient-to-b from-gray-100 to-gray-400 p-2 px-4 border-b border-gray-500 flex justify-between items-center shadow-sm">
                         <div class="flex items-center gap-2">
@@ -254,9 +254,9 @@
                         <button @click="showPendencias = false" class="bg-red-500 hover:bg-red-700 text-white font-bold p-1 px-3 rounded shadow-inner text-[10px]">X</button>
                     </div>
 
-                    <div class="flex flex-1 overflow-hidden">
+                    <div class="flex flex-1 flex-col md:flex-row overflow-hidden">
                         <!-- Left: List -->
-                        <div class="w-1/2 flex flex-col border-r border-gray-400 bg-[#E1E1E1]">
+                        <div class="w-full md:w-1/2 flex flex-col border-b md:border-b-0 md:border-r border-gray-400 bg-[#E1E1E1] overflow-hidden">
                             <div class="p-3 bg-gray-200 border-b border-gray-400 flex flex-col gap-2 shadow-inner">
                                 <div class="relative w-full">
                                     <input type="text" x-model="searchPendencia" placeholder="Pesquisar por Código ou Descrição..." class="w-full text-[11px] border-gray-300 rounded shadow-inner pl-8 pr-2 py-2 uppercase">
@@ -310,7 +310,7 @@
                         </div>
 
                         <!-- Right: Details & Actions -->
-                        <div class="w-1/2 p-6 flex flex-col gap-5 overflow-y-auto bg-[#F0F0F0] shadow-inner">
+                        <div class="w-full md:w-1/2 p-3 sm:p-6 flex flex-col gap-3 sm:gap-5 overflow-y-auto bg-[#F0F0F0] shadow-inner">
                             <!-- Info Header Buttons -->
                             <div class="flex justify-between gap-1 mb-2">
                                 @foreach(['CADASTRAR', 'IMPRIMIR', 'ALTERAR', 'EXCLUIR'] as $label)
