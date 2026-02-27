@@ -9,7 +9,8 @@
             <form action="{{ route('dashboard') }}" method="GET" class="flex flex-wrap gap-4 items-end">
                 <div>
                     <label class="block text-xs font-bold text-gray-500 uppercase mb-1">Ano</label>
-                    <select name="ano" class="rounded-lg border-gray-300 text-sm focus:ring-ccb-blue-500 focus:border-ccb-blue-500">
+                    <select name="ano"
+                        class="rounded-lg border-gray-300 text-sm focus:ring-ccb-blue-500 focus:border-ccb-blue-500">
                         @foreach(range(date('Y'), 2024) as $year)
                             <option value="{{ $year }}" {{ $year == $stats['ano'] ? 'selected' : '' }}>{{ $year }}</option>
                         @endforeach
@@ -189,24 +190,24 @@
                 <thead class="bg-gray-50 text-xs uppercase font-bold text-gray-400">
                     <tr>
                         <th class="px-4 py-3 rounded-l-lg">Localidade</th>
-                        <th class="px-4 py-3">Data Prevista</th>
-                        <th class="px-4 py-3">Responsável</th>
-                        <th class="px-4 py-3">Status</th>
+                        <th class="px-4 py-3">Data</th>
+                        <th class="px-4 py-3 hidden sm:table-cell">Responsável</th>
+                        <th class="px-4 py-3 hidden md:table-cell">Status</th>
                         <th class="px-4 py-3 rounded-r-lg">Ações</th>
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-gray-100">
                     @forelse($nextAppointments as $appt)
                         <tr class="hover:bg-gray-50 transition-colors">
-                            <td class="px-4 py-3 font-semibold text-gray-800">{{ $appt->local->nome }}</td>
-                            <td class="px-4 py-3">
-                                {{ $appt->scheduled_at ? $appt->scheduled_at->format('d/m/Y H:i') : 'A definir' }}
+                            <td class="px-4 py-3 font-semibold text-gray-800 text-xs sm:text-sm">{{ $appt->local->nome }}</td>
+                            <td class="px-4 py-3 text-xs sm:text-sm">
+                                {{ $appt->scheduled_at ? $appt->scheduled_at->format('d/m/y H:i') : '---' }}
                             </td>
-                            <td class="px-4 py-3 text-xs">
+                            <td class="px-4 py-3 text-xs hidden sm:table-cell">
                                 <span class="font-bold">{{ $appt->responsavel_nome }}</span><br>
                                 <span class="text-gray-400 uppercase tracking-tighter">{{ $appt->responsavel_cargo }}</span>
                             </td>
-                            <td class="px-4 py-3">
+                            <td class="px-4 py-3 hidden md:table-cell">
                                 <span
                                     class="px-2 py-0.5 rounded text-[10px] font-bold uppercase {{ $appt->status === 'confirmado' ? 'bg-green-100 text-green-700' : 'bg-blue-100 text-blue-700' }}">
                                     {{ $appt->status }}
@@ -214,7 +215,7 @@
                             </td>
                             <td class="px-4 py-3">
                                 <a href="{{ route('appointments.show', $appt) }}"
-                                    class="text-blue-600 font-bold hover:underline">Detalhes</a>
+                                    class="text-blue-600 font-bold hover:underline text-xs">Ver</a>
                             </td>
                         </tr>
                     @empty
@@ -230,31 +231,31 @@
     <!-- Versículo do Dia (Gemini AI) -->
     @if(isset($dailyData))
         <div x-data="{ showDevotional: false }" class="mt-8">
-            <div @click="showDevotional = true" class="fixed bottom-14 right-6 cursor-pointer group animate-slideUp"
-                style="position: fixed; bottom: 3.5rem; right: 1.5rem; animation: slideUp 0.5s ease-out;">
+            <div @click="showDevotional = true"
+                class="fixed bottom-14 right-4 sm:right-6 cursor-pointer group animate-slideUp z-[30]"
+                style="position: fixed; bottom: 3.5rem; right: 1rem; animation: slideUp 0.5s ease-out;">
                 <div
-                    class="bg-white rounded-xl shadow-xl p-5 border border-blue-100 max-w-xs relative hover:shadow-2xl hover:-translate-y-1 transition-all duration-300">
+                    class="bg-white rounded-xl shadow-xl p-3 sm:p-5 border border-blue-100 max-w-[200px] sm:max-w-xs relative hover:shadow-2xl hover:-translate-y-1 transition-all duration-300">
                     <div class="absolute -top-2 left-4 w-4 h-4 bg-white border-t border-l border-blue-100 rotate-45"></div>
 
-                    <div class="flex items-center gap-3 mb-2">
-                        <div class="bg-ccb-blue-50 p-1.5 rounded-lg">
-                            <svg class="w-4 h-4 text-ccb-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <div class="flex items-center gap-2 sm:gap-3 mb-2">
+                        <div class="bg-ccb-blue-50 p-1 rounded-lg shrink-0">
+                            <svg class="w-3 h-3 sm:w-4 sm:h-4 text-ccb-blue-600" fill="none" viewBox="0 0 24 24"
+                                stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                     d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.082.477 4 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.082.477-4 1.253" />
                             </svg>
                         </div>
                         <div>
-                            <p class="text-[13px] italic text-gray-700 leading-relaxed line-clamp-2">
+                            <p class="text-[11px] sm:text-[13px] italic text-gray-700 leading-tight line-clamp-2">
                                 "{{ $dailyData['verse'] }}"
-                            </p>
-                            <p class="text-[10px] font-bold text-gray-400 mt-1 uppercase tracking-wide">
-                                {{ $dailyData['reference'] ?? '' }}
                             </p>
                         </div>
                     </div>
 
                     <div class="flex items-center justify-between mt-2 pt-2 border-t border-gray-50">
-                        <span class="text-[9px] font-bold text-ccb-blue-400 uppercase tracking-widest">Clique para meditar</span>
+                        <span class="text-[9px] font-bold text-ccb-blue-400 uppercase tracking-widest">Clique para
+                            meditar</span>
                         <p class="text-[10px] font-bold text-ccb-blue-900">
                             Versículo do Dia
                         </p>

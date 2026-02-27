@@ -4,85 +4,85 @@
 
 @section('content')
     <div class="space-y-6 animate-fadeIn" x-data="{ 
-                                                                                            showJustificationModal: false, 
-                                                                                            selectedAppointmentId: null, 
-                                                                                            newStatus: '',
-                                                                                        confirmStatus(id, status) {
-                                                                                            if (status === 'cancelado' || status === 'adiado') {
-                                                                                                this.selectedAppointmentId = id;
-                                                                                                this.newStatus = status;
-                                                                                                this.showJustificationModal = true;
-                                                                                            } else {
-                                                                                                window.confirmAction('Confirmar Status', 'Deseja alterar o status para ' + status + '?', () => {
-                                                                                                    const form = document.createElement('form');
-                                                                                                    form.method = 'POST';
-                                                                                                    form.action = '/admin/agendamentos/' + id + '/status';
+                                                                                                showJustificationModal: false, 
+                                                                                                selectedAppointmentId: null, 
+                                                                                                newStatus: '',
+                                                                                            confirmStatus(id, status) {
+                                                                                                if (status === 'cancelado' || status === 'adiado') {
+                                                                                                    this.selectedAppointmentId = id;
+                                                                                                    this.newStatus = status;
+                                                                                                    this.showJustificationModal = true;
+                                                                                                } else {
+                                                                                                    window.confirmAction('Confirmar Status', 'Deseja alterar o status para ' + status + '?', () => {
+                                                                                                        const form = document.createElement('form');
+                                                                                                        form.method = 'POST';
+                                                                                                        form.action = '/admin/agendamentos/' + id + '/status';
 
-                                                                                                    const csrfInput = document.createElement('input');
-                                                                                                    csrfInput.type = 'hidden';
-                                                                                                    csrfInput.name = '_token';
-                                                                                                    csrfInput.value = '{{ csrf_token() }}';
-                                                                                                    form.appendChild(csrfInput);
+                                                                                                        const csrfInput = document.createElement('input');
+                                                                                                        csrfInput.type = 'hidden';
+                                                                                                        csrfInput.name = '_token';
+                                                                                                        csrfInput.value = '{{ csrf_token() }}';
+                                                                                                        form.appendChild(csrfInput);
 
-                                                                                                    const statusInput = document.createElement('input');
-                                                                                                    statusInput.type = 'hidden';
-                                                                                                    statusInput.name = 'status';
-                                                                                                    statusInput.value = status;
-                                                                                                    form.appendChild(statusInput);
+                                                                                                        const statusInput = document.createElement('input');
+                                                                                                        statusInput.type = 'hidden';
+                                                                                                        statusInput.name = 'status';
+                                                                                                        statusInput.value = status;
+                                                                                                        form.appendChild(statusInput);
 
-                                                                                                    document.body.appendChild(form);
-                                                                                                    form.submit();
-                                                                                                });
-                                                                                            }
-                                                                                        },
-                                                    confirmDelete(id, status, url, data, local, responsavel) {
-                                                        if (status === 'confirmado') {
-                                                            Swal.fire({
-                                                                title: 'Ação Bloqueada',
-                                                                text: 'Não é possível excluir um agendamento confirmado (verde). Por favor, cancele ou reagende (para voltar a previsão) antes de excluir.',
-                                                                icon: 'error',
-                                                                confirmButtonColor: '#1e40af',
-                                                                confirmButtonText: 'Entendi',
-                                                                customClass: {
-                                                                    popup: 'rounded-xl',
-                                                                    confirmButton: 'px-6 py-2 rounded-lg font-bold'
-                                                                }
+                                                                                                        document.body.appendChild(form);
+                                                                                                        form.submit();
+                                                                                                    });
+                                                                                                }
+                                                                                            },
+                                                        confirmDelete(id, status, url, data, local, responsavel) {
+                                                            if (status === 'confirmado') {
+                                                                Swal.fire({
+                                                                    title: 'Ação Bloqueada',
+                                                                    text: 'Não é possível excluir um agendamento confirmado (verde). Por favor, cancele ou reagende (para voltar a previsão) antes de excluir.',
+                                                                    icon: 'error',
+                                                                    confirmButtonColor: '#1e40af',
+                                                                    confirmButtonText: 'Entendi',
+                                                                    customClass: {
+                                                                        popup: 'rounded-xl',
+                                                                        confirmButton: 'px-6 py-2 rounded-lg font-bold'
+                                                                    }
+                                                                });
+                                                                return;
+                                                            }
+
+                                                            window.confirmAction('Excluir Agendamento', 
+                                                                'Deseja excluir permanentemente este agendamento? Esta ação não pode ser desfeita.', 
+                                                                () => {
+                                                                const form = document.createElement('form');
+                                                                form.method = 'POST';
+                                                                form.action = url;
+
+                                                                const methodInput = document.createElement('input');
+                                                                methodInput.type = 'hidden';
+                                                                methodInput.name = '_method';
+                                                                methodInput.value = 'DELETE';
+                                                                form.appendChild(methodInput);
+
+                                                                const tokenMeta = document.querySelector('meta[name=\'csrf-token\']');
+                                                                const csrfInput = document.createElement('input');
+                                                                csrfInput.type = 'hidden';
+                                                                csrfInput.name = '_token';
+                                                                csrfInput.value = tokenMeta ? tokenMeta.getAttribute('content') : '';
+                                                                form.appendChild(csrfInput);
+
+                                                                document.body.appendChild(form);
+                                                                form.submit();
                                                             });
-                                                            return;
                                                         }
-
-                                                        window.confirmAction('Excluir Agendamento', 
-                                                            'Deseja excluir permanentemente este agendamento? Esta ação não pode ser desfeita.', 
-                                                            () => {
-                                                            const form = document.createElement('form');
-                                                            form.method = 'POST';
-                                                            form.action = url;
-
-                                                            const methodInput = document.createElement('input');
-                                                            methodInput.type = 'hidden';
-                                                            methodInput.name = '_method';
-                                                            methodInput.value = 'DELETE';
-                                                            form.appendChild(methodInput);
-
-                                                            const tokenMeta = document.querySelector('meta[name=\'csrf-token\']');
-                                                            const csrfInput = document.createElement('input');
-                                                            csrfInput.type = 'hidden';
-                                                            csrfInput.name = '_token';
-                                                            csrfInput.value = tokenMeta ? tokenMeta.getAttribute('content') : '';
-                                                            form.appendChild(csrfInput);
-
-                                                            document.body.appendChild(form);
-                                                            form.submit();
-                                                        });
-                                                    }
-                                                }">
-        <div class="flex justify-between items-center">
+                                                    }">
+        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
             <div>
-                <h2 class="text-2xl font-bold text-gray-800">Gestão de Visitas</h2>
+                <h2 class="text-xl sm:text-2xl font-bold text-gray-800">Gestão de Visitas</h2>
                 <p class="text-sm text-gray-500">Acompanhe e organize as datas de inventário nas localidades.</p>
             </div>
             <a href="{{ route('appointments.create') }}"
-                class="inline-flex items-center px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-xl transition-all shadow-md hover:shadow-lg active:scale-95 gap-2">
+                class="w-full sm:w-auto inline-flex items-center justify-center px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-xl transition-all shadow-md hover:shadow-lg active:scale-95 gap-2">
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
                 </svg>
@@ -92,8 +92,8 @@
 
         <!-- Filtros -->
         <div class="bg-white rounded-2xl shadow-sm border border-gray-200 p-4 mb-6">
-            <form method="GET" action="{{ route('appointments.index') }}" class="flex items-center gap-4">
-                <div class="w-full md:w-32">
+            <form method="GET" action="{{ route('appointments.index') }}" class="flex flex-col sm:flex-row items-end gap-4">
+                <div class="w-full sm:w-32">
                     <label for="year" class="block text-xs font-bold text-gray-400 uppercase mb-2">Ano</label>
                     <select name="year" id="year" onchange="this.form.submit()"
                         class="w-full bg-gray-50 border border-gray-200 rounded-xl focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 text-sm px-4 py-2.5 font-bold text-gray-700 transition-all">
@@ -103,7 +103,7 @@
                         @endforeach
                     </select>
                 </div>
-                <div class="w-full md:w-48">
+                <div class="w-full sm:w-48">
                     <label for="month" class="block text-xs font-bold text-gray-400 uppercase mb-2">Mês</label>
                     <select name="month" id="month" onchange="this.form.submit()"
                         class="w-full bg-gray-50 border border-gray-200 rounded-xl focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 text-sm px-4 py-2.5 font-bold text-gray-700 transition-all">
@@ -115,7 +115,7 @@
                         @endforeach
                     </select>
                 </div>
-                <div class="w-full md:w-64">
+                <div class="w-full sm:w-64">
                     <label for="status" class="block text-xs font-bold text-gray-400 uppercase mb-2">Filtrar por
                         Status</label>
                     <select name="status" id="status" onchange="this.form.submit()"
@@ -124,13 +124,11 @@
                         <option value="previsao" {{ request('status') === 'previsao' ? 'selected' : '' }}>🔵 Previsão</option>
                         <option value="confirmado" {{ request('status') === 'confirmado' ? 'selected' : '' }}>🟢 Confirmado
                         </option>
-                        <option value="adiado" {{ request('status') === 'adiado' ? 'selected' : '' }}>🟠 Adiado / Reagendado
-                        </option>
+                        <option value="adiado" {{ request('status') === 'adiado' ? 'selected' : '' }}>🟠 Adiado</option>
                         <option value="cancelado" {{ request('status') === 'cancelado' ? 'selected' : '' }}>🔴 Cancelado
                         </option>
                     </select>
                 </div>
-
             </form>
         </div>
 
@@ -140,48 +138,48 @@
                 <table class="w-full text-left text-sm">
                     <thead class="bg-gray-50 text-xs uppercase font-bold text-gray-400 border-b border-gray-100">
                         <tr>
-                            <th class="px-6 py-4">Localidade</th>
-                            <th class="px-6 py-4">Responsável / Cargo</th>
-                            <th class="px-6 py-4">Data Planejada</th>
-                            <th class="px-6 py-4">Status</th>
-                            <th class="px-6 py-4">Criado por</th>
-                            <th class="px-6 py-4 text-center">Ações</th>
+                            <th class="px-3 sm:px-6 py-4">Localidade</th>
+                            <th class="px-6 py-4 hidden md:table-cell">Responsável</th>
+                            <th class="px-3 sm:px-6 py-4">Data Planejada</th>
+                            <th class="px-3 sm:px-6 py-4">Status</th>
+                            <th class="px-6 py-4 hidden lg:table-cell">Criado por</th>
+                            <th class="px-3 sm:px-6 py-4 text-center">Ações</th>
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-gray-100">
                         @forelse($appointments as $appointment)
                             <tr class="hover:bg-gray-50/50 transition-colors">
-                                <td class="px-6 py-4">
+                                <td class="px-3 sm:px-6 py-4">
                                     <div class="flex flex-col">
-                                        <span class="font-bold text-gray-800">
+                                        <span class="font-bold text-gray-800 text-xs sm:text-sm">
                                             {{ $appointment->igreja ? $appointment->igreja->nome : $appointment->local->nome }}
                                         </span>
                                         @if($appointment->igreja)
-                                            <span class="text-[10px] text-gray-400 uppercase font-bold tracking-tight">
+                                            <span class="text-[9px] text-gray-400 uppercase font-bold tracking-tight">
                                                 {{ $appointment->local->nome }}
                                             </span>
                                         @endif
                                     </div>
                                 </td>
-                                <td class="px-6 py-4">
+                                <td class="px-6 py-4 hidden md:table-cell">
                                     <div class="flex flex-col">
                                         <span class="font-medium text-gray-700">{{ $appointment->responsavel_nome }}</span>
                                         <span
                                             class="text-[10px] text-gray-400 uppercase font-bold tracking-tight">{{ $appointment->responsavel_cargo ?? 'Sem Cargo' }}</span>
                                     </div>
                                 </td>
-                                <td class="px-6 py-4">
+                                <td class="px-3 sm:px-6 py-4 text-xs sm:text-sm">
                                     <div class="flex items-center gap-2">
-                                        <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor"
+                                        <svg class="hidden sm:block w-4 h-4 text-gray-400" fill="none" stroke="currentColor"
                                             viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                                 d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
                                         </svg>
                                         <span
-                                            class="font-medium text-gray-600">{{ $appointment->scheduled_at ? $appointment->scheduled_at->format('d/m/Y H:i') : 'A definir' }}</span>
+                                            class="font-medium text-gray-600">{{ $appointment->scheduled_at ? $appointment->scheduled_at->format('d/m/y H:i') : '---' }}</span>
                                     </div>
                                 </td>
-                                <td class="px-6 py-4">
+                                <td class="px-3 sm:px-6 py-4">
                                     @php
                                         $statusClasses = [
                                             'previsao' => 'bg-blue-50 text-blue-600 border-blue-100',
@@ -189,22 +187,19 @@
                                             'cancelado' => 'bg-red-50 text-red-600 border-red-100',
                                             'adiado' => 'bg-orange-50 text-orange-600 border-orange-100',
                                         ];
-                                        $statusLabels = [
-                                            'previsao' => 'Previsão',
-                                            'confirmado' => 'Confirmado',
-                                            'cancelado' => 'Cancelado',
-                                            'adiado' => 'Adiado',
-                                        ];
                                     @endphp
                                     <span
-                                        class="px-3 py-1 rounded-full border text-[11px] font-bold uppercase tracking-wider {{ $statusClasses[$appointment->status] ?? 'bg-gray-50 text-gray-500 border-gray-200' }}">
-                                        {{ $statusLabels[$appointment->status] ?? 'INDEFINIDO' }}
+                                        class="px-2 sm:px-3 py-0.5 sm:py-1 rounded-full border text-[9px] sm:text-[11px] font-bold uppercase tracking-wider {{ $statusClasses[$appointment->status] ?? 'bg-gray-50 text-gray-500 border-gray-200' }}">
+                                        <span
+                                            class="hidden sm:inline">{{ $statusLabels[$appointment->status] ?? 'INDEFINIDO' }}</span>
+                                        <span
+                                            class="sm:hidden">{{ substr($statusLabels[$appointment->status] ?? '?', 0, 1) }}</span>
                                     </span>
                                 </td>
-                                <td class="px-6 py-4 text-gray-500 italic text-xs">
+                                <td class="px-6 py-4 text-gray-500 italic text-xs hidden lg:table-cell">
                                     {{ $appointment->creator->name }}
                                 </td>
-                                <td class="px-6 py-4">
+                                <td class="px-3 sm:px-6 py-4">
                                     <div class="flex items-center justify-center gap-2">
                                         <a href="{{ route('appointments.show', $appointment) }}"
                                             class="p-2 text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
@@ -275,8 +270,8 @@
                         </h3>
                         <p class="text-sm text-gray-500 mt-2"
                             x-text="newStatus === 'cancelado' 
-                                                                                            ? 'Por favor, informe o motivo do cancelamento.' 
-                                                                                            : 'Defina a nova data para o reagendamento.'">
+                                                                                                ? 'Por favor, informe o motivo do cancelamento.' 
+                                                                                                : 'Defina a nova data para o reagendamento.'">
                         </p>
                     </div>
 
