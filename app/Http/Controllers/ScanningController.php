@@ -97,13 +97,13 @@ class ScanningController extends Controller
     public function saveTratativa(Request $request, $id)
     {
         $request->validate([
-            'detalhe_ids' => 'required|array',
+            'detalhe_ids' => 'present|array', // Allow empty array
             'detalhe_ids.*' => 'integer',
             'tratativa' => 'required|string',
             'observacao' => 'nullable|string',
         ]);
 
-        $ids = $request->detalhe_ids;
+        $ids = $request->detalhe_ids ?? [];
         $tratativa = $request->tratativa;
         $observacao = $request->observacao;
         $generatedForms = [];
@@ -111,7 +111,56 @@ class ScanningController extends Controller
         DB::connection('tenant')->beginTransaction();
 
         try {
-            foreach ($ids as $detalheId) {
+            $inventario = Inventario::findOrFail($id);
+            $idsToProcess = [];
+
+            // 1) SPECIAL CASE: Adding a new item OFFLINE (No Tag/detalhe_ids)
+            if (empty($ids) && $tratativa === 'novo') {
+                if (!$request->nova_descricao || !$request->nova_dependencia) {
+                    throw new \Exception("Descrição e Dependência são obrigatórios para um Novo Bem Sem Etiqueta.");
+                }
+
+                // Generate a shadow Barcode (MAX 12 digits: NW + UNIX Time)
+                $shadowBarcode = 'NW' . time();
+
+                // Create the Shadow Bem
+                $shadowBem = Bem::create([
+                    'id_bem' => $shadowBarcode,
+                    'descricao' => strtoupper($request->nova_descricao),
+                    'id_igreja' => $inventario->id_igreja,
+                    'id_dependencia' => $request->nova_dependencia,
+                    'id_status' => 1,
+                    'origem' => 'manual'
+                ]);
+
+                // Record the Divergence
+                \App\Models\Divergencia::create([
+                    'inventario_id' => $inventario->id,
+                    'id_bem' => $shadowBarcode,
+                    'codigo_divergencia' => '02',
+                    'descricao' => 'BEM SEM ETIQUETA ADICIONADO NA CONFERÊNCIA',
+                    'id_dependencia_nova' => $request->nova_dependencia,
+                    'registrado_por' => Auth::user()->nome
+                ]);
+
+                // Create the Detalhe directly linked to this inventory
+                $newDetalhe = InventarioDetalhe::create([
+                    'inventario_id' => $inventario->id,
+                    'id_bem' => $shadowBarcode,
+                    'status_leitura' => 'encontrado', // Since we just created it and "found" it
+                    'tratativa' => 'novo',
+                    'observacao' => $observacao ?: "NOVO BEM SEM ETIQUETA REGISTRADO",
+                    'user_id_conferencia' => Auth::id(),
+                    'timestamp_leitura' => now()
+                ]);
+
+                // Add this new detail's ID to process Doacao/Forms loop below if needed
+                $idsToProcess[] = $newDetalhe->id;
+            } else {
+                $idsToProcess = $ids;
+            }
+
+            foreach ($idsToProcess as $detalheId) {
                 $detalhe = InventarioDetalhe::where('inventario_id', $id)
                     ->where('id', $detalheId)
                     ->firstOrFail();
@@ -214,12 +263,12 @@ class ScanningController extends Controller
             }
 
             DB::connection('tenant')->commit();
-            $count = count($ids);
+            $count = count($idsToProcess);
 
             // Check if any item has donation PDFs
             $donationPdfs = null;
-            if ($request->is_doacao && $request->tratativa === 'novo') {
-                $firstDetalhe = InventarioDetalhe::find($ids[0]);
+            if ($request->is_doacao && $request->tratativa === 'novo' && $count > 0) {
+                $firstDetalhe = InventarioDetalhe::find($idsToProcess[0]);
                 if ($firstDetalhe && $firstDetalhe->documento_doacao_path) {
                     $files = explode('|', $firstDetalhe->documento_doacao_path);
                     $donationPdfs = [
