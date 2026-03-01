@@ -69,6 +69,16 @@
             </div>
 
 
+            <!-- SCANNER ACTION BUTTONS -->
+            <div class="flex flex-col gap-2 mb-2 lg:mb-4">
+                <button @click="toggleCamera()" class="w-full bg-green-500 hover:bg-green-600 rounded-xl shadow-lg border-b-4 border-green-700 text-white font-black text-xs uppercase p-3 transition flex items-center justify-center gap-2 group">
+                    <span class="text-xl group-hover:scale-110 transition">📷</span> Câmera Celular
+                </button>
+                <button @click="abrirScannerManual()" class="w-full bg-[#004A80] hover:bg-[#003B66] rounded-xl shadow-lg border-b-4 border-[#002D4C] text-white font-black text-xs uppercase p-3 transition flex items-center justify-center gap-2 group">
+                    <span class="text-xl group-hover:scale-110 transition animate-pulse">📠</span> Leitor / Bipe Único
+                </button>
+            </div>
+
             <!-- Sidebar Actions (Fixed at bottom if possible) -->
             <div class="mt-auto space-y-2 pt-2">
                 <button onclick="location.reload()" class="w-full py-2 bg-gray-50 hover:bg-gray-100 text-gray-500 rounded-lg text-[9px] font-black uppercase tracking-widest transition border border-gray-200">
@@ -83,197 +93,216 @@
             </div>
         </div>
 
-        <!-- MAIN AREA: Scanner & History (Expanding more) -->
-        <div class="flex-grow flex flex-col gap-4 overflow-hidden">
-            <!-- Top Bar (More Compact) -->
-            <div class="bg-white/80 backdrop-blur-md p-3 px-4 rounded-xl shadow-sm border border-gray-200 flex flex-col sm:flex-row items-center justify-between gap-4">
-                <div class="w-full sm:flex-grow max-w-lg">
-                    <div class="relative">
-                        <span class="absolute left-3 top-3 text-xs opacity-40">📍</span>
-                        <select x-model="dependenciaId" class="w-full pl-8 text-[11px] border-gray-100 rounded-lg focus:ring-0 focus:border-blue-600 font-bold uppercase tracking-tight py-2 shadow-inner bg-gray-50/80">
-                            <option value="">SELECIONE LOCALIZAÇÃO FÍSICA...</option>
-                            @foreach(App\Models\Dependencia::orderBy('nome')->get() as $dep)
-                                <option value="{{ $dep->id }}">{{ str_pad($dep->id, 3, '0', STR_PAD_LEFT) }} - {{ $dep->nome }}</option>
-                            @endforeach
-                        </select>
+        <!-- OLD MAIN AREA REMOVED - REPLACED BY PENDÊNCIAS NATIVE VIEW -->
+
+        <!-- SCANNER MANUAL FULLSCREEN OVERLAY -->
+        <div x-show="showScannerManual" 
+             class="fixed inset-0 z-[140] bg-[#F5F7FA] flex flex-col"
+             x-transition:enter="transition ease-out duration-300"
+             x-transition:enter-start="opacity-0 translate-y-full"
+             x-transition:enter-end="opacity-100 translate-y-0"
+             x-transition:leave="transition ease-in duration-200"
+             x-transition:leave-start="opacity-100 translate-y-0"
+             x-transition:leave-end="opacity-0 translate-y-full"
+             x-cloak>
+            
+            <!-- Header bar -->
+            <div class="bg-gray-100 text-[#004A80] p-4 flex justify-between items-center shadow-sm border-b-2 border-gray-200 z-10 shrink-0">
+                <div class="flex items-center gap-3">
+                    <span class="text-gray-500 animate-pulse text-2xl">📠</span>
+                    <div class="flex flex-col">
+                        <span class="font-black text-sm md:text-lg uppercase tracking-widest text-[#004A80]">Leitor / Digitação</span>
+                        <span class="text-[9px] font-bold text-gray-500 uppercase tracking-widest">Aguardando Código de Barras...</span>
                     </div>
                 </div>
-                
-                <div class="flex flex-wrap items-center justify-center gap-3 sm:gap-6 w-full sm:w-auto">
-                    <button @click="toggleCamera()" 
-                            :class="cameraActive ? 'bg-red-600 text-white border-red-700' : 'bg-green-600 text-white border-green-700'"
-                            class="flex-1 sm:flex-none p-2.5 px-3 sm:px-5 border rounded-lg shadow-sm hover:opacity-90 transition flex items-center justify-center gap-2 group">
-                        <span class="text-xs" x-text="cameraActive ? '⏹️' : '📷'"></span>
-                        <span class="text-[10px] font-black uppercase tracking-widest" x-text="cameraActive ? 'Parar' : 'Câmera'"></span>
-                    </button>
-
-                    <label class="flex items-center gap-2 cursor-pointer group">
-                        <span class="text-[9px] font-black text-gray-400 uppercase tracking-tighter group-hover:text-blue-900 transition">Auto-foco</span>
-                        <div class="relative inline-flex items-center scale-75">
-                            <input type="checkbox" x-model="autoFocus" class="sr-only peer">
-                            <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-[#004A80]"></div>
-                        </div>
-                    </label>
-
-                    <button @click="showPendencias = true" class="flex-1 sm:flex-none p-2.5 px-3 sm:px-5 bg-white border border-gray-300 text-blue-900 rounded-lg shadow-sm hover:bg-gray-50 transition flex items-center justify-center gap-2 group">
-                        <span class="text-xs group-hover:rotate-12 transition">📋</span>
-                        <span class="text-[10px] font-black uppercase tracking-widest">Pendências</span>
-                    </button>
-                </div>
-            </div>
-
-            <!-- LEITOR CARD (Slimmed padding) -->
-            <div class="bg-white rounded-2xl shadow-xl border border-gray-100 flex flex-col overflow-hidden ring-4 ring-gray-50/50">
-                <div class="p-6 pb-2 flex flex-col items-center">
-                    <div class="text-center mb-6">
-                        <h2 class="text-xl font-black text-gray-800 uppercase tracking-tight">Congregação Cristã no Brasil</h2>
-                        <p class="text-[9px] font-black text-blue-800/40 uppercase tracking-[0.4em]">Administração Central</p>
-                    </div>
-
-                    <div class="w-full max-w-4xl space-y-6">
-                        <!-- Camera Scanner Container -->
-                        <div x-show="cameraActive" 
-                             x-transition:enter="transition ease-out duration-300"
-                             x-transition:enter-start="opacity-0 -translate-y-4"
-                             x-transition:enter-end="opacity-100 translate-y-0"
-                             class="mb-4 overflow-hidden rounded-2xl border-4 border-blue-100 shadow-inner bg-black relative aspect-video md:aspect-auto md:h-64">
-                            <div id="reader" class="w-full h-full"></div>
-                            <div class="absolute inset-0 pointer-events-none border-2 border-dashed border-white/30 m-8 rounded-lg flex items-center justify-center">
-                                <div class="w-full h-0.5 bg-red-500/50 absolute animate-pulse"></div>
-                            </div>
-                        </div>
-
-                        <!-- Main Input -->
-                        <div class="relative bg-white border-2 border-gray-100 rounded-2xl shadow-inner p-1">
-                            <input type="text" 
-                                   x-model="barcode" 
-                                   @keyup.enter="processScan()"
-                                   maxlength="12"
-                                   placeholder="000000000000"
-                                   class="w-full text-3xl md:text-6xl font-mono tracking-tighter text-gray-900 border-none focus:ring-0 text-center uppercase p-2 md:p-6 bg-transparent"
-                                    id="scannerInput"
-                                    @input="if(barcode.length === 12) processScan()"
-                                    autofocus>
-                            
-                            <div class="absolute -bottom-5 left-0 right-0 text-center">
-                                <p class="text-[8px] font-black text-gray-400 uppercase tracking-[0.4em] animate-pulse">Aguardando Leitura da Etiqueta...</p>
-                            </div>
-                        </div>
-
-                        <!-- Search Section (More Horizontal) -->
-                        <div class="flex gap-3">
-                            <div class="flex-grow relative">
-                                <span class="absolute left-4 top-3.5 text-xs opacity-20">🔍</span>
-                                <input type="text" 
-                                       x-model="searchText" 
-                                       @keyup.enter="searchByText()"
-                                       placeholder="BUSCA RÁPIDA POR NOME OU DETALHES DO ITEM..." 
-                                       class="w-full p-3.5 pl-10 text-[10px] border border-gray-200 rounded-xl shadow-inner uppercase font-bold focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 bg-gray-50/30">
-                            </div>
-                            <button @click="searchByText()" class="px-8 bg-gray-800 text-white text-[10px] font-black uppercase rounded-xl shadow-sm hover:bg-black transition-all">
-                                Localizar Item
-                            </button>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Status Footer (More Compact) -->
-                <div class="mt-4 bg-gray-50/80 border-t border-gray-100 p-3 px-8 flex justify-between items-center">
-                    <div class="flex items-center gap-6">
+                <!-- Global Feedback Toast Overlay -->
+                <div x-show="showFeedback" class="fixed top-20 left-1/2 transform -translate-x-1/2 z-[200] w-[90%] md:w-auto"
+                     x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0 -translate-y-8" x-transition:enter-end="opacity-100 translate-y-0"
+                     x-transition:leave="transition ease-in duration-150" x-transition:leave-start="opacity-100 translate-y-0" x-transition:leave-end="opacity-0 translate-y-8" x-cloak>
+                    <div class="bg-gray-900/90 text-white px-6 py-4 rounded-xl shadow-2xl flex items-center gap-4 border-l-4 border-blue-500 backdrop-blur-md">
+                        <div class="text-3xl" x-text="feedbackIcon"></div>
                         <div class="flex flex-col">
-                            <span class="text-[8px] font-black text-gray-400 uppercase">Último Lido</span>
-                            <span class="text-sm font-black text-gray-800 font-mono tracking-tighter" x-text="lastItem.barcode || '---'"></span>
-                        </div>
-                        <div class="h-6 w-px bg-gray-200"></div>
-                        <div class="flex flex-col max-w-lg">
-                            <span class="text-[8px] font-black text-gray-400 uppercase">Descrição</span>
-                            <span class="text-[11px] font-bold text-gray-600 truncate uppercase" x-text="lastItem.descricao || 'Nenhum item processado'"></span>
+                            <span class="font-black text-[13px] uppercase tracking-wider text-gray-100" x-text="feedbackTitle"></span>
+                            <span class="text-[11px] font-bold text-gray-300 mt-0.5" x-text="feedbackMessage"></span>
                         </div>
                     </div>
-                    <span class="px-3 py-1 bg-blue-100 text-blue-700 rounded-lg text-[9px] font-black uppercase" x-show="lastItem.situacao" x-text="lastItem.situacao"></span>
                 </div>
+                <button @click="fecharScannerManual()" class="bg-gray-300 hover:bg-gray-400 text-gray-700 font-black px-6 py-3 rounded-lg text-[10px] md:text-sm uppercase shadow-sm flex items-center gap-2 transition">
+                    <span>X</span> Voltar
+                </button>
             </div>
+            
+            <div class="flex-grow p-4 md:p-8 flex flex-col gap-4 overflow-y-auto">
+                <!-- CONTROLS & SETTINGS (Moved from Home) -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 shrink-0">
+                    <!-- Location Selector -->
+                    <div class="bg-white p-3 border border-gray-200 shadow-sm rounded-xl">
+                        <span class="text-[9px] font-black uppercase text-gray-500 mb-1 block">Localização Base</span>
+                        <div class="flex items-center gap-2">
+                            <span class="text-xs opacity-40">📍</span>
+                            <select x-model="dependenciaId" class="w-full text-xs font-bold border-gray-200 rounded-lg focus:ring-0 focus:border-blue-600 uppercase tracking-tight py-1.5 shadow-inner bg-gray-50">
+                                <option value="">DEFINA LOCALIZAÇÃO FÍSICA AQUI...</option>
+                                @foreach(App\Models\Dependencia::orderBy('nome')->get() as $dep)
+                                    <option value="{{ $dep->id }}">{{ str_pad($dep->id, 3, '0', STR_PAD_LEFT) }} - {{ $dep->nome }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                    </div>
 
-            <!-- HISTORY LIST CARD -->
-            <div class="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden flex flex-col min-h-[300px]">
-                <div class="bg-[#004A80] text-white p-3 px-6 flex justify-between items-center shadow-md">
-                    <span class="text-[11px] font-black uppercase tracking-widest">Log de leituras recentes ({{ $inventario->mes }}/{{ $inventario->ano }})</span>
-                    <span class="bg-blue-400/20 px-2 py-0.5 rounded text-[10px]" x-text="history.length + ' Itens Registrados'"></span>
+                    <!-- Search and Switches -->
+                    <div class="flex flex-col gap-2">
+                        <!-- Busca Rápida Toolbar -->
+                        <div class="relative bg-white border border-gray-200 rounded-xl shadow-sm flex items-center flex-grow p-1">
+                            <span class="pl-2 pr-1 text-xs opacity-40">🔍</span>
+                            <input type="text" x-model="buscaRapida" @focus="showBuscaResultados = true" @click.away="showBuscaResultados = false" placeholder="BUSCA RÁPIDA (NOME OU CÓDIGO)..." class="w-full bg-transparent border-none text-[10px] uppercase font-bold focus:ring-0 py-2">
+                            
+                            <!-- Dropdown Busca -->
+                            <div x-show="showBuscaResultados && buscaRapida.length > 0" class="absolute top-12 left-0 z-50 w-full bg-white border-2 border-[#004A80] rounded-xl shadow-2xl max-h-60 overflow-y-auto">
+                                <template x-if="resultadosBuscaRapida.length === 0">
+                                    <div class="p-4 text-center text-[10px] font-black text-gray-400">NENHUM ENCONTRADO...</div>
+                                </template>
+                                <template x-for="item in resultadosBuscaRapida" :key="item.id_bem">
+                                    <div @click="selecionarBuscaRapida(item)" class="p-3 border-b border-gray-100 hover:bg-blue-50 cursor-pointer transition">
+                                        <div class="text-[11px] font-black text-gray-800 uppercase truncate" x-text="item.bem.descricao"></div>
+                                        <div class="text-[9px] font-mono font-bold text-[#004A80]" x-text="item.id_bem + ' • ' + (item.bem.dependencia_original || '')"></div>
+                                    </div>
+                                </template>
+                            </div>
+                        </div>
+
+                        <!-- Tiny Switches row -->
+                        <div class="flex items-center gap-4 px-1 py-1">
+                            <label class="flex items-center gap-2 cursor-pointer group">
+                                <span class="text-[9px] font-black uppercase tracking-tighter text-gray-500 group-hover:text-blue-700">Travar Local</span>
+                                <div class="relative inline-flex items-center scale-90">
+                                    <input type="checkbox" x-model="exigirDependencia" class="sr-only peer">
+                                    <div class="w-11 h-6 bg-gray-300 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-[#004A80]"></div>
+                                </div>
+                            </label>
+                            <label class="flex items-center gap-2 cursor-pointer group">
+                                <span class="text-[9px] font-black uppercase tracking-tighter text-gray-500 group-hover:text-blue-700">Auto-Bipe</span>
+                                <div class="relative inline-flex items-center scale-90">
+                                    <input type="checkbox" x-model="autoFocus" class="sr-only peer">
+                                    <div class="w-11 h-6 bg-gray-300 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-[#004A80]"></div>
+                                </div>
+                            </label>
+                        </div>
+                    </div>
                 </div>
-                <div class="overflow-y-auto flex-grow custom-scrollbar">
-                    <table class="min-w-full text-[11px]">
-                        <thead class="bg-gray-50/80 border-b sticky top-0 backdrop-blur-sm z-10">
-                            <tr>
-                                <th class="px-6 py-3 text-left font-black text-gray-400 uppercase tracking-tighter">Etiqueta</th>
-                                <th class="px-6 py-3 text-left font-black text-gray-400 uppercase tracking-tighter">Descrição</th>
-                                <th class="px-6 py-3 text-left font-black text-gray-400 uppercase tracking-tighter hidden sm:table-cell">Loc. Física</th>
-                                <th class="px-6 py-3 text-left font-black text-gray-400 uppercase tracking-tighter hidden md:table-cell">Situação</th>
-                                <th class="px-6 py-3 text-center font-black text-gray-400 uppercase tracking-tighter hidden sm:table-cell">Lido</th>
-                            </tr>
-                        </thead>
-                        <tbody class="divide-y divide-gray-50">
-                            <template x-for="(item, index) in history" :key="index + '-' + item.barcode">
-                                <tr class="hover:bg-blue-50/50 transition-colors group"
-                                    :class="item.lido ? 'text-gray-400 bg-gray-50/30' : 'text-gray-900 font-medium'">
-                                    <td class="px-3 sm:px-6 py-3 font-mono text-sm tracking-tighter" 
-                                        :class="item.is_cross_church ? 'text-red-700 font-black' : 'text-blue-900/40'"
-                                        x-text="item.barcode"></td>
-                                    <td class="px-3 sm:px-6 py-3 uppercase text-[10px] sm:text-xs" x-text="item.descricao"></td>
-                                    <td class="px-6 py-3 text-gray-500 font-bold hidden sm:table-cell" x-text="item.dependencia"></td>
-                                    <td class="px-6 py-3 hidden md:table-cell">
-                                        <span class="px-2 py-0.5 rounded-full font-black text-[9px] uppercase tracking-tighter"
+
+                <!-- Main Input Field -->
+                <div class="relative bg-white border-4 border-gray-200 rounded-3xl shadow-xl p-2 shrink-0 flex items-center justify-center group overflow-hidden focus-within:border-[#004A80] focus-within:ring-4 focus-within:ring-[#004A80]/20 transition-all duration-300 min-h-[140px] md:min-h-[180px]">
+                    <div class="absolute inset-0 bg-gradient-to-br from-blue-50 to-transparent opacity-0 group-focus-within:opacity-100 transition duration-500 pointer-events-none"></div>
+                    <input type="text" 
+                           x-model="barcode" 
+                           @keyup.enter="processScan()"
+                           maxlength="12"
+                           placeholder="000000000"
+                           class="w-full text-5xl md:text-8xl font-black font-mono tracking-tighter text-gray-900 border-none focus:ring-0 text-center uppercase p-6 bg-transparent relative z-10"
+                            id="scannerInputManualOverlay"
+                            @input="if(barcode.length >= 1) { String(barcode).length === 12 ? processScan() : null; }"
+                            @blur="if(showScannerManual && autoFocus) setTimeout(() => document.getElementById('scannerInputManualOverlay')?.focus(), 150)">
+                    
+                    <div class="absolute bottom-4 left-0 right-0 text-center pointer-events-none">
+                        <p class="text-[10px] md:text-[14px] font-black tracking-[0.3em]" :class="barcode.length > 0 ? 'text-[#004A80] animate-none' : 'text-gray-300 animate-pulse'" x-text="barcode.length > 0 ? 'Pressione ENTER ou bip novamente...' : 'Aguardando Leitura...'"></p>
+                    </div>
+                </div>
+
+                <!-- Last 3 items read feedback -->
+                <div class="bg-white rounded-2xl shadow-sm border border-gray-200 flex-grow flex flex-col min-h-[250px] shrink-0">
+                    <div class="bg-gray-50 border-b border-gray-200 text-gray-500 p-3 px-6 flex justify-between items-center">
+                        <span class="text-[10px] font-black uppercase tracking-widest">Acompanhamento Log (Últimos itens)</span>
+                        <span class="bg-blue-100/50 text-blue-800 px-2 py-0.5 rounded text-[10px] font-black" x-text="history.length + ' LIDOS HOJE'"></span>
+                    </div>
+                    <div class="overflow-y-auto custom-scrollbar flex-grow p-2">
+                        <div class="space-y-2">
+                            <template x-if="history.length === 0">
+                                <div class="h-32 flex items-center justify-center p-6 text-center text-gray-300 font-black text-sm uppercase tracking-widest border-2 border-dashed border-gray-100 rounded-xl m-4">
+                                    Nenhuma leitura registrada nesta sessão...
+                                </div>
+                            </template>
+                            <template x-for="(item, index) in history.slice(0, 4)" :key="index + '-' + item.barcode">
+                                <div class="bg-white border-2 border-gray-100 shadow-sm p-4 rounded-xl flex items-center justify-between animate-fade-in hover:border-gray-300 transition" :class="index === 0 ? 'ring-2 ring-blue-500/30 bg-blue-50/20' : ''">
+                                    <div class="flex items-center gap-4">
+                                        <div class="h-10 w-10 md:h-12 md:w-12 rounded-full bg-gray-50 border border-gray-200 flex items-center justify-center shrink-0">
+                                            <span class="text-xl" :class="item.lido ? 'text-green-500' : 'text-gray-400 opacity-50'">✔️</span>
+                                        </div>
+                                        <div class="flex flex-col">
+                                            <span class="text-lg md:text-xl font-black font-mono tracking-tighter" :class="item.is_cross_church ? 'text-red-700' : 'text-[#004A80]'" x-text="item.barcode"></span>
+                                            <span class="text-[11px] md:text-xs font-bold text-gray-500 uppercase tracking-wide truncate max-w-[200px] md:max-w-md" x-text="item.descricao"></span>
+                                        </div>
+                                    </div>
+                                    <div class="flex flex-col items-end">
+                                        <span class="px-3 py-1.5 rounded-lg text-[9px] md:text-[10px] font-black uppercase tracking-widest text-center"
                                               :class="item.situacao.includes('DIVERGÊNCIA') ? 'bg-red-100 text-red-700' : 'bg-green-100 text-green-700'"
                                               x-text="item.situacao"></span>
-                                    </td>
-                                    <td class="px-6 py-3 text-center hidden sm:table-cell">
-                                        <span class="inline-block w-2 h-2 rounded-full" :class="item.lido ? 'bg-green-500 shadow-sm shadow-green-200' : 'bg-gray-300'"></span>
-                                    </td>
-                                </tr>
+                                        <span class="text-[9px] font-black text-gray-400 mt-2 tracking-widest uppercase hidden md:block" x-text="item.dependencia ? 'LOC: ' + item.dependencia : ''"></span>
+                                    </div>
+                                </div>
                             </template>
-                        </tbody>
-                    </table>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
 
-        <!-- PENDÊNCIAS MODAL (MOVED INSIDE SCOPE) -->
-        <template x-teleport="body">
-            <div x-show="showPendencias" 
-                 class="fixed inset-0 bg-black bg-opacity-60 z-[100] flex items-center justify-center p-4 backdrop-blur-sm"
-                 x-transition:enter="transition ease-out duration-300"
-                 x-transition:enter-start="opacity-0 scale-95"
-                 x-transition:enter-end="opacity-100 scale-100"
-                 x-cloak>
-                <div class="bg-[#F0F0F0] rounded-lg shadow-[0_35px_60px_-15px_rgba(0,0,0,0.5)] w-full max-w-6xl h-auto md:h-[650px] max-h-[90vh] border border-gray-400 flex flex-col overflow-hidden">
-                    <!-- Title Bar -->
-                    <div class="bg-gradient-to-b from-gray-100 to-gray-400 p-2 px-4 border-b border-gray-500 flex justify-between items-center shadow-sm">
-                        <div class="flex items-center gap-2">
-                            <span class="text-blue-900 drop-shadow">📜</span>
-                            <span class="text-sm font-bold text-gray-700 uppercase tracking-tight">Pendências de Inventário</span>
-                        </div>
-                        <button @click="showPendencias = false" class="bg-red-500 hover:bg-red-700 text-white font-bold p-1 px-3 rounded shadow-inner text-[10px]">X</button>
-                    </div>
+        <!-- CAMERA FULLSCREEN OVERLAY -->
+        <div x-show="cameraActive" 
+             class="fixed inset-0 z-[150] bg-black flex flex-col"
+             x-transition:enter="transition ease-out duration-300"
+             x-transition:enter-start="opacity-0 scale-95"
+             x-transition:enter-end="opacity-100 scale-100"
+             x-transition:leave="transition ease-in duration-200"
+             x-transition:leave-start="opacity-100 scale-100"
+             x-transition:leave-end="opacity-0 scale-95"
+             x-cloak>
+            <!-- Header bar for Camera -->
+            <div class="bg-gray-900 text-white p-3 flex justify-between items-center shadow-md z-10">
+                <div class="flex items-center gap-2">
+                    <span class="text-green-500 animate-pulse">📷</span>
+                    <span class="font-black text-sm uppercase tracking-widest text-gray-200">Scanner Ativo</span>
+                </div>
+                <button @click="stopCamera()" class="bg-red-600 hover:bg-red-700 text-white font-black px-4 py-2 rounded-lg text-xs uppercase shadow-lg flex items-center gap-2 transition">
+                    <span>⏹️</span> Encerrar
+                </button>
+            </div>
+            
+            <!-- Camera Viewfinder -->
+            <div class="flex-grow relative overflow-hidden flex items-center justify-center">
+                <div id="reader" class="w-full h-full object-cover [&>video]:object-cover [&>video]:w-full [&>video]:h-full"></div>
+                <div class="absolute inset-0 pointer-events-none border-[3px] border-dashed border-white/40 m-6 sm:m-12 rounded-xl flex items-center justify-center shadow-[0_0_0_9999px_rgba(0,0,0,0.5)]">
+                    <div class="w-3/4 h-0.5 bg-red-500/80 absolute animate-[pulse_2s_ease-in-out_infinite] shadow-[0_0_10px_rgba(239,68,68,0.8)]"></div>
+                </div>
+                
+                <div class="absolute bottom-10 left-0 right-0 text-center pointer-events-none drop-shadow-md">
+                    <p class="text-white text-xs font-black uppercase tracking-widest bg-black/50 inline-block px-4 py-2 rounded-full backdrop-blur-sm">
+                        Centralize o código de barras
+                    </p>
+                </div>
+            </div>
+        </div>
 
-                    <div class="flex flex-1 flex-col md:flex-row overflow-hidden">
-                        <!-- Left: List -->
-                        <div class="w-full md:w-1/2 flex flex-col border-b md:border-b-0 md:border-r border-gray-400 bg-[#E1E1E1] overflow-hidden">
-                            <div class="p-3 bg-gray-200 border-b border-gray-400 flex flex-col gap-2 shadow-inner">
-                                <div class="relative w-full">
-                                    <input type="text" x-model="searchPendencia" placeholder="Pesquisar por Código ou Descrição..." class="w-full text-[11px] border-gray-300 rounded shadow-inner pl-8 pr-2 py-2 uppercase">
-                                    <span class="absolute left-3 top-2.5 opacity-40">🔍</span>
-                                </div>
-                                <div class="flex items-center gap-4 px-1">
-                                    @foreach(['pendentes' => 'Pendentes', 'encontrados' => 'Encontrados', 'tratados' => 'Tratados', 'todos' => 'Todos'] as $val => $lbl)
-                                        <label class="flex items-center gap-1.5 text-[9px] font-black uppercase tracking-tighter cursor-pointer group">
-                                            <input type="radio" x-model="filterStatus" value="{{ $val }}" class="text-[#004A80] focus:ring-0 w-3 h-3">
-                                            <span class="group-hover:text-blue-800 transition">{{ $lbl }}</span>
-                                        </label>
-                                    @endforeach
-                                </div>
-                            </div>
-                            <div class="flex-grow overflow-y-auto">
+        <!-- NEW MAIN AREA: BENS / TRATATIVAS (Replaces Pendencias SPA Tab) -->
+        <div class="flex-grow flex flex-col overflow-hidden bg-[#F5F7FA] rounded-xl relative shadow-md animate-fade-in border border-blue-900/20">
+            <div class="w-full h-full flex flex-col overflow-hidden">
+
+                <div class="flex-grow flex flex-col md:flex-row overflow-hidden border-2 border-[#004A80] m-1 rounded bg-white">
+                    <!-- Esquerda: Tabela de Pendências -->
+                    <div class="w-full md:w-[65%] flex flex-col border-r-2 border-[#004A80]">
+                        <div class="bg-gradient-to-r from-gray-100 to-white px-4 py-2 flex items-center gap-3 border-b border-gray-300 shadow-sm relative z-20">
+                            <span class="text-[10px] font-black uppercase text-gray-500 tracking-tighter">Filtrar:</span>
+                            <select x-model="filterStatus" class="border-gray-300 rounded text-[10px] font-bold uppercase p-1.5 focus:ring-[#004A80] focus:border-[#004A80] shadow-inner bg-white">
+                                <option value="pendentes">🚨 Não Localizados (Pendente)</option>
+                                <option value="encontrados">✅ Localizados</option>
+                                <option value="tratados">📝 Tratativa Registrada</option>
+                                <option value="todos">📋 Mostrar Todos</option>
+                            </select>
+                            <input type="text" x-model="searchPendencia" placeholder="Pesquisar..." class="border-gray-300 rounded text-[10px] p-1.5 ml-auto w-40 max-w-full font-bold uppercase shadow-inner placeholder:opacity-50 focus:ring-[#004A80]">
+                        </div>
+                        <div class="flex-grow overflow-hidden flex flex-col min-h-0">
+                            <div class="overflow-y-auto flex-1 h-full pr-1">
                                 <table class="w-full text-[11px] text-left border-collapse">
-                                    <thead class="bg-[#004A80] text-white sticky top-0 uppercase tracking-widest text-[9px]">
+                                    <thead class="bg-[#004A80] text-white sticky top-0 uppercase tracking-widest text-[9px] z-10 shadow-sm">
                                         <tr>
                                             <th class="p-2 w-8 text-center border-r border-blue-900">
                                                 <input type="checkbox" 
@@ -285,10 +314,10 @@
                                             <th class="p-2 px-4">Bem Móvel</th>
                                         </tr>
                                     </thead>
-                                    <tbody class="bg-white">
+                                    <tbody class="bg-white divide-y divide-gray-100">
                                         <template x-for="item in filteredPendencias" :key="item.id">
                                             <tr @click="toggleSelection(item)" 
-                                                class="border-b border-gray-200 cursor-pointer hover:bg-blue-50 transition"
+                                                class="cursor-pointer hover:bg-blue-50 transition"
                                                 :class="selectedIds.includes(item.id) ? 'bg-[#C1D8FF] font-black' : ''">
                                                 <td class="p-2 text-center border-r border-gray-100">
                                                     <input type="checkbox" 
@@ -297,87 +326,53 @@
                                                            class="rounded border-gray-300 text-blue-600 focus:ring-blue-500 w-3 h-3">
                                                 </td>
                                                 <td class="p-2 px-4 border-r border-gray-100 font-mono" x-text="item.bem.id_bem"></td>
-                                                <td class="p-2 px-4 truncate uppercase" x-text="item.bem.descricao"></td>
+                                                <td class="p-2 px-4 truncate uppercase max-w-[150px]" x-text="item.bem.descricao"></td>
                                             </tr>
                                         </template>
                                     </tbody>
                                 </table>
                             </div>
-                            <div class="p-2 bg-gray-300 border-t border-gray-400 flex justify-between items-center text-[10px] font-black text-blue-900 px-4">
-                                <span>SISTEMA DE BENS MÓVEIS</span>
-                                <span x-text="filteredPendencias.length + ' Bens Pendentes'"></span>
+                        </div>
+                        <div class="p-2 bg-gray-300 border-t border-gray-400 flex justify-between items-center text-[10px] font-black text-blue-900 px-4">
+                            <span>SISTEMA DE BENS MÓVEIS</span>
+                            <span x-text="filteredPendencias.length + ' Bens Pendentes'"></span>
+                        </div>
+                    </div>
+
+                    <!-- Direita: Ações de Tratativa -->
+                    <div class="w-full md:w-[35%] bg-[#F8F9FA] p-5 flex flex-col gap-4 relative overflow-y-auto">
+                        <div class="flex items-center gap-2 border-b-2 border-gray-200 pb-2">
+                            <span class="text-blue-900 font-black text-lg">💡</span>
+                            <div>
+                                <h3 class="font-black text-blue-900 uppercase text-xs">Registro de Ações</h3>
+                                <p class="text-[9px] text-gray-500 font-bold tracking-tight uppercase" x-text="(selectedIds.length > 0 ? selectedIds.length : 'Nenhum') + ' Item(ns) Selecionado(s)'"></p>
                             </div>
                         </div>
 
-                        <!-- Right: Details & Actions -->
-                        <div class="w-full md:w-1/2 p-3 sm:p-6 flex flex-col gap-3 sm:gap-5 overflow-y-auto bg-[#F0F0F0] shadow-inner">
-                            <!-- Info Header Buttons -->
-                            <div class="flex justify-between gap-1 mb-2">
-                                @foreach(['CADASTRAR', 'IMPRIMIR', 'ALTERAR', 'EXCLUIR'] as $label)
-                                    <div class="bg-[#003865] text-white p-1 flex-1 text-center border-2 border-gray-500 rounded-sm">
-                                        <p class="text-[8px] font-black leading-none mb-1">{{ $label }}</p>
-                                        <p class="text-xs font-black">{{ $tratativaCounts[strtolower($label)] ?? 0 }}</p>
-                                    </div>
-                                @endforeach
+                        <!-- Info do Item unico -->
+                        <div x-show="selectedIds.length === 1 && selectedItem" class="bg-blue-50 border-l-4 border-[#004A80] p-3 rounded shadow-sm">
+                            <p class="text-[9px] font-black text-gray-500 uppercase tracking-tighter">Item em Foco</p>
+                            <p class="font-mono font-black text-sm text-blue-900 mt-1" x-text="selectedItem?.bem?.id_bem"></p>
+                            <p class="text-[10px] font-bold text-gray-700 uppercase mt-1 truncate" x-text="selectedItem?.bem?.descricao"></p>
+                            <p class="text-[9px] font-bold text-gray-500 mt-2 uppercase bg-white p-1 rounded border border-blue-100">
+                                📍 <span x-text="selectedItem?.bem?.dependencia_original || 'S/ LOCAL ORIGINAL'"></span>
+                            </p>
+                        </div>
+                        <!-- Info Multiplos Itens -->
+                        <div x-show="selectedIds.length > 1" class="bg-amber-50 border-l-4 border-amber-500 p-3 rounded shadow-sm flex items-center gap-3">
+                            <span class="text-2xl">⚠️</span>
+                            <div>
+                                <p class="text-[10px] font-black text-amber-800 uppercase">Ação em Lote Ativada</p>
+                                <p class="text-[9px] font-bold text-amber-700 mt-0.5">A mesma tratativa será aplicada a todos os <span x-text="selectedIds.length"></span> itens.</p>
                             </div>
+                        </div>
 
-                            <div class="grid grid-cols-2 gap-4">
-                                <div class="bg-white border-2 border-gray-400 shadow-sm p-2">
-                                    <p class="text-[8px] font-black text-gray-400 uppercase tracking-widest bg-gray-50 p-1 mb-1 border-b">Situação</p>
-                                    <p class="text-sm font-black text-amber-600 uppercase text-center py-1" 
-                                       x-text="selectedItem ? (selectedItem.tratativa && selectedItem.tratativa !== 'nenhuma' ? selectedItem.tratativa : selectedItem.status_leitura) : 'AGUARDANDO'"></p>
-                                </div>
-                                <div class="bg-white border-2 border-gray-400 shadow-sm p-2">
-                                    <p class="text-[8px] font-black text-gray-400 uppercase tracking-widest bg-gray-50 p-1 mb-1 border-b">Etiqueta</p>
-                                    <p class="text-sm font-black font-mono text-center py-1" x-text="selectedItem ? selectedItem.bem.id_bem : '0000000000'"></p>
-                                </div>
-                            </div>
-
-                            <div class="bg-[#003865] text-white p-2 text-center text-[9px] font-black uppercase tracking-[0.2em] shadow">
-                                Bem Móvel
-                            </div>
-                            <div class="bg-white border-2 border-gray-400 shadow-inner p-4 text-[11px] font-black leading-relaxed min-h-[70px] uppercase text-gray-700 italic" 
-                                 x-text="selectedItem ? selectedItem.bem.descricao : 'Selecione um item na lista ao lado para iniciar a tratativa...'"></div>
-
-                            <div class="bg-[#003865] text-white p-2 text-center text-[9px] font-black uppercase tracking-[0.2em] shadow">
-                                Observação para o Relatório
-                            </div>
-                            <textarea x-model="observacao" 
-                                      class="w-full border-2 border-gray-400 shadow-inner rounded-sm text-[11px] font-bold p-3 h-20 focus:border-blue-600 focus:ring-0" 
-                                      :class="selectedItem?.observacao?.includes('LOCALIDADE') ? 'text-red-600 border-red-300 bg-red-50' : ''"
-                                      placeholder="Digite aqui as tratativas realizadas (Ex: ITEM LOCALIZADO NO FUNDO BÍBLICO)..."></textarea>
-
-                            <!-- New Asset Fields (Conditional) -->
-                            <div x-show="tratativa === 'novo'" x-transition class="bg-amber-50 border-2 border-amber-300 p-4 rounded-sm space-y-3 shadow-md">
-                                <p class="text-[9px] font-black text-amber-700 uppercase border-b border-amber-200 pb-1">📄 Registro de Novo Bem (Offline/Extra-ERP)</p>
-                                <div class="space-y-1">
-                                    <label class="text-[10px] font-black text-gray-500 uppercase">Descrição do Item</label>
-                                    <input type="text" x-model="novaDescricao" class="w-full p-2 text-[11px] border-gray-400 rounded-sm font-bold uppercase" placeholder="EX: VENTILADOR DE PAREDE PRETO">
-                                </div>
-                                <div class="space-y-1">
-                                    <label class="text-[10px] font-black text-gray-500 uppercase">Dependência Destino</label>
-                                    <select x-model="novaDependencia" class="w-full p-2 text-[11px] border-gray-400 rounded-sm font-bold">
-                                        <option value="">Selecione...</option>
-                                        @foreach(App\Models\Dependencia::orderBy('nome')->get() as $dep)
-                                            <option value="{{ $dep->id }}">{{ $dep->id }} - {{ $dep->nome }}</option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                                <div class="flex items-center gap-2 mt-2 p-2 bg-blue-50 border border-blue-200 rounded">
-                                    <input type="checkbox" x-model="isDoacao" id="isDoacao" class="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500">
-                                    <label for="isDoacao" class="text-[10px] font-black text-blue-700 uppercase cursor-pointer">
-                                        📄 Este item é uma doação? (Gera Formulários 14.1 e 14.2)
-                                    </label>
-                                </div>
-                            </div>
-
+                        <div class="flex-grow flex flex-col gap-3">
                             <div class="bg-white p-4 border-2 border-gray-400 shadow-sm rounded-sm">
                                 <p class="text-[9px] font-black text-gray-400 uppercase mb-3 border-b pb-1">Tratativa Selecionada</p>
                                 <div class="grid grid-cols-3 gap-y-3 gap-x-2">
                                     @foreach([
-                                        'novo' => 'Novo', 
                                         'imprimir' => 'Imprimir', 
-                                        'encontrado' => 'Encontrado',
                                         'alterar' => 'Alterar', 
                                         'transferir' => 'Transferir', 
                                         'excluir' => 'Excluir'
@@ -390,15 +385,51 @@
                                 </div>
                             </div>
 
+                            <textarea x-model="observacao" rows="3" 
+                                      class="w-full border-gray-300 rounded shadow-inner text-[11px] font-bold uppercase p-3 focus:ring-[#004A80] focus:border-[#004A80] placeholder:opacity-40" 
+                                      placeholder="Digite aqui as tratativas realizadas (Ex: ITEM LOCALIZADO NO FUNDO BÍBLICO)..."></textarea>
+
+                            <!-- New Asset Fields (Conditional) -->
+                            <div x-show="tratativa === 'novo'" x-transition class="bg-amber-50 border-2 border-amber-300 p-4 rounded-sm space-y-3 shadow-md relative overflow-hidden">
+                                <div class="absolute inset-0 bg-white/40 pointer-events-none"></div>
+                                <div class="relative z-10 flex justify-between items-center border-b border-amber-200 pb-2">
+                                    <p class="text-[10px] font-black text-amber-700 uppercase">📄 Registro de Novo Bem</p>
+                                    <span x-show="false" class="bg-amber-400 text-amber-900 text-[8px] px-2 py-0.5 rounded shadow-sm font-black uppercase inline-flex items-center gap-1 animate-pulse"><span class="block w-1.5 h-1.5 rounded-full bg-red-600"></span> SEM ETIQUETA / OFFLINE</span>
+                                </div>
+                                <div class="relative z-10 space-y-1 mt-2">
+                                    <label class="text-[10px] font-black text-gray-500 uppercase">Descrição do Item</label>
+                                    <input type="text" x-model="novaDescricao" class="w-full p-2.5 text-[11px] border border-gray-400 rounded shadow-inner font-bold uppercase focus:ring-1 focus:ring-amber-400 focus:border-amber-400" placeholder="EX: VENTILADOR DE PAREDE PRETO">
+                                </div>
+                                <div class="relative z-10 space-y-1">
+                                    <label class="text-[10px] font-black text-gray-500 uppercase">Dependência Destino</label>
+                                    <select x-model="novaDependencia" class="w-full p-2.5 text-[11px] border border-gray-400 rounded shadow-inner font-bold focus:ring-1 focus:ring-amber-400 focus:border-amber-400">
+                                        <option value="">Selecione a dependência...</option>
+                                        @foreach(App\Models\Dependencia::orderBy('nome')->get() as $dep)
+                                            <option value="{{ $dep->id }}">{{ $dep->id }} - {{ $dep->nome }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                                <div class="relative z-10 flex items-center gap-2 mt-3 p-2 bg-blue-50/80 border border-blue-200 rounded">
+                                    <input type="checkbox" x-model="isDoacao" id="isDoacao" class="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500">
+                                    <label for="isDoacao" class="text-[10px] font-black text-blue-700 uppercase cursor-pointer select-none">
+                                        📄 Este item é uma doação? (Gera Formulários 14.1 e 14.2)
+                                    </label>
+                                </div>
+                            </div>
+
                             <div class="flex gap-4 mt-auto">
-                                <button @click="showPendencias = false" class="w-1/3 bg-gray-200 border-2 border-gray-400 p-3 font-black text-gray-500 text-xs shadow hover:bg-white transition uppercase">Cancelar</button>
+                                <button @click="tratativa = 'novo'; resetSelectionForNew()" class="w-1/4 bg-amber-100 hover:bg-amber-200 border border-amber-300 text-amber-800 font-black text-[9px] uppercase shadow-sm transition p-2 flex flex-col items-center justify-center text-center leading-tight">
+                                    <span>➕ ADD BEM</span>
+                                    <span>S/ ETIQUETA</span>
+                                </button>
+                                <button @click="showPendencias = false" class="w-1/4 bg-gray-200 border border-gray-400 p-2 font-black text-gray-600 text-[10px] shadow hover:bg-white transition uppercase">Fechar</button>
                                 <button @click="saveTratativa()" 
-                                        :disabled="selectedIds.length === 0 || !tratativa || savingTratativa"
-                                        class="w-2/3 bg-[#004A80] text-white p-3 rounded-sm font-black text-sm shadow-lg hover:bg-[#003B66] hover:scale-[1.02] transition flex items-center justify-center gap-2 group disabled:opacity-50 disabled:cursor-not-allowed">
+                                        :disabled="!isValidToSave()"
+                                        class="w-2/4 bg-[#004A80] text-white p-3 rounded font-black text-sm shadow-lg hover:bg-[#003B66] hover:scale-[1.02] transition flex items-center justify-center gap-2 group disabled:opacity-50 disabled:cursor-not-allowed">
                                     <template x-if="!savingTratativa">
                                         <div class="flex items-center gap-2">
-                                            <span class="group-hover:rotate-12 transition">💾</span>
-                                            <span x-text="selectedIds.length > 1 ? 'SALVAR ' + selectedIds.length + ' ITENS' : 'SALVAR TRATATIVA'"></span>
+                                            <span class="text-xs group-hover:rotate-12 transition group-disabled:hidden">💾</span>
+                                            <span x-text="getSaveButtonText()"></span>
                                         </div>
                                     </template>
                                     <template x-if="savingTratativa">
@@ -407,7 +438,7 @@
                                                 <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
                                                 <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                                             </svg>
-                                            <span>PROCESSANDO...</span>
+                                            <span class="text-[11px]">PROCESSANDO...</span>
                                         </div>
                                     </template>
                                 </button>
@@ -416,7 +447,7 @@
                     </div>
                 </div>
             </div>
-        </template>
+        </div>
     </div>
 
     <script>
@@ -444,7 +475,9 @@
                 showPendencias: false,
                 filterStatus: 'pendentes',
                 autoFocus: true, // Default to true
-                searchText: '',
+                exigirDependencia: true, // Toggle local Dependency Requirement
+                buscaRapida: '',
+                showBuscaResultados: false,
                 searchPendencia: '',
                 selectedItem: null,
                 selectedIds: [],
@@ -455,6 +488,11 @@
                 isDoacao: false,
                 savingTratativa: false,
                 cameraActive: false,
+                showScannerManual: false,
+                showFeedback: false,
+                feedbackTitle: '',
+                feedbackMessage: '',
+                feedbackIcon: '',
                 html5QrCode: null,
                 allPendencias: @json($allDetalhes),
                 lastItem: {
@@ -491,6 +529,60 @@
                         
                         return matchesSearch && matchesStatus;
                     });
+                },
+
+                get resultadosBuscaRapida() {
+                    const searchLower = this.buscaRapida.toLowerCase();
+                    if (!searchLower || searchLower.length < 2) return [];
+
+                    // Return max 10 results from local allPendencias that match
+                    return this.allPendencias.filter(item => {
+                        return (item.status_leitura === 'nao_encontrado' || item.status_leitura === 'novo_sistema') &&
+                               // Not treated
+                               (!item.tratativa || item.tratativa === 'nenhuma') &&
+                               (item.id_bem.toLowerCase().includes(searchLower) || 
+                                (item.bem && item.bem.descricao && item.bem.descricao.toLowerCase().includes(searchLower)));
+                    }).slice(0, 10);
+                },
+
+                selecionarBuscaRapida(item) {
+                    this.showBuscaResultados = false;
+                    this.buscaRapida = '';
+                    this.barcode = item.id_bem;
+                    this.processScan();
+                },
+
+                isNewItemOflfine() {
+                    return this.selectedIds.length === 0 && this.tratativa === 'novo';
+                },
+
+                isValidToSave() {
+                    if (this.savingTratativa) return false;
+                    
+                    // Offline addition mode (No Tag)
+                    if (this.selectedIds.length === 0) {
+                        return this.tratativa === 'novo' && 
+                               this.novaDescricao.trim() !== '' && 
+                               this.novaDependencia !== '';
+                    }
+                    
+                    // Normal item mode
+                    return this.tratativa && this.tratativa !== '';
+                },
+
+                getSaveButtonText() {
+                    if (this.selectedIds.length === 0 && this.tratativa !== 'novo') {
+                        return 'SELECIONE UM ITEM NA LISTA';
+                    }
+                    if (this.isNewItemOflfine()) {
+                        return 'SALVAR NOVO BEM SEM ETIQUETA';
+                    }
+                    return this.selectedIds.length > 1 ? 'SALVAR ' + this.selectedIds.length + ' ITENS' : 'SALVAR TRATATIVA';
+                },
+
+                resetSelectionForNew() {
+                    this.selectedIds = [];
+                    this.selectedItem = null;
                 },
 
                 toggleSelection(item) {
@@ -588,10 +680,29 @@
                     }
                 },
 
-                async saveTratativa() {
-                    if (this.selectedIds.length === 0 || !this.tratativa) {
-                        return Toast.fire({ icon: 'warning', title: 'Selecione pelo menos um item e uma tratativa.' });
+                isValidToSave() {
+                    if (this.selectedIds.length === 0) return false;
+                    if (!this.tratativa) return false;
+                    
+                    if (this.tratativa === 'novo') {
+                        if (!this.novaDescricao || this.novaDescricao.length < 3) return false;
+                        if (this.exigirDependencia && !this.novaDependencia) return false;
                     }
+                    
+                    if (this.tratativa === 'transferir') {
+                        if (!this.novaDependencia) return false;
+                    }
+
+                    return true;
+                },
+
+                getSaveButtonText() {
+                    const count = this.selectedIds.length;
+                    return count > 1 ? `APLICAR AOS ${count} ITENS` : `SALVAR MUDANÇAS`;
+                },
+
+                async saveTratativa() {
+                    if (!this.isValidToSave()) return;
 
                     this.savingTratativa = true;
 
@@ -686,7 +797,7 @@
                                 Toast.fire({ icon: 'success', title: data.message, timer: 1500 });
                             }
 
-                            // Keep modal open, just reset selection and form
+                            // Clear fields (removed auto-hide to allow bulk adding)
                             this.resetTratativa();
                         }
                     } catch (err) {
@@ -707,7 +818,16 @@
                 },
 
                 focusScanner() {
-                    if (!this.autoFocus || this.cameraActive) return; // Respect the toggle and don't steal focus if camera is on
+                    if (!this.autoFocus || this.cameraActive || this.showPendencias) return; 
+                    
+                    if (this.showScannerManual) {
+                        this.$nextTick(() => {
+                            const overlayInput = document.getElementById('scannerInputManualOverlay');
+                            if (overlayInput && document.activeElement !== overlayInput) overlayInput.focus();
+                        });
+                        return;
+                    }
+
                     this.$nextTick(() => {
                         const input = document.getElementById('scannerInput');
                         if (input && document.activeElement !== input) input.focus();
@@ -718,8 +838,26 @@
                     if (this.cameraActive) {
                         this.stopCamera();
                     } else {
+                        // Ensure overlay logic
+                        this.showScannerManual = false; 
                         this.startCamera();
                     }
+                },
+
+                abrirScannerManual() {
+                    this.stopCamera(); // Auto-stop camera if running
+                    this.showScannerManual = true;
+                    // Retain visual autofocus capability
+                    setTimeout(() => {
+                        const overlayInput = document.getElementById('scannerInputManualOverlay');
+                        if(overlayInput) overlayInput.focus();
+                    }, 200);
+                },
+
+                fecharScannerManual() {
+                    this.showScannerManual = false;
+                    this.barcode = '';
+                    // Reset focus logic if returning to main
                 },
 
                 startCamera() {
@@ -773,7 +911,7 @@
 
                 async processScan() {
                     if (this.loading || !this.barcode.trim()) return;
-                    if (!this.dependenciaId) {
+                    if (this.exigirDependencia && !this.dependenciaId) {
                         showAlert('Atenção', 'warning', 'Selecione a dependência física onde você se encontra.');
                         this.barcode = '';
                         this.focusScanner();
@@ -832,19 +970,36 @@
                                 this.allPendencias.unshift(data.detalhe);
                             }
 
-                            Toast.fire({ 
-                                icon: data.status, 
-                                title: data.message,
-                                customClass: data.is_cross_church ? { popup: 'border-2 border-red-500' } : {}
-                            });
-                            
                             if (data.status === 'error') {
                                 playError();
+                                this.showToastOverlay('Erro', data.message, '❌');
                             } else {
                                 playSuccess();
+                                this.showToastOverlay(data.status === 'success' ? 'Sucesso' : 'Aviso', data.message, data.status === 'success' ? '✅' : '⚠️');
                             }
                             
                             this.barcode = '';
+                        }
+                    } catch (error) {
+                        console.error('Erro no process', error);
+                        Toast.fire({ icon: 'error', title: 'Erro de comunicação.' });
+                        this.showToastOverlay('Erro', 'Falha ao comunicar porta.', '❌');
+                    } finally {
+                        this.loading = false;
+                        this.focusScanner();
+                    }
+                },
+
+                showToastOverlay(title, msg, icon) {
+                    if(!this.showScannerManual) return;
+                    this.feedbackTitle = title;
+                    this.feedbackMessage = msg;
+                    this.feedbackIcon = icon;
+                    this.showFeedback = true;
+                    setTimeout(() => {
+                        this.showFeedback = false;
+                    }, 2500);
+                }
                             this.focusScanner();
                         } else {
                             playError();
