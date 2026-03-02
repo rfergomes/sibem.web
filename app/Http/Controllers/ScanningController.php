@@ -107,6 +107,7 @@ class ScanningController extends Controller
         $tratativa = $request->tratativa;
         $observacao = $request->observacao;
         $generatedForms = [];
+        $createdDetalhe = null;
 
         DB::connection('tenant')->beginTransaction();
 
@@ -153,6 +154,9 @@ class ScanningController extends Controller
                     'user_id_conferencia' => Auth::id(),
                     'timestamp_leitura' => now()
                 ]);
+
+                $newDetalhe->load('bem', 'bem.dependencia');
+                $createdDetalhe = $newDetalhe;
 
                 // Add this new detail's ID to process Doacao/Forms loop below if needed
                 $idsToProcess[] = $newDetalhe->id;
@@ -236,7 +240,7 @@ class ScanningController extends Controller
                             $pdf142->save("{$dir}/{$filename142}");
 
                             // Store path in database
-                            $detalhe->documento_doacao_path = "doacoes/{$id}/{$filename141}|{$filename142}";
+                            $detalhe->documento_doacao_path = "doacoes/{$id}/{$filename141}|doacoes/{$id}/{$filename142}";
                         }
                     }
                 }
@@ -271,9 +275,12 @@ class ScanningController extends Controller
                 $firstDetalhe = InventarioDetalhe::find($idsToProcess[0]);
                 if ($firstDetalhe && $firstDetalhe->documento_doacao_path) {
                     $files = explode('|', $firstDetalhe->documento_doacao_path);
+                    $file1 = str_contains($files[0], 'doacoes/') ? $files[0] : "doacoes/{$id}/{$files[0]}";
+                    $file2 = str_contains($files[1], 'doacoes/') ? $files[1] : "doacoes/{$id}/{$files[1]}";
+
                     $donationPdfs = [
-                        'form_14_1' => asset('storage/' . $files[0]),
-                        'form_14_2' => asset('storage/' . $files[1])
+                        'form_14_1' => asset('storage/' . $file1),
+                        'form_14_2' => asset('storage/' . $file2)
                     ];
                 }
             }
@@ -282,7 +289,8 @@ class ScanningController extends Controller
                 'status' => 'success',
                 'message' => $count > 1 ? "{$count} tratativas salvas com sucesso." : 'Tratativa salva com sucesso.',
                 'donation_pdfs' => $donationPdfs,
-                'generated_forms' => $generatedForms
+                'generated_forms' => $generatedForms,
+                'new_detalhe' => $createdDetalhe
             ]);
 
         } catch (\Exception $e) {
