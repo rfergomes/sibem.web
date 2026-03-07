@@ -324,19 +324,19 @@
             <div class="flex-grow flex flex-col overflow-hidden bg-[#F5F7FA] rounded-xl relative shadow-md animate-fade-in border border-blue-900/20"
                 x-show="!showScannerManual && !cameraActive">
                 <!-- Header Toolbar -->
-                <div class="bg-gray-100 border-b border-gray-200 p-3 flex justify-between items-center z-10 shrink-0">
-                    <div class="flex items-center gap-2 md:gap-4">
-                        <div class="flex flex-col">
+                <div class="bg-gray-100 border-b border-gray-200 p-3 flex flex-col xl:flex-row justify-between items-stretch xl:items-center gap-3 z-10 shrink-0 overflow-x-hidden">
+                    <div class="flex items-end gap-2 md:gap-4 w-full xl:w-auto overflow-x-auto custom-scrollbar pb-1 xl:pb-0">
+                        <div class="flex flex-col shrink-0">
                             <label class="text-[9px] font-black uppercase text-gray-500 mb-0.5 ml-1">Pesquisar</label>
                             <div class="relative">
                                 <input type="text" x-model="consultaPesquisa" placeholder="Digite aqui..."
                                     class="text-[11px] border-gray-300 rounded shadow-inner py-1.5 w-32 md:w-48 uppercase font-bold focus:ring-[#004A80] focus:border-[#004A80]">
                             </div>
                         </div>
-                        <div class="flex flex-col">
+                        <div class="flex flex-col shrink-0">
                             <label class="text-[9px] font-black uppercase text-gray-500 mb-0.5 ml-1">Selecionar Consulta</label>
                             <select x-model="consultaAtiva"
-                                class="text-[11px] border-gray-300 rounded shadow-inner py-1.5 w-40 md:w-56 uppercase font-black focus:ring-[#004A80] focus:border-[#004A80] text-[#004A80]">
+                                class="text-[11px] border-gray-300 rounded shadow-inner py-1.5 w-44 md:w-56 uppercase font-black focus:ring-[#004A80] focus:border-[#004A80] text-[#004A80]">
                                 <option value="lista_geral">BENS LIDOS (HISTÓRICO)</option>
                                 <option value="bens_totalizados">BENS TOTALIZADOS</option>
                                 <option value="bens_localizados">BENS LOCALIZADOS</option>
@@ -345,29 +345,29 @@
                                 <option value="dependencias">DEPENDÊNCIAS DA TAREFA</option>
                             </select>
                         </div>
-                        <button class="bg-gray-200 text-[#004A80] p-1.5 mt-4 rounded shadow-sm hover:bg-gray-300 transition"
+                        <button class="bg-gray-200 text-[#004A80] p-1.5 rounded shadow-sm hover:bg-gray-300 transition shrink-0"
                             @click="consultaPesquisa = ''" title="Limpar Pesquisa">
                             <span class="text-lg font-black leading-none">↺</span>
                         </button>
                     </div>
 
-                    <div class="flex flex-wrap gap-2 items-center justify-end mt-4 md:mt-0">
-                        <button @click="toggleCamera()"
-                            class="bg-green-600 hover:bg-green-700 text-white font-bold px-2 py-1.5 md:px-3 text-[10px] sm:text-[11px] rounded uppercase shadow-sm flex items-center gap-1.5 transition group flex-1 md:flex-none justify-center tracking-wider">
-                            <span class="text-base sm:text-lg group-hover:scale-110 transition">📷</span>
-                            <span>CÂMERA</span>
+                    <div class="flex flex-row flex-wrap gap-2 items-center justify-between xl:justify-end w-full xl:w-auto mt-2 xl:mt-0">
+                        <button @click="showPendencias = true"
+                            class="bg-white border-2 border-red-700 hover:bg-red-50 text-red-700 font-bold px-2 py-1.5 md:px-3 text-[10px] sm:text-[11px] rounded uppercase shadow-sm flex items-center justify-center gap-1.5 transition group flex-1 md:flex-none tracking-wider whitespace-nowrap">
+                            <span class="text-base sm:text-lg group-hover:scale-110 transition">📋</span>
+                            <span>PENDÊNCIAS</span>
                         </button>
                         <button @click="abrirScannerManual()"
-                            class="bg-[#004A80] hover:bg-[#003B66] text-white font-bold px-2 py-1.5 md:px-3 text-[10px] sm:text-[11px] rounded uppercase shadow-sm flex items-center gap-1.5 transition group flex-1 md:flex-none justify-center relative overflow-hidden tracking-wider">
+                            class="bg-[#004A80] hover:bg-[#003B66] text-white font-bold px-2 py-1.5 md:px-3 text-[10px] sm:text-[11px] rounded uppercase shadow-sm flex items-center justify-center gap-1.5 transition group flex-1 md:flex-none relative overflow-hidden tracking-wider whitespace-nowrap">
                             <div class="absolute inset-0 bg-white/5 group-hover:bg-transparent transition object-cover"></div>
                             <span
                                 class="text-base sm:text-lg group-hover:scale-110 transition animate-pulse relative z-10">📠</span>
                             <span class="relative z-10">LEITOR</span>
                         </button>
-                        <button @click="showPendencias = true"
-                            class="bg-white border-2 border-red-700 hover:bg-red-50 text-red-700 font-bold px-2 py-1.5 md:px-3 text-[10px] sm:text-[11px] rounded uppercase shadow-sm flex items-center gap-1.5 transition group flex-1 sm:flex-none justify-center tracking-wider">
-                            <span class="text-base sm:text-lg group-hover:scale-110 transition">📋</span>
-                            <span>PENDÊNCIAS</span>
+                        <button @click="toggleCamera()"
+                            class="bg-green-600 hover:bg-green-700 text-white font-bold px-2 py-1.5 md:px-3 text-[10px] sm:text-[11px] rounded uppercase shadow-sm flex items-center justify-center gap-1.5 transition group flex-1 md:flex-none tracking-wider whitespace-nowrap">
+                            <span class="text-base sm:text-lg group-hover:scale-110 transition">📷</span>
+                            <span>CÂMERA</span>
                         </button>
                     </div>
                 </div>
@@ -598,11 +598,11 @@
                             </div>
 
                             <!-- Top Stats Row (Full Width) -->
-                            <div class="bg-gray-200 border-b border-gray-400 p-2 flex justify-between gap-1 shrink-0">
-                                @foreach(['CADASTRAR', 'IMPRIMIR', 'ALTERAR', 'EXCLUIR'] as $label)
-                                    <div class="bg-[#003865] text-white p-1 flex-1 text-center border-2 border-gray-500 rounded-sm shadow-sm transition hover:bg-[#002D4C]">
+                            <div class="bg-gray-200 border-b border-gray-400 p-2 flex justify-between gap-1 shrink-0 overflow-x-auto custom-scrollbar">
+                                @foreach(['ENCONTRADO', 'IMPRIMIR', 'ALTERAR', 'TRANSFERIR', 'EXCLUIR'] as $label)
+                                    <div class="bg-[#003865] text-white p-1 min-w-[70px] flex-1 text-center border-2 border-gray-500 rounded-sm shadow-sm transition hover:bg-[#002D4C]">
                                         <p class="text-[8px] font-black leading-none mb-0.5 opacity-80">{{ $label }}</p>
-                                        <p class="text-xs font-black drop-shadow-md">{{ $tratativaCounts[strtolower($label)] ?? 0 }}</p>
+                                        <p class="text-xs font-black drop-shadow-md" x-text="stats.tratativas['{{ strtolower($label) }}'] || 0">{{ $tratativaCounts[strtolower($label)] ?? 0 }}</p>
                                     </div>
                                 @endforeach
                             </div>
@@ -688,55 +688,12 @@
                                                     <p class="text-[9px] font-black text-gray-400 text-center uppercase tracking-widest border-b border-gray-100 pb-2 mb-2"># Etiqueta Fís.</p>
                                                     <div class="flex items-center justify-center gap-2">
                                                         <span class="opacity-40 text-sm">🏷️</span>
-                                                        <p class="text-base font-black font-mono text-gray-800" x-text="selectedItem ? selectedItem.bem.id_bem : '0000000000'"></p>
+                                                        <p class="text-base font-black font-mono text-gray-800" x-text="selectedIds.length > 1 ? selectedIds.length + ' ITENS' : (selectedItem ? selectedItem.bem.id_bem : '0000000000')"></p>
                                                     </div>
                                                 </div>
                                             </div>
 
-                                            <div class="bg-white border-2 border-gray-200 shadow-sm rounded-lg overflow-hidden group">
-                                                <div class="bg-gray-50 p-2 text-center text-[10px] sm:text-xs font-black uppercase tracking-[0.2em] text-gray-500 border-b border-gray-200">
-                                                    Dados do Bem Móvel
-                                                </div>
-                                                <div class="p-6 text-sm font-black leading-relaxed min-h-[100px] uppercase text-gray-800" 
-                                                     :class="!selectedItem ? 'text-gray-400 italic flex items-center justify-center text-center' : ''"
-                                                     x-text="selectedItem ? selectedItem.bem.descricao : 'Clique em uma linha na tabela ao lado para visualizar os detalhes deste item e iniciar as tratativas.'"></div>
-                                            </div>
-
-                                            <div class="bg-white border-2 border-gray-200 shadow-sm rounded-lg overflow-hidden mt-4">
-                                                <div class="bg-gray-50 p-2 text-center text-[10px] sm:text-xs font-black uppercase tracking-[0.2em] text-gray-500 border-b border-gray-200">
-                                                    Observação para o Relatório Opcional
-                                                </div>
-                                                <textarea x-model="observacao" 
-                                                      class="w-full border-none text-xs font-bold p-4 h-24 focus:ring-4 focus:ring-blue-50/50 resize-none transition" 
-                                                      :class="selectedItem?.observacao?.includes('LOCALIDADE') ? 'text-red-700 bg-red-50' : ''"
-                                                      placeholder="Se precisar adicionar alguma nota, digite aqui as tratativas realizadas (Ex: ITEM LOCALIZADO NO FUNDO BÍBLICO, PERTENCE A OUTRA ADMINISTRAÇÃO)..."></textarea>
-                                            </div>
-
-                                            <!-- New Asset Fields (Conditional) -->
-                                            <div x-show="tratativa === 'novo'" x-transition class="bg-amber-50 border-2 border-amber-400 p-6 rounded-lg space-y-4 shadow-sm mt-4">
-                                                <p class="text-xs font-black text-amber-800 uppercase tracking-widest border-b-2 border-amber-200 pb-2 flex items-center gap-2"><span>🏷️</span> Registro de Novo Bem Extra-ERP</p>
-                                                <div class="space-y-1.5 mt-4">
-                                                    <label class="text-[10px] font-black text-amber-700 uppercase">Descrição do Item</label>
-                                                    <input type="text" x-model="novaDescricao" class="w-full p-3 text-sm border-2 border-amber-300 rounded-md font-bold uppercase focus:ring-amber-500 focus:border-amber-500" placeholder="EX: VENTILADOR DE PAREDE PRETO">
-                                                </div>
-                                                <div class="space-y-1.5">
-                                                    <label class="text-[10px] font-black text-amber-700 uppercase">Dependência Destino</label>
-                                                    <select x-model="novaDependencia" class="w-full p-3 text-sm border-2 border-amber-300 rounded-md font-bold text-gray-700 focus:ring-amber-500 focus:border-amber-500 bg-white">
-                                                        <option value="">Selecione um Setor / Dependência...</option>
-                                                        @foreach(App\Models\Dependencia::orderBy('nome')->get() as $dep)
-                                                            <option value="{{ $dep->id }}">{{ str_pad($dep->id, 3, '0', STR_PAD_LEFT) }} - {{ $dep->nome }}</option>
-                                                        @endforeach
-                                                    </select>
-                                                </div>
-                                                <div class="flex items-center gap-3 mt-4 p-4 bg-white border border-amber-200 rounded-md shadow-sm">
-                                                    <input type="checkbox" x-model="isDoacao" id="isDoacao" class="w-5 h-5 text-amber-600 border-gray-300 rounded focus:ring-amber-500 cursor-pointer">
-                                                    <label for="isDoacao" class="text-xs font-bold text-gray-700 cursor-pointer">
-                                                        Este item é uma doação? <span class="font-normal text-gray-500 block text-[10px] mt-0.5">(Serão gerados automaticamente os Formulários 14.1 e 14.2)</span>
-                                                    </label>
-                                                </div>
-                                            </div>
-
-                                            <div class="bg-white p-5 border-2 border-gray-200 shadow-sm rounded-lg mt-4" :class="tratativa === 'novo' ? 'hidden' : ''">
+                                            <div class="bg-white p-5 border-2 border-gray-200 shadow-sm rounded-lg mt-4">
                                                 <p class="text-[10px] font-black text-gray-400 uppercase tracking-widest border-b border-gray-100 pb-2 mb-4 text-center">Tratativa a ser Aplicada</p>
                                                 <div class="grid grid-cols-2 lg:grid-cols-3 gap-y-4 gap-x-2">
                                                     @foreach([
@@ -744,7 +701,8 @@
                                                             'encontrado' => 'Encontrado',
                                                             'alterar' => 'Alterar',
                                                             'transferir' => 'Transferir',
-                                                            'excluir' => 'Excluir'
+                                                            'excluir' => 'Excluir',
+                                                            'novo' => '+ Novo S / Etiqueta'
                                                         ] as $val => $txt)
                                                                         <label class="flex items-center gap-3 text-xs font-bold text-gray-600 group cursor-pointer bg-gray-50 p-2 rounded border border-transparent hover:border-gray-200 transition-all hover:bg-gray-100">
                                                                             <input type="radio" x-model="tratativa" value="{{ $val }}" class="text-[#004A80] focus:ring-[#004A80] border-gray-300 w-4 h-4 cursor-pointer">
@@ -754,11 +712,66 @@
                                                 </div>
                                             </div>
 
+                                            <!-- Observação (Imprimir, Encontrado, Excluir) -->
+                                            <div x-show="['imprimir', 'encontrado', 'excluir'].includes(tratativa)" x-transition class="bg-white border-2 border-gray-200 shadow-sm rounded-lg overflow-hidden mt-4 shrink-0">
+                                                <div class="bg-gray-50 p-2 text-center text-[10px] sm:text-xs font-black uppercase tracking-[0.2em] text-gray-500 border-b border-gray-200"
+                                                     x-text="'Motivo / Observação (' + tratativa + ')'">
+                                                </div>
+                                                <textarea x-model="observacao" 
+                                                      class="w-full border-none text-xs font-bold p-4 h-24 focus:ring-4 focus:ring-blue-50/50 resize-none transition" 
+                                                      :class="selectedItem?.observacao?.includes('LOCALIDADE') ? 'text-red-700 bg-red-50' : ''"
+                                                      placeholder="Digite o motivo ou observação para esta tratativa (Opcional)..."></textarea>
+                                            </div>
+
+                                            <!-- Conditional Fields for Novo, Alterar e Transferir -->
+                                            <div x-show="['novo', 'alterar', 'transferir'].includes(tratativa)" x-transition class="bg-amber-50 border-2 border-amber-400 p-6 rounded-lg space-y-4 shadow-sm mt-4 shrink-0">
+                                                <p class="text-xs font-black text-amber-800 uppercase tracking-widest border-b-2 border-amber-200 pb-2 flex items-center gap-2">
+                                                    <span>🏷️</span> 
+                                                    <span x-text="tratativa === 'novo' ? 'Registro de Novo Bem Extra-ERP' : (tratativa === 'transferir' ? 'Transferência de Patrimônio' : 'Alteração Cadastral')"></span>
+                                                </p>
+
+                                                <!-- Descrição (Novo e Alterar) -->
+                                                <div class="space-y-1.5 mt-4" x-show="['novo', 'alterar'].includes(tratativa)">
+                                                    <label class="text-[10px] font-black text-amber-700 uppercase" x-text="tratativa === 'novo' ? 'Descrição do Item' : 'Nova Descrição (Opcional)'"></label>
+                                                    <input type="text" x-model="novaDescricao" class="w-full p-3 text-sm border-2 border-amber-300 rounded-md font-bold uppercase focus:ring-amber-500 focus:border-amber-500" placeholder="EX: VENTILADOR DE PAREDE PRETO">
+                                                </div>
+
+                                                <!-- Dependencia (Novo, Alterar) -->
+                                                <div class="space-y-1.5" x-show="['novo', 'alterar'].includes(tratativa)">
+                                                    <label class="text-[10px] font-black text-amber-700 uppercase">Dependência/Setor Físico</label>
+                                                    <div wire:ignore>
+                                                        <select x-model="novaDependencia" x-init="$nextTick(() => { new TomSelect($el, {create: false, plugins: ['clear_button']})})" class="w-full p-3 text-sm border-2 border-amber-300 rounded-md font-bold text-gray-700 focus:ring-amber-500 focus:border-amber-500 bg-white">
+                                                            <option value="">Selecione um Setor / Dependência...</option>
+                                                            @foreach(App\Models\Dependencia::orderBy('nome')->get() as $dep)
+                                                                <option value="{{ $dep->id }}">{{ str_pad($dep->id, 3, '0', STR_PAD_LEFT) }} - {{ $dep->nome }}</option>
+                                                            @endforeach
+                                                        </select>
+                                                    </div>
+                                                </div>
+
+                                                <!-- Igreja Destino (Transferir) -->
+                                                <div class="space-y-1.5" x-show="tratativa === 'transferir'">
+                                                    <label class="text-[10px] font-black text-amber-700 uppercase">Localidade / Igreja Destino da Transferência</label>
+                                                    <div wire:ignore>
+                                                        <select x-model="novaIgreja" x-init="$nextTick(() => { new TomSelect($el, {create: false, plugins: ['clear_button']})})" class="w-full p-3 text-sm border-2 border-amber-300 rounded-md font-bold text-gray-700 focus:ring-amber-500 focus:border-amber-500 bg-white">
+                                                            <option value="">Selecione a Localidade / Igreja...</option>
+                                                            @foreach(App\Models\Igreja::orderBy('nome')->get() as $igreja)
+                                                                <option value="{{ $igreja->id }}">{{ $igreja->codigo_ccb }} - {{ $igreja->nome }} ({{$igreja->cidade}})</option>
+                                                            @endforeach
+                                                        </select>
+                                                    </div>
+                                                </div>
+
+                                                <!-- Doacao checkbox (Somente Novo) -->
+                                                <div class="flex items-center gap-3 mt-4 p-4 bg-white border border-amber-200 rounded-md shadow-sm" x-show="tratativa === 'novo'">
+                                                    <input type="checkbox" x-model="isDoacao" id="isDoacao" class="w-5 h-5 text-amber-600 border-gray-300 rounded focus:ring-amber-500 cursor-pointer">
+                                                    <label for="isDoacao" class="text-xs font-bold text-gray-700 cursor-pointer">
+                                                        Este item é uma doação? <span class="font-normal text-gray-500 block text-[10px] mt-0.5">(Serão gerados automaticamente os Formulários 14.1 e 14.2 futuramente)</span>
+                                                    </label>
+                                                </div>
+                                            </div>
+
                                             <div class="flex flex-col sm:flex-row gap-3 pt-6 mt-auto">
-                                                <button @click="tratativa = 'novo'; selectedIds = []; selectedItem = null;" 
-                                                        class="w-full sm:w-auto bg-white border-2 border-amber-500 text-amber-600 hover:text-white px-5 py-4 rounded-lg font-black text-xs sm:text-sm shadow-sm hover:bg-amber-500 transition-all uppercase tracking-widest shrink-0 flex items-center justify-center gap-2 group">
-                                                    <span class="text-xl group-hover:scale-125 transition">+</span> NOVO BEM S/ ETIQUETA
-                                                </button>
                                                 <button @click="saveTratativa()" 
                                                         :disabled="selectedIds.length === 0 && tratativa !== 'novo' || !tratativa || savingTratativa"
                                                         class="flex-1 bg-[#004A80] text-white p-3 rounded-sm font-black text-sm shadow-lg hover:bg-[#003B66] hover:scale-[1.01] transition flex items-center justify-center gap-2 group disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none">
@@ -780,10 +793,10 @@
                                                 </button>
                                             </div>
                                             <!-- Cancelar Novo Bem -->
-                                            <div class="mt-2 text-center" x-show="tratativa === 'novo'">
-                                                 <button @click="tratativa = ''; novaDescricao = ''; novaDependencia = ''; isDoacao = false;"
+                                            <div class="mt-2 text-center" x-show="['novo', 'alterar', 'transferir'].includes(tratativa)">
+                                                 <button @click="resetTratativa()"
                                                          class="text-[10px] font-black uppercase tracking-widest text-red-500 hover:text-red-700 hover:underline transition">
-                                                     [ X ] CANCELAR OPERAÇÃO DE NOVO BEM
+                                                     [ X ] CANCELAR OPERAÇÃO DE <span x-text="tratativa"></span>
                                                  </button>
                                             </div>
                                         </div>
@@ -815,6 +828,7 @@
                                         resultado: {{ $resultado }},
                                         tratativas: {
                                             imprimir: {{ $tratativaCounts['imprimir'] }},
+                                            encontrado: {{ $tratativaCounts['encontrado'] ?? 0 }},
                                             alterar: {{ $tratativaCounts['alterar'] }},
                                             excluir: {{ $tratativaCounts['excluir'] }},
                                             transferir: {{ $tratativaCounts['transferir'] }}
@@ -833,6 +847,7 @@
                                     observacao: '',
                                     novaDescricao: '',
                                     novaDependencia: '',
+                                    novaIgreja: '',
                                     isDoacao: false,
                                     savingTratativa: false,
                                     cameraActive: false,
@@ -855,6 +870,13 @@
                                     dependenciaMapa: null,
 
                                     init() {
+                                        this.$watch('tratativa', value => {
+                                            if (value === 'novo') {
+                                                this.selectedItem = null;
+                                                this.selectedIds = [];
+                                            }
+                                        });
+
                                         this.dependenciaMapa = {
                                             @foreach(App\Models\Dependencia::all() as $dep)
                                                 '{{ $dep->id }}': {!! json_encode($dep->nome) !!},
@@ -1155,7 +1177,7 @@
                                     }
 
                                     if (this.tratativa === 'transferir') {
-                                        if (!this.novaDependencia) return false;
+                                        if (!this.novaIgreja) return false;
                                     }
 
                                     return true;
@@ -1181,6 +1203,7 @@
                                                 observacao: this.observacao,
                                                 nova_descricao: this.novaDescricao,
                                                 nova_dependencia: this.novaDependencia,
+                                                nova_igreja: this.novaIgreja,
                                                 is_doacao: this.isDoacao
                                             })
                                         });
@@ -1298,6 +1321,7 @@
                                     this.observacao = '';
                                     this.novaDescricao = '';
                                     this.novaDependencia = '';
+                                    this.novaIgreja = '';
                                     this.isDoacao = false;
                                 },
 

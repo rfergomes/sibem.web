@@ -46,9 +46,10 @@ class ScanningController extends Controller
 
         $tratativaCounts = array_merge([
             'imprimir' => 0,
+            'encontrado' => 0,
             'alterar' => 0,
-            'excluir' => 0,
-            'transferir' => 0
+            'transferir' => 0,
+            'excluir' => 0
         ], $tratativaCounts);
 
         $ultimosLeituras = $inventario->detalhes()
@@ -172,124 +173,136 @@ class ScanningController extends Controller
                 $detalhe->tratativa = $tratativa;
                 $detalhe->observacao = $observacao;
 
-                // If found through tratativa
-                if ($tratativa === 'encontrado' || $tratativa === 'novo') {
-                    $detalhe->status_leitura = 'encontrado';
-                    $detalhe->timestamp_leitura = now();
-                    $detalhe->user_id_conferencia = Auth::id();
+                $bem = $detalhe->bem;
 
-                    // If it's a new asset (Divergence override) - Only for single item registration usually
-                    // but we keep logic for backward compatibility or individual "new" marks
-                    if ($tratativa === 'novo' && $request->has('nova_descricao')) {
-                        // Update the Bem record if it's a shadow record
-                        $bem = $detalhe->bem;
-                        if ($bem && $bem->origem === 'scanner_manual') {
-                            $bem->update([
-                                'descricao' => strtoupper($request->nova_descricao),
-                                'id_dependencia' => $request->nova_dependencia,
-                                'id_status' => 1 // Active
-                            ]);
-                        }
+                switch ($tratativa) {
+                    case 'novo':
+                        $detalhe->status_leitura = 'encontrado';
+                        $detalhe->timestamp_leitura = now();
+                        $detalhe->user_id_conferencia = Auth::id();
 
-                        // Update observation with new data
-                        $prefix = " [NOVO BEM REGISTRADO: " . strtoupper($request->nova_descricao) . " em DEP {$request->nova_dependencia}]";
-                        $detalhe->observacao = ($detalhe->observacao ?: "") . $prefix;
-
-                        // Create divergência record for new item
-                        \App\Models\Divergencia::create([
-                            'inventario_id' => $id,
-                            'id_bem' => $detalhe->id_bem,
-                            'codigo_divergencia' => '01',
-                            'descricao' => 'NOVO BEM REGISTRADO: ' . strtoupper($request->nova_descricao),
-                            'id_dependencia_anterior' => null,
-                            'id_dependencia_nova' => $request->nova_dependencia,
-                            'registrado_por' => Auth::user()->nome
-                        ]);
-
-                        // Generate donation PDFs if marked as donation
-                        if ($request->is_doacao) {
-                            $detalhe->is_doacao = true;
-
-                            // Prepare data for PDF
-                            $inventario = Inventario::findOrFail($id);
-                            $headerData = $inventario->header_data;
-                            $dependencia = \App\Models\Dependencia::find($request->nova_dependencia);
-
-                            $pdfData = array_merge($headerData, [
-                                'dataEmissao' => now()->format('d/m/Y'),
-                                'descricaoBem' => strtoupper($request->nova_descricao),
-                                'localData' => ($dependencia ? $dependencia->nome : 'N/A') . ', ' . now()->format('d/m/Y'),
-                                'idBem' => $detalhe->id_bem,
-                                'dependencia' => $dependencia ? $dependencia->nome : 'N/A'
-                            ]);
-
-                            // Create directory if not exists
-                            $dir = storage_path("app/public/doacoes/{$id}");
-                            if (!file_exists($dir)) {
-                                mkdir($dir, 0755, true);
+                        if ($request->has('nova_descricao')) {
+                            if ($bem && $bem->origem === 'scanner_manual') {
+                                $bem->update([
+                                    'descricao' => strtoupper($request->nova_descricao),
+                                    'id_dependencia' => $request->nova_dependencia,
+                                    'id_status' => 1 // Active
+                                ]);
                             }
 
-                            // Generate PDF 14.1
-                            $pdf141 = Pdf::loadView('pdf.formulario_14_1', $pdfData);
-                            $filename141 = "doacao_14.1_{$detalhe->id_bem}_" . time() . ".pdf";
-                            $pdf141->save("{$dir}/{$filename141}");
+                            $prefix = " [NOVO BEM REGISTRADO: " . strtoupper($request->nova_descricao) . " em DEP {$request->nova_dependencia}]";
+                            $detalhe->observacao = ($detalhe->observacao ?: "") . $prefix;
 
-                            // Generate PDF 14.2
-                            $pdf142 = Pdf::loadView('pdf.formulario_14_2', $pdfData);
-                            $filename142 = "doacao_14.2_{$detalhe->id_bem}_" . time() . ".pdf";
-                            $pdf142->save("{$dir}/{$filename142}");
-
-                            // Store path in database
-                            $detalhe->documento_doacao_path = "doacoes/{$id}/{$filename141}|doacoes/{$id}/{$filename142}";
+                            \App\Models\Divergencia::create([
+                                'inventario_id' => $id,
+                                'id_bem' => $detalhe->id_bem,
+                                'codigo_divergencia' => '01',
+                                'descricao' => 'NOVO BEM REGISTRADO: ' . strtoupper($request->nova_descricao),
+                                'id_dependencia_anterior' => null,
+                                'id_dependencia_nova' => $request->nova_dependencia,
+                                'registrado_por' => Auth::user()->nome
+                            ]);
                         }
-                    }
+                        // Formularios 14.1 e 14.2 serão gerados no fechamento do relatório se is_doacao for verdadeiro.
+                        if ($request->is_doacao) {
+                            $detalhe->is_doacao = true;
+                        }
+                        break;
+
+                    case 'encontrado':
+                        $detalhe->status_leitura = 'encontrado';
+                        $detalhe->timestamp_leitura = now();
+                        $detalhe->user_id_conferencia = Auth::id();
+                        break;
+
+                    case 'imprimir':
+                        // Apenas atualizará tratativa = 'imprimir'
+                        $detalhe->status_leitura = 'nao_encontrado'; // Continua pendente até ser impresso/localizado fisicamente se essa for a regra
+                        break;
+
+                    case 'alterar':
+                        $detalhe->status_leitura = 'encontrado'; // Alterou significa que tem o bem em mãos
+                        $detalhe->timestamp_leitura = now();
+                        $detalhe->user_id_conferencia = Auth::id();
+
+                        $updates = [];
+                        $obsParts = [];
+                        if ($request->has('nova_descricao') && $request->nova_descricao) {
+                            $updates['descricao'] = strtoupper($request->nova_descricao);
+                            $obsParts[] = "Novo Descritivo: " . strtoupper($request->nova_descricao);
+                        }
+
+                        if ($request->has('nova_dependencia') && $request->nova_dependencia && $bem->id_dependencia != $request->nova_dependencia) {
+                            $oldDep = $bem->id_dependencia;
+                            $updates['id_dependencia'] = $request->nova_dependencia;
+                            $obsParts[] = "Localização Física: De {$oldDep} para {$request->nova_dependencia}";
+
+                            \App\Models\Divergencia::create([
+                                'inventario_id' => $id,
+                                'id_bem' => $detalhe->id_bem,
+                                'codigo_divergencia' => '05', // Ajuste cadastral
+                                'descricao' => "Localização Corrigida Física: De {$oldDep} para {$request->nova_dependencia}",
+                                'id_dependencia_anterior' => $oldDep,
+                                'id_dependencia_nova' => $request->nova_dependencia,
+                                'registrado_por' => Auth::user()->nome
+                            ]);
+                        }
+
+                        if (!empty($updates) && $bem) {
+                            $bem->update($updates);
+                        }
+
+                        if (!empty($obsParts)) {
+                            $prefix = implode(' | ', $obsParts);
+                            $detalhe->observacao = $detalhe->observacao ? $detalhe->observacao . ' - ' . $prefix : $prefix;
+                        }
+                        break;
+
+                    case 'transferir':
+                        $detalhe->status_leitura = 'encontrado'; // Está com o bem mas será transferido
+                        $detalhe->timestamp_leitura = now();
+                        $detalhe->user_id_conferencia = Auth::id();
+
+                        if ($request->has('nova_igreja') && $request->nova_igreja && $bem) {
+                            $oldIgreja = $bem->id_igreja;
+                            $bem->update(['id_igreja' => $request->nova_igreja]);
+
+                            $novaIgrejaObj = \App\Models\Igreja::find($request->nova_igreja);
+                            $nomeNovaIgreja = $novaIgrejaObj ? $novaIgrejaObj->nome : $request->nova_igreja;
+
+                            $prefix = "Transferência detectada: De {$oldIgreja} para {$request->nova_igreja} ({$nomeNovaIgreja})";
+                            $detalhe->observacao = $detalhe->observacao ? $detalhe->observacao . ' - ' . $prefix : $prefix;
+
+                            \App\Models\Divergencia::create([
+                                'inventario_id' => $id,
+                                'id_bem' => $detalhe->id_bem,
+                                'codigo_divergencia' => '03',
+                                'descricao' => "Transferência para outra Igreja/Localidade detectada: De {$oldIgreja} para {$request->nova_igreja} ({$nomeNovaIgreja})",
+                                'id_dependencia_anterior' => $bem->id_dependencia,
+                                'id_dependencia_nova' => null,
+                                'registrado_por' => Auth::user()->nome
+                            ]);
+                        }
+                        break;
+
+                    case 'excluir':
+                        // O status_leitura ideal seria manter como nao_encontrado com a marcação de excluir
+                        if ($bem) {
+                            $bem->update(['id_status' => 0]); // Marcado como inativo para não aparecer mais nos próximos inventários
+                        }
+                        break;
                 }
 
                 $detalhe->save();
-
-                // Logic to Suggest Forms based on Tratativa
-                if ($tratativa === 'excluir') {
-                    $generatedForms[] = [
-                        'label' => "Termo de Saída (14.3) - Item #{$detalhe->id_bem}",
-                        'url' => route('report.14-3', $detalheId)
-                    ];
-                } elseif ($tratativa === 'transferir') {
-                    $generatedForms[] = [
-                        'label' => "Mov. Interna (14.7) - Item #{$detalhe->id_bem}",
-                        'url' => route('report.14-7', $detalheId)
-                    ];
-                } elseif ($tratativa === 'alterar') {
-                    $generatedForms[] = [
-                        'label' => "Alteração (14.6) - Item #{$detalhe->id_bem}",
-                        'url' => route('report.14-6', $detalheId)
-                    ];
-                }
             }
 
             DB::connection('tenant')->commit();
             $count = count($idsToProcess);
 
-            // Check if any item has donation PDFs
-            $donationPdfs = null;
-            if ($request->is_doacao && $request->tratativa === 'novo' && $count > 0) {
-                $firstDetalhe = InventarioDetalhe::find($idsToProcess[0]);
-                if ($firstDetalhe && $firstDetalhe->documento_doacao_path) {
-                    $files = explode('|', $firstDetalhe->documento_doacao_path);
-                    $file1 = str_contains($files[0], 'doacoes/') ? $files[0] : "doacoes/{$id}/{$files[0]}";
-                    $file2 = str_contains($files[1], 'doacoes/') ? $files[1] : "doacoes/{$id}/{$files[1]}";
-
-                    $donationPdfs = [
-                        'form_14_1' => asset('storage/' . $file1),
-                        'form_14_2' => asset('storage/' . $file2)
-                    ];
-                }
-            }
-
+            // Generated forms logic has been moved to a post-inventory process
             return response()->json([
                 'status' => 'success',
                 'message' => $count > 1 ? "{$count} tratativas salvas com sucesso." : 'Tratativa salva com sucesso.',
-                'donation_pdfs' => $donationPdfs,
-                'generated_forms' => $generatedForms,
                 'new_detalhe' => $createdDetalhe
             ]);
 
