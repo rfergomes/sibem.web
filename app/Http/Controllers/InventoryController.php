@@ -144,7 +144,8 @@ class InventoryController extends Controller
     public function printReport($id)
     {
         $inventario = Inventario::findOrFail($id);
-        return view('inventarios.report_print', compact('inventario'));
+        $pdf = \Barryvdh\DomPDF\Facade\Pdf::loadView('inventarios.report_print', compact('inventario'));
+        return $pdf->download("Ata_FOR_AI_22_{$inventario->codigo_unico}.pdf");
     }
 
     public function customReport($id)
@@ -159,6 +160,63 @@ class InventoryController extends Controller
         $bensFinal = $localizados + $novos;
         $resultado = ($bensInicial > 0) ? ($bensFinal / $bensInicial) * 100 : 0;
 
-        return view('inventarios.report_custom', compact('inventario', 'resultado'));
+        $pdf = \Barryvdh\DomPDF\Facade\Pdf::loadView('inventarios.report_custom', compact('inventario', 'resultado'));
+        return $pdf->download("Relatorio_Geral_{$inventario->codigo_unico}.pdf");
+    }
+
+    public function edit($id)
+    {
+        $inventario = Inventario::findOrFail($id);
+        if ($inventario->status !== 'aberto') {
+            return redirect()->route('inventarios.index')->with('error', 'Não é possível editar um inventário fechado.');
+        }
+        $usuarios = \App\Models\User::orderBy('nome')->get(['id', 'nome']);
+        return view('inventarios.edit', compact('inventario', 'usuarios'));
+    }
+
+    public function update(Request $request, $id)
+    {
+        $request->validate([
+            'ano' => 'required|integer|min:2024',
+            'mes' => 'required|integer|min:1|max:12',
+            'responsavel' => 'required|string',
+            'inventariante' => 'required|string',
+        ]);
+
+        $inventario = Inventario::findOrFail($id);
+
+        if ($inventario->status !== 'aberto') {
+            return redirect()->route('inventarios.index')->with('error', 'Não é possível editar um inventário que não está aberto.');
+        }
+
+        $inventario->update([
+            'ano' => $request->ano,
+            'mes' => $request->mes,
+            'responsavel' => $request->responsavel,
+            'inventariante' => $request->inventariante
+        ]);
+
+        return redirect()->route('inventarios.index')->with('success', 'Inventário atualizado com sucesso.');
+    }
+
+    public function destroy($id)
+    {
+        $inventario = Inventario::findOrFail($id);
+
+        if ($inventario->status !== 'aberto') {
+            return redirect()->back()->with('error', 'Apenas inventários com status "aberto" podem ser excluídos.');
+        }
+
+        DB::connection('tenant')->beginTransaction();
+        try {
+            // Delete details
+            $inventario->detalhes()->delete();
+            $inventario->delete();
+            DB::connection('tenant')->commit();
+            return redirect()->route('inventarios.index')->with('success', 'Inventário excluído com sucesso.');
+        } catch (\Exception $e) {
+            DB::connection('tenant')->rollBack();
+            return redirect()->back()->with('error', 'Erro ao excluir inventário: ' . $e->getMessage());
+        }
     }
 }

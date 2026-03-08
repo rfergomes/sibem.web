@@ -1,0 +1,25 @@
+name: Auto Merge initial-config para master
+
+on:
+  push:
+    branches:
+      - initial-config
+
+jobs:
+  merge-branch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Configurar Git
+        run: |
+          git config --global user.name 'github-actions[bot]'
+          git config --global user.email 'github-actions[bot]@users.noreply.github.com'
+
+      - name: Mesclar initial-config na master
+        run: |
+          git checkout master
+          git merge origin/initial-config --allow-unrelated-histories -m "Auto-merge da branch initial-config para master"
+          git push origin master

@@ -1,8 +1,8 @@
 <header
-    class="h-16 bg-ccb-blue flex items-center justify-between px-6 md:px-8 shrink-0 shadow-lg text-white z-40 relative">
+    class="h-16 bg-ccb-blue flex items-center justify-between px-6 md:px-8 shrink-0 shadow-lg text-white z-40 relative gap-4">
     <!-- Left: Toggle & Mobile Info -->
-    <div class="flex items-center gap-4">
-        <button @click="sidebarOpen = !sidebarOpen" class="text-white hover:text-gray-300 focus:outline-none">
+    <div class="flex items-center gap-4 flex-1 min-w-0">
+        <button @click="sidebarOpen = !sidebarOpen" class="text-white hover:text-gray-300 focus:outline-none shrink-0">
             <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16">
                 </path>
@@ -10,7 +10,7 @@
         </button>
 
         <!-- Mobile Context (Visible only on small screens) -->
-        <div class="md:hidden flex flex-col leading-tight">
+        <div class="md:hidden flex flex-col leading-tight min-w-0">
             <span class="text-[10px] opacity-75 uppercase font-bold tracking-wider">ADM</span>
             <span
                 class="text-xs font-bold truncate max-w-[150px]">{{ Session::get('current_local_name', 'Local') }}</span>
@@ -18,14 +18,13 @@
     </div>
 
     <!-- Center: Organization Name -->
-    <div class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 hidden md:block pointer-events-none">
-        <span
-            class="font-serif text-xl tracking-wide font-bold text-white shadow-sm uppercase whitespace-nowrap">Congregação
+    <div class="hidden xl:flex justify-center items-center pointer-events-none mx-auto whitespace-nowrap px-4 shrink-0">
+        <span class="font-serif text-xl tracking-wide font-bold text-white shadow-sm uppercase">Congregação
             Cristã no Brasil</span>
     </div>
 
     <!-- Right: Admin Info + Icons -->
-    <div class="flex items-center gap-6">
+    <div class="flex items-center justify-end gap-6 flex-1 min-w-0 shrink-0">
         <!-- Admin Info (Desktop) -->
         <div class="hidden lg:flex flex-col items-end leading-tight text-right">
             <div class="flex items-center gap-2 text-[10px] font-bold tracking-widest text-blue-200 uppercase">
