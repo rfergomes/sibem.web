@@ -11,16 +11,6 @@
             </div>
         </div>
 
-        @if(session('success'))
-            <div class="mb-6 p-4 rounded-lg bg-green-50 text-green-700 border border-green-100 font-medium">
-                {{ session('success') }}
-            </div>
-        @endif
-        @if(session('error'))
-            <div class="mb-6 p-4 rounded-lg bg-red-50 text-red-700 border border-red-100 font-medium">
-                {{ session('error') }}
-            </div>
-        @endif
 
         <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
             @if($solicitacoes->isEmpty())
