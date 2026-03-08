@@ -17,3 +17,23 @@ use Illuminate\Support\Facades\Route;
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
+
+// Webhook para Automação do GitHub Deploy
+Route::post('/deploy_webhook_secreto123', function (Request $request) {
+    // Validação extra de segurança garantindo que vem do GitHub
+    if (!$request->hasHeader('X-GitHub-Event')) {
+        return response()->json(['error' => 'Acesso negado'], 403);
+    }
+
+    $repo_dir = base_path();
+    chdir($repo_dir);
+
+    // Executa o git pull no lado do servidor
+    $output = shell_exec('git pull origin master 2>&1');
+
+    return response()->json([
+        'success' => true,
+        'message' => 'Deploy acionado com sucesso',
+        'output' => $output
+    ]);
+});
