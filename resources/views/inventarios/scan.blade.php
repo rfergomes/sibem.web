@@ -607,10 +607,10 @@
                                 @endforeach
                             </div>
 
-                            <div class="flex flex-1 flex-col md:flex-row overflow-hidden min-h-0 bg-white">
+                            <div class="flex flex-1 flex-col md:flex-row overflow-y-auto md:overflow-hidden min-h-0 bg-white">
                                 <!-- Left: List -->
                                 <div
-                                    class="w-full md:w-1/2 lg:w-[60%] flex flex-col border-b md:border-b-0 border-r border-gray-300 bg-white overflow-hidden min-h-0 shadow-[4px_0_24px_-10px_rgba(0,0,0,0.1)] z-10">
+                                    class="w-full md:w-1/2 lg:w-[60%] flex flex-col border-b md:border-b-0 border-r border-gray-300 bg-white overflow-hidden max-h-[45vh] md:max-h-none min-h-0 shrink-0 md:shrink shadow-[4px_0_24px_-10px_rgba(0,0,0,0.1)] z-10">
                                     <div
                                         class="p-4 bg-gray-50 flex flex-col gap-3 shrink-0">
                                         <div class="relative w-full">
@@ -673,7 +673,7 @@
 
                                                 <!-- END REPLACED BUG -->
                                 <!-- Right: Details & Actions -->
-                                <div class="w-full md:w-1/2 lg:w-[40%] p-4 sm:p-8 flex flex-col gap-4 overflow-y-auto bg-gray-100 relative shadow-inner">
+                                <div class="w-full md:w-1/2 lg:w-[40%] p-4 sm:p-8 flex flex-col gap-4 bg-gray-100 relative shadow-inner shrink-0 md:shrink md:overflow-y-auto">
 
                                             <div class="grid grid-cols-2 gap-4">
                                                 <div class="bg-white border-2 border-gray-200 shadow-sm rounded-lg p-3 hover:shadow-md transition">
@@ -713,14 +713,15 @@
                                             </div>
 
                                             <!-- Observação (Imprimir, Encontrado, Excluir) -->
-                                            <div x-show="['imprimir', 'encontrado', 'excluir'].includes(tratativa)" x-transition class="bg-white border-2 border-gray-200 shadow-sm rounded-lg overflow-hidden mt-4 shrink-0">
-                                                <div class="bg-gray-50 p-2 text-center text-[10px] sm:text-xs font-black uppercase tracking-[0.2em] text-gray-500 border-b border-gray-200"
-                                                     x-text="'Motivo / Observação (' + tratativa + ')'">
-                                                </div>
+                                            <div x-show="['imprimir', 'encontrado', 'excluir'].includes(tratativa)" x-transition class="bg-amber-50 border-2 border-amber-400 p-6 rounded-lg space-y-4 shadow-sm mt-4 shrink-0">
+                                                <p class="text-xs font-black text-amber-800 uppercase tracking-widest border-b-2 border-amber-200 pb-2 flex items-center gap-2">
+                                                    <span>📝</span> 
+                                                    <span x-text="'Motivo / Observação (' + tratativa + ')'"></span>
+                                                </p>
                                                 <textarea x-model="observacao" 
-                                                      class="w-full border-none text-xs font-bold p-4 h-24 focus:ring-4 focus:ring-blue-50/50 resize-none transition" 
-                                                      :class="selectedItem?.observacao?.includes('LOCALIDADE') ? 'text-red-700 bg-red-50' : ''"
-                                                      placeholder="Digite o motivo ou observação para esta tratativa (Opcional)..."></textarea>
+                                                      class="w-full text-sm border-2 border-amber-300 rounded-md font-bold text-gray-700 p-4 h-24 focus:ring-amber-500 focus:border-amber-500 bg-white resize-none transition uppercase" 
+                                                      :class="selectedItem?.observacao?.includes('LOCALIDADE') ? 'border-red-400 focus:ring-red-500 bg-red-50' : ''"
+                                                      placeholder="DIGITE O MOTIVO OU OBSERVAÇÃO PARA ESTA TRATATIVA (OPCIONAL)..."></textarea>
                                             </div>
 
                                             <!-- Conditional Fields for Novo, Alterar e Transferir -->
