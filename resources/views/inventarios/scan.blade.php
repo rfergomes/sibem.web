@@ -351,22 +351,22 @@
                         </button>
                     </div>
 
-                    <div class="flex flex-row flex-wrap gap-2 items-center justify-between xl:justify-end w-full xl:w-auto mt-2 xl:mt-0">
+                    <div class="flex flex-row flex-wrap gap-1 sm:gap-2 items-center justify-between xl:justify-end w-full xl:w-auto mt-2 xl:mt-0">
                         <button @click="showPendencias = true"
-                            class="bg-white border-2 border-red-700 hover:bg-red-50 text-red-700 font-bold px-2 py-1.5 md:px-3 text-[10px] sm:text-[11px] rounded uppercase shadow-sm flex items-center justify-center gap-1.5 transition group flex-1 md:flex-none tracking-wider whitespace-nowrap">
-                            <span class="text-base sm:text-lg group-hover:scale-110 transition">📋</span>
+                            class="bg-white border-2 border-red-700 hover:bg-red-50 text-red-700 font-bold px-1 sm:px-2 py-1.5 md:px-3 text-[9px] sm:text-[11px] rounded uppercase shadow-sm flex items-center justify-center gap-1 sm:gap-1.5 transition group flex-1 md:flex-none tracking-normal sm:tracking-wider whitespace-nowrap">
+                            <span class="text-sm sm:text-lg group-hover:scale-110 transition shrink-0">📋</span>
                             <span>PENDÊNCIAS</span>
                         </button>
                         <button @click="abrirScannerManual()"
-                            class="bg-[#004A80] hover:bg-[#003B66] text-white font-bold px-2 py-1.5 md:px-3 text-[10px] sm:text-[11px] rounded uppercase shadow-sm flex items-center justify-center gap-1.5 transition group flex-1 md:flex-none relative overflow-hidden tracking-wider whitespace-nowrap">
+                            class="bg-[#004A80] hover:bg-[#003B66] text-white font-bold px-1 sm:px-2 py-1.5 md:px-3 text-[9px] sm:text-[11px] rounded uppercase shadow-sm flex items-center justify-center gap-1 sm:gap-1.5 transition group flex-1 md:flex-none relative overflow-hidden tracking-normal sm:tracking-wider whitespace-nowrap">
                             <div class="absolute inset-0 bg-white/5 group-hover:bg-transparent transition object-cover"></div>
                             <span
-                                class="text-base sm:text-lg group-hover:scale-110 transition animate-pulse relative z-10">📠</span>
+                                class="text-sm sm:text-lg group-hover:scale-110 transition animate-pulse relative z-10 shrink-0">📠</span>
                             <span class="relative z-10">LEITOR</span>
                         </button>
                         <button @click="toggleCamera()"
-                            class="bg-green-600 hover:bg-green-700 text-white font-bold px-2 py-1.5 md:px-3 text-[10px] sm:text-[11px] rounded uppercase shadow-sm flex items-center justify-center gap-1.5 transition group flex-1 md:flex-none tracking-wider whitespace-nowrap">
-                            <span class="text-base sm:text-lg group-hover:scale-110 transition">📷</span>
+                            class="bg-green-600 hover:bg-green-700 text-white font-bold px-1 sm:px-2 py-1.5 md:px-3 text-[9px] sm:text-[11px] rounded uppercase shadow-sm flex items-center justify-center gap-1 sm:gap-1.5 transition group flex-1 md:flex-none tracking-normal sm:tracking-wider whitespace-nowrap">
+                            <span class="text-sm sm:text-lg group-hover:scale-110 transition shrink-0">📷</span>
                             <span>CÂMERA</span>
                         </button>
                     </div>
