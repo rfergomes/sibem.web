@@ -73,14 +73,14 @@
                                     </td>
                                     <td class="px-6 py-4 text-right flex justify-end gap-2">
                                         <form action="{{ route('admin.access-requests.reject', $solicitacao->id) }}" method="POST"
-                                            onsubmit="return confirm('Rejeitar solicitação?');">
+                                            onsubmit="event.preventDefault(); window.confirmAction('Rejeitar solicitação?', 'Tem certeza que deseja rejeitar esta solicitação?', () => this.submit());">
                                             @csrf
                                             <button type="submit"
                                                 class="px-3 py-1.5 rounded-lg border border-red-200 text-red-600 hover:bg-red-50 text-xs font-bold transition-all">Rejeitar</button>
                                         </form>
 
                                         <form action="{{ route('admin.access-requests.approve', $solicitacao->id) }}" method="POST"
-                                            onsubmit="return confirm('Aprovar e criar usuário?');">
+                                            onsubmit="event.preventDefault(); window.confirmAction('Aprovar solicitação?', 'Deseja aprovar e criar um usuário para este solicitante?', () => this.submit());">
                                             @csrf
                                             <button type="submit"
                                                 class="px-3 py-1.5 rounded-lg bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold shadow-md shadow-blue-500/20 transition-all">Aprovar</button>
