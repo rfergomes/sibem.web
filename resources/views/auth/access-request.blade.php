@@ -137,7 +137,94 @@
         .animate-scaleIn {
             animation: scaleIn 0.3s ease-out;
         }
+
+        /* Tom Select Custom Theme to match the existing form styling */
+        .ts-wrapper.single .ts-control {
+            background-color: #f9fafb !important;
+            border: 1px solid #e5e7eb !important;
+            border-radius: 0.75rem !important;
+            padding: 0.75rem 1rem !important;
+            font-size: 0.875rem !important;
+            font-weight: 500 !important;
+            box-shadow: none !important;
+            transition: all 0.3s !important;
+            min-height: auto !important;
+            display: flex;
+            align-items: center;
+        }
+
+        .ts-wrapper.focus .ts-control {
+            background-color: white !important;
+            border-color: #3b82f6 !important;
+            box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.1) !important;
+        }
+
+        .ts-dropdown {
+            border-radius: 0.75rem;
+            border: 1px solid #e5e7eb;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+            font-size: 0.875rem;
+            overflow: hidden;
+            z-index: 1000;
+        }
+
+        .ts-dropdown .ts-dropdown-content {
+            max-height: 240px;
+        }
+
+        .ts-dropdown [data-selectable].option {
+            padding: 0.5rem 1rem;
+            color: #374151;
+        }
+
+        .ts-dropdown [data-selectable].option:hover,
+        .ts-dropdown [data-selectable].option.active {
+            background-color: #eff6ff;
+            color: #1d4ed8;
+        }
+
+        .ts-wrapper .ts-control input {
+            font-size: 0.875rem;
+            color: #374151;
+        }
+
+        .ts-dropdown .no-results {
+            padding: 0.75rem 1rem;
+            color: #9ca3af;
+        }
+
+        .ts-wrapper {
+            position: relative;
+            z-index: auto;
+            border: none !important;
+            background: transparent !important;
+            padding: 0 !important;
+            box-shadow: none !important;
+        }
     </style>
+
+    <!-- Tom Select -->
+    <link href="https://cdn.jsdelivr.net/npm/tom-select@2.3.1/dist/css/tom-select.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/tom-select@2.3.1/dist/js/tom-select.complete.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            new TomSelect('#regional_id', {
+                create: false,
+                sortField: {
+                    field: "text",
+                    direction: "asc"
+                },
+                placeholder: 'Selecione uma Regional...',
+                noResultsText: 'Nenhuma regional encontrada',
+                searchField: ['text'],
+                render: {
+                    no_results: function (data, escape) {
+                        return '<div class="no-results">Nenhum resultado para "<em>' + escape(data.input) + '"</em></div>';
+                    }
+                }
+            });
+        });
+    </script>
 </body>
 
 </html>
