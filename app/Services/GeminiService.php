@@ -28,9 +28,18 @@ class GeminiService
         $today = now()->format('Y-m-d');
         $cacheKey = "daily_word_data_{$today}";
 
-        return Cache::remember($cacheKey, now()->endOfDay(), function () {
-            return $this->fetchDailyDataFromApi();
-        });
+        if (Cache::has($cacheKey)) {
+            return Cache::get($cacheKey);
+        }
+
+        $data = $this->fetchDailyDataFromApi();
+
+        // Don't cache the fallback so it can retry later if the API was temporarily down
+        if (isset($data['verse']) && !str_contains($data['verse'], 'Lâmpada para os meus pés')) {
+            Cache::put($cacheKey, $data, now()->endOfDay());
+        }
+
+        return $data;
     }
 
     /**
@@ -66,7 +75,7 @@ class GeminiService
                 '"reflection", "prayer", "application", "curiosity". ' .
                 'Evite versículos muito comuns como João 3:16. Explore livros menos conhecidos também.';
 
-            $response = Http::post($this->baseUrl . 'gemini-1.5-flash:generateContent?key=' . $this->apiKey, [
+            $response = Http::post($this->baseUrl . 'gemini-2.5-flash:generateContent?key=' . $this->apiKey, [
                 'contents' => [
                     ['parts' => [['text' => $prompt]]]
                 ],

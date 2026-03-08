@@ -78,11 +78,10 @@ class BemController extends Controller
                         ->where('id', $inventario->id_igreja)
                         ->first();
 
-                    if ($globalChurch && $globalChurch->codigo_ccb) {
-                        $churchCode = str_replace(['-', ' '], '', $globalChurch->codigo_ccb);
+                    if ($globalChurch) {
 
                         // Populate inventario_detalhes with ONLY ACTIVE bens for this specific church code
-                        $bens = Bem::where('id_igreja', $churchCode)
+                        $bens = Bem::where('id_igreja', $inventario->id_igreja)
                             ->where('id_status', 1) // Only active assets
                             ->get();
 
@@ -92,6 +91,7 @@ class BemController extends Controller
                             $detailsToUpsert[] = [
                                 'inventario_id' => $inventario->id,
                                 'id_bem' => $bem->id_bem,
+                                'id_dependencia_original' => $bem->id_dependencia,
                                 'status_leitura' => 'nao_encontrado',
                                 'created_at' => now(),
                                 'updated_at' => now(),

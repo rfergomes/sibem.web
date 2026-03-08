@@ -75,17 +75,28 @@
                                     @endif
                                 </td>
                                 <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm text-right">
-                                    @if($inv->status == 'aberto')
-                                        @if($inv->is_sincronizado)
-                                            <a href="{{ route('scan.show', $inv->id) }}"
-                                                class="text-blue-600 hover:text-blue-900 font-semibold mr-3 underline">🛍️ Conferir</a>
-                                        @else
-                                            <a href="{{ route('inventarios.show', $inv->id) }}"
-                                                class="text-amber-600 hover:text-amber-900 font-semibold mr-3 underline">⚠️ Sincronizar</a>
+                                    <div class="flex items-center justify-end gap-3">
+                                        @if($inv->status == 'aberto')
+                                            @if($inv->is_sincronizado)
+                                                <a href="{{ route('scan.show', $inv->id) }}"
+                                                    class="text-blue-600 hover:text-blue-900 font-semibold underline">🛍️ Conferir</a>
+                                            @else
+                                                <a href="{{ route('inventarios.show', $inv->id) }}"
+                                                    class="text-amber-600 hover:text-amber-900 font-semibold underline">⚠️ Sincronizar</a>
+                                            @endif
+                                            
+                                            <a href="{{ route('inventarios.edit', $inv->id) }}"
+                                                class="text-blue-500 hover:text-blue-700 font-semibold underline">✏️ Editar</a>
+                                                
+                                            <form action="{{ route('inventarios.destroy', $inv->id) }}" method="POST" class="inline" id="delete-form-{{ $inv->id }}">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="button" onclick="confirmDelete('{{ $inv->id }}')" class="text-red-500 hover:text-red-700 font-semibold underline text-sm">🗑️ Excluir</button>
+                                            </form>
                                         @endif
-                                    @endif
-                                    <a href="{{ route('inventarios.show', $inv->id) }}"
-                                        class="text-gray-600 hover:text-gray-900 font-semibold underline">📄 Ver</a>
+                                        <a href="{{ route('inventarios.show', $inv->id) }}"
+                                            class="text-gray-600 hover:text-gray-900 font-semibold underline">📄 Ver</a>
+                                    </div>
                                 </td>
                             </tr>
                         @endforeach
@@ -291,5 +302,30 @@
             const selected = Array.from(checkboxes).map(cb => cb.value);
             document.getElementById('final-inventariante').value = selected.join("\n");
         });
+
+        function confirmDelete(id) {
+            Swal.fire({
+                title: 'Tem certeza?',
+                text: "Esta ação excluirá este inventário e todos os dados espelhados permanentemente. Isso não pode ser desfeito!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#3085d6',
+                confirmButtonText: 'Sim, excluir!',
+                cancelButtonText: 'Cancelar'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    Swal.fire({
+                        title: 'Excluindo...',
+                        text: 'Aguarde um instante.',
+                        allowOutsideClick: false,
+                        didOpen: () => {
+                            Swal.showLoading();
+                        }
+                    });
+                    document.getElementById('delete-form-' + id).submit();
+                }
+            })
+        }
     </script>
 @endsection

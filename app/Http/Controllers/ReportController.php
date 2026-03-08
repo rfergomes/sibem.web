@@ -57,7 +57,7 @@ class ReportController extends Controller
         $detalhe->documentos_gerados = $docs;
         $detalhe->save();
 
-        return response()->download(storage_path("app/public/{$path}"));
+        return response()->download(storage_path("app/public/{$path}"), $filename);
     }
 
     /**
@@ -87,7 +87,7 @@ class ReportController extends Controller
         $detalhe->documentos_gerados = $docs;
         $detalhe->save();
 
-        return response()->download(storage_path("app/public/{$path}"));
+        return response()->download(storage_path("app/public/{$path}"), $filename);
     }
 
     /**
@@ -121,7 +121,7 @@ class ReportController extends Controller
         $inventario->documentos_gerados = $docs;
         $inventario->save();
 
-        return response()->download(storage_path("app/public/{$path}"));
+        return response()->download(storage_path("app/public/{$path}"), $filename);
     }
 
     /**
@@ -151,7 +151,7 @@ class ReportController extends Controller
         $detalhe->documentos_gerados = $docs;
         $detalhe->save();
 
-        return response()->download(storage_path("app/public/{$path}"));
+        return response()->download(storage_path("app/public/{$path}"), $filename);
     }
 
     /**
@@ -183,7 +183,7 @@ class ReportController extends Controller
         $detalhe->documentos_gerados = $docs;
         $detalhe->save();
 
-        return response()->download(storage_path("app/public/{$path}"));
+        return response()->download(storage_path("app/public/{$path}"), $filename);
     }
 
     /**
@@ -220,6 +220,6 @@ class ReportController extends Controller
         $inventario->documentos_gerados = $docs;
         $inventario->save();
 
-        return response()->download(storage_path("app/public/{$path}"));
+        return response()->download(storage_path("app/public/{$path}"), $filename);
     }
 }

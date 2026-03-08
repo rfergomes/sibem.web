@@ -22,6 +22,7 @@ class BensImport implements OnEachRow, WithStartRow, WithChunkReading, SkipsEmpt
 
     protected $inventarioId;
     protected $idIgrejaInventario;
+    protected $dependencias;
 
     public function __construct($inventarioId = null)
     {
@@ -30,6 +31,8 @@ class BensImport implements OnEachRow, WithStartRow, WithChunkReading, SkipsEmpt
             $inv = \App\Models\Inventario::find($this->inventarioId);
             $this->idIgrejaInventario = $inv ? $inv->id_igreja : null;
         }
+
+        $this->dependencias = Dependencia::all();
     }
 
     /**
@@ -79,7 +82,8 @@ class BensImport implements OnEachRow, WithStartRow, WithChunkReading, SkipsEmpt
             return null;
         }
 
-        // 3. Find Localidade
+        $idIgrejaInventario = $this->idIgrejaInventario;
+        // 3. Find Localidade as fallback
         foreach ($rowData as $val) {
             $val = (string) $val;
             if (preg_match('/(\d{2}-\d{4})/', $val, $matches)) {
@@ -87,6 +91,8 @@ class BensImport implements OnEachRow, WithStartRow, WithChunkReading, SkipsEmpt
                 break;
             }
         }
+
+        $idIgrejaFinal = $idIgrejaInventario ?? $idIgreja;
 
         // 4. Find Sector
         foreach ($rowData as $val) {
@@ -97,15 +103,31 @@ class BensImport implements OnEachRow, WithStartRow, WithChunkReading, SkipsEmpt
             }
         }
 
-        if ($idIgreja && $setorEncontrado) {
-            Igreja::where('codigo_ccb', $idIgreja)->update(['setor' => $setorEncontrado]);
+        if ($idIgrejaFinal && $setorEncontrado) {
+            Igreja::where('id', $idIgrejaFinal)->update(['setor' => $setorEncontrado]);
         }
 
         // 5. Find Status
         foreach ($rowData as $val) {
-            $val = mb_strtolower(trim((string) $val));
-            if (in_array($val, ['ativo', 'baixado', 'ruim', 'sucata', 'inativo', 'leilao', 'furtado', 'roubado'])) {
-                $idStatus = $this->parseStatus($val);
+            $valStr = mb_strtolower(trim((string) $val));
+            if (in_array($valStr, ['ativo', 'baixado', 'ruim', 'sucata', 'inativo', 'leilao', 'furtado', 'roubado'])) {
+                $idStatus = $this->parseStatus($valStr);
+                break;
+            }
+        }
+
+        // 6. Find Dependencia
+        foreach ($rowData as $val) {
+            $valStr = mb_strtoupper(trim((string) $val));
+            if (empty($valStr))
+                continue;
+
+            $match = $this->dependencias->first(function ($dep) use ($valStr) {
+                return mb_strtoupper($dep->nome) === $valStr;
+            });
+
+            if ($match) {
+                $idDependencia = $match->id;
                 break;
             }
         }
@@ -116,7 +138,8 @@ class BensImport implements OnEachRow, WithStartRow, WithChunkReading, SkipsEmpt
             [
                 'descricao' => $descricao,
                 'id_status' => $idStatus,
-                'id_igreja' => $idIgreja,
+                'id_igreja' => $idIgrejaFinal,
+                'id_dependencia' => $idDependencia,
                 'origem' => 'importado',
                 'data_importacao' => now(),
             ]

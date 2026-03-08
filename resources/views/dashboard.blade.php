@@ -10,16 +10,16 @@
                 <div>
                     <label class="block text-xs font-bold text-gray-500 uppercase mb-1">Ano</label>
                     <select name="ano"
-                        class="rounded-lg border-gray-300 text-sm focus:ring-ccb-blue-500 focus:border-ccb-blue-500">
+                        class="w-full min-w-[100px] rounded-lg border-gray-300 text-sm focus:ring-blue-500 focus:border-blue-500">
                         @foreach(range(date('Y'), 2024) as $year)
                             <option value="{{ $year }}" {{ $year == $stats['ano'] ? 'selected' : '' }}>{{ $year }}</option>
                         @endforeach
                     </select>
                 </div>
-                <div>
+                <div class="flex-1 min-w-[200px]">
                     <label class="block text-xs font-bold text-gray-500 uppercase mb-1">Setor</label>
                     <select name="setor_id"
-                        class="rounded-lg border-gray-300 text-sm focus:ring-ccb-blue-500 focus:border-ccb-blue-500">
+                        class="w-full rounded-lg border-gray-300 text-sm focus:ring-blue-500 focus:border-blue-500">
                         <option value="">Todos</option>
                         @if(isset($sectors))
                             @foreach($sectors as $sector)
@@ -31,7 +31,7 @@
                     </select>
                 </div>
                 <button type="submit"
-                    class="bg-ccb-blue-600 hover:bg-ccb-blue-700 text-white px-4 py-2 rounded-lg text-sm font-bold transition-colors">
+                    class="bg-blue-600 hover:bg-ccb-blue-700 text-white px-4 py-2 rounded-lg text-sm font-bold transition-colors">
                     Filtrar
                 </button>
             </form>
@@ -230,168 +230,185 @@
     </div>
     <!-- Versículo do Dia (Gemini AI) -->
     @if(isset($dailyData))
-        <div x-data="{ showDevotional: false }" class="mt-8">
-            <div @click="showDevotional = true"
-                class="fixed bottom-14 right-4 sm:right-6 cursor-pointer group animate-slideUp z-[30]"
+        <div x-data="{ 
+                    showDevotional: false,
+                    balloonDismissed: localStorage.getItem('hide_devotional_balloon_{{ date('Ymd') }}') === 'true',
+                    dismissBalloon() {
+                        this.balloonDismissed = true;
+                        localStorage.setItem('hide_devotional_balloon_{{ date('Ymd') }}', 'true');
+                    }
+                }" class="mt-8">
+            <div x-show="!balloonDismissed" class="fixed bottom-14 right-4 sm:right-6 group animate-slideUp z-[30]"
                 style="position: fixed; bottom: 3.5rem; right: 1rem; animation: slideUp 0.5s ease-out;">
-                <div
-                    class="bg-white rounded-xl shadow-xl p-3 sm:p-5 border border-blue-100 max-w-[200px] sm:max-w-xs relative hover:shadow-2xl hover:-translate-y-1 transition-all duration-300">
-                    <div class="absolute -top-2 left-4 w-4 h-4 bg-white border-t border-l border-blue-100 rotate-45"></div>
 
-                    <div class="flex items-center gap-2 sm:gap-3 mb-2">
-                        <div class="bg-ccb-blue-50 p-1 rounded-lg shrink-0">
-                            <svg class="w-3 h-3 sm:w-4 sm:h-4 text-ccb-blue-600" fill="none" viewBox="0 0 24 24"
-                                stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.082.477 4 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.082.477-4 1.253" />
-                            </svg>
-                        </div>
-                        <div>
-                            <p class="text-[11px] sm:text-[13px] italic text-gray-700 leading-tight line-clamp-2">
-                                "{{ $dailyData['verse'] }}"
-                            </p>
-                        </div>
-                    </div>
-
-                    <div class="flex items-center justify-between mt-2 pt-2 border-t border-gray-50">
-                        <span class="text-[9px] font-bold text-ccb-blue-400 uppercase tracking-widest">Clique para
-                            meditar</span>
-                        <p class="text-[10px] font-bold text-ccb-blue-900">
-                            Versículo do Dia
-                        </p>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Devotional Modal -->
-            <div x-show="showDevotional" x-transition:enter="transition ease-out duration-300"
-                x-transition:enter-start="opacity-0 scale-90" x-transition:enter-end="opacity-100 scale-100"
-                x-transition:leave="transition ease-in duration-200" x-transition:leave-start="opacity-100 scale-100"
-                x-transition:leave-end="opacity-0 scale-90"
-                class="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm"
-                @click.away="showDevotional = false" style="display: none;">
-
-                <div
-                    class="bg-ccb-blue w-full max-w-3xl rounded-[2rem] shadow-2xl relative max-h-[85vh] flex flex-col overflow-hidden">
-                    <!-- Background blobs (Contained by outer overflow-hidden) -->
-                    <div
-                        class="absolute top-0 right-0 -mt-20 -mr-20 w-64 h-64 bg-white/5 rounded-full blur-3xl pointer-events-none">
-                    </div>
-                    <div
-                        class="absolute bottom-0 left-0 -mb-20 -ml-20 w-64 h-64 bg-ccb-blue-400/10 rounded-full blur-3xl pointer-events-none">
-                    </div>
-
-                    <!-- Close Button -->
-                    <button @click="showDevotional = false"
-                        class="absolute top-6 right-6 text-white/50 hover:text-white transition-colors z-20">
-                        <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <div class="relative">
+                    <!-- Close Button for Balloon -->
+                    <button @click.stop="dismissBalloon()"
+                        class="absolute -top-2 -right-2 bg-white rounded-full w-5 h-5 flex items-center justify-center shadow border border-gray-100 text-gray-400 hover:text-gray-600 hover:bg-gray-50 transition-colors z-[35]">
+                        <svg class="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
                         </svg>
                     </button>
 
-                    <!-- Scrollable Content Area -->
-                    <div class="overflow-y-auto custom-scrollbar relative z-10 p-6 sm:px-8 sm:pt-10 sm:pb-6">
-                        <div class="flex items-center gap-3 mb-8">
-                            <div class="bg-white/10 p-2.5 rounded-xl">
-                                <svg class="w-6 h-6 text-ccb-blue-200" fill="currentColor" viewBox="0 0 24 24">
-                                    <path d="M12 2L4.5 20.29l.71.71L12 18l6.79 3 .71-.71L12 2z" />
+                    <div @click="showDevotional = true"
+                        class="cursor-pointer bg-white rounded-xl shadow-xl p-3 sm:p-5 border border-blue-100 max-w-[200px] sm:max-w-xs relative hover:shadow-2xl hover:-translate-y-1 transition-all duration-300">
+                        <div class="absolute -top-2 left-4 w-4 h-4 bg-white border-t border-l border-blue-100 rotate-45"></div>
+
+                        <div class="flex items-center gap-2 sm:gap-3 mb-2">
+                            <div class="bg-blue-50 p-1 rounded-lg shrink-0">
+                                <svg class="w-3 h-3 sm:w-4 sm:h-4 text-blue-600" fill="none" viewBox="0 0 24 24"
+                                    stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.082.477 4 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.082.477-4 1.253" />
                                 </svg>
                             </div>
-                            <h2 class="text-xl font-bold text-white tracking-tight">Reflexão Espiritual</h2>
-                        </div>
-
-                        <div class="space-y-6">
-                            <div class="text-center py-4 px-4 bg-white/5 rounded-3xl border border-white/10 relative">
-                                <div
-                                    class="absolute -top-4 left-1/2 -translate-x-1/2 bg-ccb-dark px-4 py-1 rounded-full text-[10px] font-bold uppercase tracking-widest text-ccb-blue-200 border border-white/10">
-                                    Palavra de Hoje
-                                </div>
-                                <p class="text-lg sm:text-xl font-serif italic text-white leading-relaxed mb-3 mt-1">
+                            <div>
+                                <p class="text-[11px] sm:text-[13px] italic text-gray-700 leading-tight line-clamp-2">
                                     "{{ $dailyData['verse'] }}"
                                 </p>
-                                <span
-                                    class="inline-block px-3 py-1 bg-ccb-blue/40 rounded-full text-xs font-bold text-ccb-blue-100 uppercase tracking-wider border border-white/20">
-                                    {{ $dailyData['reference'] ?? '' }}
-                                </span>
+                            </div>
+                        </div>
+
+                        <div class="flex items-center justify-between mt-2 pt-2 border-t border-gray-50">
+                            <span class="text-[9px] font-bold text-blue-400 uppercase tracking-widest">Clique para
+                                meditar</span>
+                            <p class="text-[10px] font-bold text-blue-900">
+                                Versículo do Dia
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Devotional Modal -->
+                <div x-show="showDevotional" x-transition:enter="transition ease-out duration-300"
+                    x-transition:enter-start="opacity-0 scale-90" x-transition:enter-end="opacity-100 scale-100"
+                    x-transition:leave="transition ease-in duration-200" x-transition:leave-start="opacity-100 scale-100"
+                    x-transition:leave-end="opacity-0 scale-90"
+                    class="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm"
+                    @click.away="showDevotional = false" style="display: none;">
+
+                    <div
+                        class="bg-ccb-blue w-full max-w-3xl rounded-[2rem] shadow-2xl relative max-h-[85vh] flex flex-col overflow-hidden">
+                        <!-- Background blobs (Contained by outer overflow-hidden) -->
+                        <div
+                            class="absolute top-0 right-0 -mt-20 -mr-20 w-64 h-64 bg-white/5 rounded-full blur-3xl pointer-events-none">
+                        </div>
+                        <div
+                            class="absolute bottom-0 left-0 -mb-20 -ml-20 w-64 h-64 bg-blue-400/10 rounded-full blur-3xl pointer-events-none">
+                        </div>
+
+                        <!-- Close Button -->
+                        <button @click="showDevotional = false"
+                            class="absolute top-6 right-6 text-white/50 hover:text-white transition-colors z-20">
+                            <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M6 18L18 6M6 6l12 12" />
+                            </svg>
+                        </button>
+
+                        <!-- Scrollable Content Area -->
+                        <div class="overflow-y-auto custom-scrollbar relative z-10 p-6 sm:px-8 sm:pt-10 sm:pb-6">
+                            <div class="flex items-center gap-3 mb-8">
+                                <div class="bg-white/10 p-2.5 rounded-xl">
+                                    <svg class="w-6 h-6 text-blue-200" fill="currentColor" viewBox="0 0 24 24">
+                                        <path d="M12 2L4.5 20.29l.71.71L12 18l6.79 3 .71-.71L12 2z" />
+                                    </svg>
+                                </div>
+                                <h2 class="text-xl font-bold text-white tracking-tight">Reflexão Espiritual</h2>
                             </div>
 
-                            <div>
-                                <h3 class="text-ccb-blue-200 text-xs font-bold uppercase tracking-widest mb-3">A Mensagem</h3>
-                                <p class="text-sm leading-relaxed text-ccb-blue-50/90 font-medium text-justify">
-                                    {{ $dailyData['reflection'] }}
-                                </p>
-                            </div>
+                            <div class="space-y-6">
+                                <div class="text-center py-4 px-4 bg-white/5 rounded-3xl border border-white/10 relative">
+                                    <div
+                                        class="absolute -top-4 left-1/2 -translate-x-1/2 bg-ccb-dark px-4 py-1 rounded-full text-[10px] font-bold uppercase tracking-widest text-blue-200 border border-white/10">
+                                        Palavra de Hoje
+                                    </div>
+                                    <p class="text-lg sm:text-xl font-serif italic text-white leading-relaxed mb-3 mt-1">
+                                        "{{ $dailyData['verse'] }}"
+                                    </p>
+                                    <span
+                                        class="inline-block px-3 py-1 bg-blue-500/40 rounded-full text-xs font-bold text-blue-100 uppercase tracking-wider border border-white/20">
+                                        {{ $dailyData['reference'] ?? '' }}
+                                    </span>
+                                </div>
 
-                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                <div
-                                    class="p-4 bg-white/5 rounded-2xl border border-white/10 hover:bg-white/10 transition-colors">
-                                    <h3
-                                        class="text-ccb-blue-200 text-[10px] font-bold uppercase tracking-widest mb-3 flex items-center gap-2">
-                                        <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
-                                        Oração
-                                    </h3>
-                                    <p class="text-ccb-blue-100 text-sm italic leading-relaxed">
-                                        "{{ $dailyData['prayer'] }}"
+                                <div>
+                                    <h3 class="text-blue-200 text-xs font-bold uppercase tracking-widest mb-3">A Mensagem</h3>
+                                    <p class="text-sm leading-relaxed text-blue-50/90 font-medium text-justify">
+                                        {{ $dailyData['reflection'] }}
                                     </p>
                                 </div>
 
-                                <div
-                                    class="p-4 bg-ccb-blue-600/30 rounded-2xl border border-white/10 hover:bg-ccb-blue-600/40 transition-colors">
-                                    <h3
-                                        class="text-ccb-blue-200 text-[10px] font-bold uppercase tracking-widest mb-3 flex items-center gap-2">
-                                        <span class="w-1.5 h-1.5 rounded-full bg-amber-400"></span>
-                                        Aplicação Prática
-                                    </h3>
-                                    <p class="text-ccb-blue-100 text-sm leading-relaxed">
-                                        {{ $dailyData['application'] }}
-                                    </p>
-                                </div>
-                            </div>
-
-                            @if(!empty($dailyData['curiosity']))
-                                <div class="pt-6 border-t border-white/10">
-                                    <div class="bg-amber-400/10 rounded-2xl p-5 border border-amber-400/20">
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                    <div
+                                        class="p-4 bg-white/5 rounded-2xl border border-white/10 hover:bg-white/10 transition-colors">
                                         <h3
-                                            class="text-amber-300 text-xs font-bold uppercase tracking-widest mb-2 flex items-center gap-2">
-                                            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
-                                                <path
-                                                    d="M11 3a1 1 0 10-2 0v1a1 1 0 102 0V3zM15.657 5.757a1 1 0 00-1.414-1.414l-.707.707a1 1 0 001.414 1.414l.707-.707zM18 10a1 1 0 01-1 1h-1a1 1 0 110-2h1a1 1 0 011 1zM5.05 6.464A1 1 0 106.464 5.05l-.707-.707a1 1 0 00-1.414 1.414l.707.707zM5 10a1 1 0 01-1 1H3a1 1 0 110-2h1a1 1 0 011 1zM8 16v-1a1 1 0 112 0v1a1 1 0 11-2 0zM13.536 14.95a1 1 0 011.414 1.414l-.707.707a1 1 0 01-1.414-1.414l.707-.707zM16.243 16.243a1 1 0 01-1.414 0l-.707-.707a1 1 0 011.414-1.414l.707.707a1 1 0 010 1.414z" />
-                                            </svg>
-                                            Você sabia?
+                                            class="text-blue-200 text-[10px] font-bold uppercase tracking-widest mb-3 flex items-center gap-2">
+                                            <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
+                                            Oração
                                         </h3>
-                                        <p class="text-ccb-blue-50 text-sm leading-relaxed">
-                                            {{ $dailyData['curiosity'] }}
+                                        <p class="text-blue-100 text-sm italic leading-relaxed">
+                                            "{{ $dailyData['prayer'] }}"
+                                        </p>
+                                    </div>
+
+                                    <div
+                                        class="p-4 bg-blue-600/30 rounded-2xl border border-white/10 hover:bg-blue-600/40 transition-colors">
+                                        <h3
+                                            class="text-blue-200 text-[10px] font-bold uppercase tracking-widest mb-3 flex items-center gap-2">
+                                            <span class="w-1.5 h-1.5 rounded-full bg-amber-400"></span>
+                                            Aplicação Prática
+                                        </h3>
+                                        <p class="text-blue-100 text-sm leading-relaxed">
+                                            {{ $dailyData['application'] }}
                                         </p>
                                     </div>
                                 </div>
-                            @endif
 
-                        </div>
+                                @if(!empty($dailyData['curiosity']))
+                                    <div class="pt-6 border-t border-white/10">
+                                        <div class="bg-amber-400/10 rounded-2xl p-5 border border-amber-400/20">
+                                            <h3
+                                                class="text-amber-300 text-xs font-bold uppercase tracking-widest mb-2 flex items-center gap-2">
+                                                <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                                                    <path
+                                                        d="M11 3a1 1 0 10-2 0v1a1 1 0 102 0V3zM15.657 5.757a1 1 0 00-1.414-1.414l-.707.707a1 1 0 001.414 1.414l.707-.707zM18 10a1 1 0 01-1 1h-1a1 1 0 110-2h1a1 1 0 011 1zM5.05 6.464A1 1 0 106.464 5.05l-.707-.707a1 1 0 00-1.414 1.414l.707.707zM5 10a1 1 0 01-1 1H3a1 1 0 110-2h1a1 1 0 011 1zM8 16v-1a1 1 0 112 0v1a1 1 0 11-2 0zM13.536 14.95a1 1 0 011.414 1.414l-.707.707a1 1 0 01-1.414-1.414l.707-.707zM16.243 16.243a1 1 0 01-1.414 0l-.707-.707a1 1 0 011.414-1.414l.707.707a1 1 0 010 1.414z" />
+                                                </svg>
+                                                Você sabia?
+                                            </h3>
+                                            <p class="text-blue-50 text-sm leading-relaxed">
+                                                {{ $dailyData['curiosity'] }}
+                                            </p>
+                                        </div>
+                                    </div>
+                                @endif
 
-                        <div class="mt-4 text-center text-[10px] text-white/30 uppercase tracking-[0.2em] font-medium">
-                            SIBEM • IA e Espiritualidade • {{ date('Y') }}
+                            </div>
+
+                            <div class="mt-4 text-center text-[10px] text-white/30 uppercase tracking-[0.2em] font-medium">
+                                SIBEM • IA e Espiritualidade • {{ date('Y') }}
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
 
-        <style>
-            @keyframes slideUp {
-                from {
-                    transform: translateY(20px);
-                    opacity: 0;
+            <style>
+                @keyframes slideUp {
+                    from {
+                        transform: translateY(20px);
+                        opacity: 0;
+                    }
+
+                    to {
+                        transform: translateY(0);
+                        opacity: 1;
+                    }
                 }
 
-                to {
-                    transform: translateY(0);
-                    opacity: 1;
+                .font-serif {
+                    font-family: Georgia, Cambria, "Times New Roman", Times, serif;
                 }
-            }
-
-            .font-serif {
-                font-family: Georgia, Cambria, "Times New Roman", Times, serif;
-            }
-        </style>
+            </style>
     @endif
 @endsection
