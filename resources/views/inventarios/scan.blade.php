@@ -646,7 +646,7 @@
                                                 </tr>
                                             </thead>
                                             <tbody class="bg-white">
-                                                <template x-for="item in filteredPendencias" :key="item.id">
+                                                <template x-for="item in pagedPendencias" :key="item.id">
                                                     <tr @click="toggleSelection(item)"
                                                         class="border-b border-gray-200 cursor-pointer hover:bg-blue-50 transition"
                                                         :class="selectedIds.includes(item.id) ? 'bg-[#C1D8FF] font-black' : ''">
@@ -668,6 +668,30 @@
                                                 </tr>
                                             </tbody>
                                         </table>
+                                        
+                                        <!-- Pagination Controls -->
+                                        <div class="bg-gray-50 border-t border-gray-200 p-3 flex items-center justify-between sticky bottom-0" x-show="filteredPendencias.length > itemsPerPage">
+                                            <div class="text-[10px] sm:text-xs font-bold text-gray-500 uppercase tracking-wider">
+                                                Exibindo <span class="text-[#004A80] font-black" x-text="((currentPage - 1) * itemsPerPage) + 1"></span> - 
+                                                <span class="text-[#004A80] font-black" x-text="Math.min(currentPage * itemsPerPage, filteredPendencias.length)"></span> de 
+                                                <span class="text-[#004A80] font-black" x-text="filteredPendencias.length"></span>
+                                            </div>
+                                            <div class="flex gap-2">
+                                                <button @click="if(currentPage > 1) currentPage--" 
+                                                        :disabled="currentPage === 1"
+                                                        class="px-3 py-1.5 bg-white border border-gray-300 rounded text-xs font-bold text-gray-700 hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed shadow-sm transition">
+                                                    ANTERIOR
+                                                </button>
+                                                <div class="px-3 py-1.5 bg-gray-200 rounded text-xs font-black text-[#004A80]">
+                                                    <span x-text="currentPage"></span> / <span x-text="totalPages"></span>
+                                                </div>
+                                                <button @click="if(currentPage < totalPages) currentPage++" 
+                                                        :disabled="currentPage === totalPages"
+                                                        class="px-3 py-1.5 bg-white border border-gray-300 rounded text-xs font-bold text-gray-700 hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed shadow-sm transition">
+                                                    PRÓXIMA
+                                                </button>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
 
@@ -842,6 +866,8 @@
                                     buscaRapida: '',
                                     showBuscaResultados: false,
                                     searchPendencia: '',
+                                    currentPage: 1,
+                                    itemsPerPage: 50,
                                     selectedItem: null,
                                     selectedIds: [],
                                     tratativa: '',
@@ -877,6 +903,10 @@
                                                 this.selectedIds = [];
                                             }
                                         });
+
+                                        // Reset pagination when search or filter changes
+                                        this.$watch('searchPendencia', () => { this.currentPage = 1; });
+                                        this.$watch('filterStatus', () => { this.currentPage = 1; });
 
                                         this.dependenciaMapa = {
                                             @foreach(App\Models\Dependencia::all() as $dep)
@@ -1019,7 +1049,17 @@
                                     });
                                 },
 
-                                            get resultadosBuscaRapida() {
+                                get totalPages() {
+                                    return Math.ceil(this.filteredPendencias.length / this.itemsPerPage) || 1;
+                                },
+
+                                get pagedPendencias() {
+                                    const start = (this.currentPage - 1) * this.itemsPerPage;
+                                    const end = start + this.itemsPerPage;
+                                    return this.filteredPendencias.slice(start, end);
+                                },
+
+                                get resultadosBuscaRapida() {
                                     const searchLower = this.buscaRapida.toLowerCase();
                                     if (!searchLower || searchLower.length < 2) return [];
 
