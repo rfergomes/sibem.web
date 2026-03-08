@@ -19,11 +19,13 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 // Webhook para Automação do GitHub Deploy
-Route::post('/deploy_webhook_secreto123', function (Request $request) {
-    // Validação extra de segurança garantindo que vem do GitHub
+Route::any('/deploy_webhook_secreto123', function (Request $request) {
+    // Validação extra de segurança garantindo que vem do GitHub (comentado para testes via navegador)
+    /*
     if (!$request->hasHeader('X-GitHub-Event')) {
         return response()->json(['error' => 'Acesso negado'], 403);
     }
+    */
 
     $repo_dir = base_path();
     chdir($repo_dir);
