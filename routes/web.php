@@ -1,0 +1,139 @@
+<?php
+
+use Illuminate\Support\Facades\Route;
+
+/*
+|--------------------------------------------------------------------------
+| Web Routes
+|--------------------------------------------------------------------------
+|
+| Here is where you can register web routes for your application. These
+| routes are loaded by the RouteServiceProvider and all of them will
+| be assigned to the "web" middleware group. Make something great!
+|
+*/
+
+Route::get('/login', [App\Http\Controllers\AuthController::class, 'showLogin'])->name('login');
+Route::post('/login', [App\Http\Controllers\AuthController::class, 'login'])->name('login.post');
+Route::post('/logout', [App\Http\Controllers\AuthController::class, 'logout'])->name('logout');
+
+Route::post('/contact', [App\Http\Controllers\ContactController::class, 'store'])->name('contact.store');
+
+// Password Reset Routes
+Route::get('/forgot-password', [App\Http\Controllers\PasswordResetController::class, 'showLinkRequestForm'])->name('password.request');
+Route::post('/forgot-password', [App\Http\Controllers\PasswordResetController::class, 'sendResetLinkEmail'])->name('password.email');
+Route::get('/reset-password/{token}', [App\Http\Controllers\PasswordResetController::class, 'showResetForm'])->name('password.reset');
+Route::post('/reset-password', [App\Http\Controllers\PasswordResetController::class, 'reset'])->name('password.update');
+
+// Access Request Routes (Guest)
+Route::get('/solicitar-acesso', [App\Http\Controllers\AccessRequestController::class, 'create'])->name('access-request.create');
+Route::post('/solicitar-acesso', [App\Http\Controllers\AccessRequestController::class, 'store'])->name('access-request.store');
+
+Route::get('/', function () {
+    if (auth()->check()) {
+        return redirect()->route('dashboard');
+    }
+
+    $stats = [
+        'users' => \App\Models\User::count(),
+        'regionais' => \App\Models\Regional::where('active', true)->count(),
+        'locais' => \App\Models\Local::where('active', true)->count(),
+        'igrejas' => \App\Models\Igreja::where('id_status', 1)->count(),
+    ];
+
+    return view('landing', $stats);
+});
+
+Route::middleware(['auth'])->group(function () {
+
+    Route::get('/dashboard', [App\Http\Controllers\DashboardController::class, 'index'])->name('dashboard');
+
+    // Notification API Routes
+    Route::prefix('api/notifications')->group(function () {
+        Route::get('/', [App\Http\Controllers\NotificationController::class, 'index'])->name('notifications.index');
+        Route::get('/unread-count', [App\Http\Controllers\NotificationController::class, 'unreadCount'])->name('notifications.unreadCount');
+        Route::post('/{notification}/read', [App\Http\Controllers\NotificationController::class, 'markAsRead'])->name('notifications.markAsRead');
+        Route::post('/read-all', [App\Http\Controllers\NotificationController::class, 'markAllAsRead'])->name('notifications.markAllAsRead');
+        Route::post('/subscribe', [App\Http\Controllers\NotificationController::class, 'subscribe'])->name('notifications.subscribe');
+        Route::post('/unsubscribe', [App\Http\Controllers\NotificationController::class, 'unsubscribe'])->name('notifications.unsubscribe');
+    });
+
+    // Switch Administration Routes
+    Route::get('/api/switch-options', [App\Http\Controllers\SwitchAdmController::class, 'list'])->name('adm.list');
+    Route::post('/api/switch', [App\Http\Controllers\SwitchAdmController::class, 'switch'])->name('adm.switch');
+
+    // Tenant Routes (Protected by TenancyMiddleware implicit in 'web' group if session exists, but good to ensure validity)
+    Route::resource('inventarios', App\Http\Controllers\InventoryController::class);
+    Route::post('/inventarios/{id}/finalize', [App\Http\Controllers\InventoryController::class, 'finalize'])->name('inventarios.finalize');
+    Route::get('/inventarios/{id}/print', [App\Http\Controllers\InventoryController::class, 'printReport'])->name('inventarios.print');
+    Route::get('/inventarios/{id}/custom-report', [App\Http\Controllers\InventoryController::class, 'customReport'])->name('inventarios.custom_report');
+
+    // Scanning Routes
+    Route::get('/inventarios/{id}/conferencia', [App\Http\Controllers\ScanningController::class, 'show'])->name('scan.show');
+    Route::post('/inventarios/{id}/scan', [App\Http\Controllers\ScanningController::class, 'process'])->name('scan.process');
+    Route::post('/inventarios/{id}/tratativa', [App\Http\Controllers\ScanningController::class, 'saveTratativa'])->name('scan.tratativa');
+    Route::get('/inventarios/{id}/search-description', [App\Http\Controllers\ScanningController::class, 'searchByDescription'])->name('scan.search_description');
+
+    // Bens & Import Routes
+    Route::resource('bens', App\Http\Controllers\BemController::class);
+    Route::get('/bens-import', [App\Http\Controllers\BemController::class, 'showImportForm'])->name('bens.import');
+    Route::post('/bens-import', [App\Http\Controllers\BemController::class, 'import'])->name('bens.import.post');
+
+    // SIGA Reports Routes (Section 14)
+    Route::get('/report/14-3/{detalheId}', [App\Http\Controllers\ReportController::class, 'generate143'])->name('report.14-3');
+    Route::get('/report/14-4/{detalheId}', [App\Http\Controllers\ReportController::class, 'generate144'])->name('report.14-4');
+    Route::get('/report/14-5/{inventarioId}', [App\Http\Controllers\ReportController::class, 'generate145'])->name('report.14-5');
+    Route::get('/report/14-6/{detalheId}', [App\Http\Controllers\ReportController::class, 'generate146'])->name('report.14-6');
+    Route::get('/report/14-7/{detalheId}', [App\Http\Controllers\ReportController::class, 'generate147'])->name('report.14-7');
+    Route::get('/report/14-8/{inventarioId}', [App\Http\Controllers\ReportController::class, 'generate148'])->name('report.14-8');
+
+    // Profile Routes (Access for all authenticated users)
+    Route::get('/profile', [App\Http\Controllers\ProfileController::class, 'edit'])->name('profile.edit');
+    Route::put('/profile', [App\Http\Controllers\ProfileController::class, 'update'])->name('profile.update');
+
+    // Force Password Change Routes
+    Route::get('/password/change', [App\Http\Controllers\Auth\ChangePasswordController::class, 'show'])->name('password.change');
+    Route::post('/password/change', [App\Http\Controllers\Auth\ChangePasswordController::class, 'update'])->name('password.update_changed');
+
+    // Protected Admin Routes
+    Route::middleware(['admin'])->group(function () {
+        // Access Requests Admin Management
+        Route::get('/admin/solicitacoes', [App\Http\Controllers\AccessRequestController::class, 'index'])->name('admin.access-requests.index');
+        Route::post('/admin/solicitacoes/{id}/approve', [App\Http\Controllers\AccessRequestController::class, 'approve'])->name('admin.access-requests.approve');
+        Route::post('/admin/solicitacoes/{id}/reject', [App\Http\Controllers\AccessRequestController::class, 'reject'])->name('admin.access-requests.reject');
+
+        // User Management Routes
+        Route::resource('users', App\Http\Controllers\UserController::class);
+
+        // Administration Management Routes
+        Route::resource('admin/locais', App\Http\Controllers\LocalController::class)
+            ->parameters(['locais' => 'local'])
+            ->names('locais');
+        Route::post('/admin/locais/{local}/provision', [App\Http\Controllers\LocalController::class, 'provision'])->name('locais.provision');
+        Route::post('/admin/locais/test-connection', [App\Http\Controllers\LocalController::class, 'testConnection'])->name('locais.testConnection');
+
+        // Administration Switching
+        Route::post('/admin/switch-local', [App\Http\Controllers\LocalSwitchController::class, 'switch'])->name('admin.switch-local');
+
+        // CRUD Cadastros
+        Route::resource('admin/igrejas', App\Http\Controllers\IgrejaController::class)
+            ->parameters(['igrejas' => 'igreja'])
+            ->names('igrejas');
+        Route::resource('admin/setores', App\Http\Controllers\SetorController::class)
+            ->parameters(['setores' => 'setor'])
+            ->names('setores');
+        Route::resource('admin/dependencias', App\Http\Controllers\DependenciaController::class)
+            ->parameters(['dependencias' => 'dependencia'])
+            ->names('dependencias');
+        Route::resource('admin/tipos-imovel', App\Http\Controllers\TipoImovelController::class)
+            ->parameters(['tipos-imovel' => 'tiposImovel'])
+            ->names('tipos-imovel');
+
+        // Appointment Scheduling System
+        Route::resource('admin/agendamentos', App\Http\Controllers\AppointmentController::class)
+            ->parameters(['agendamentos' => 'appointment'])
+            ->names('appointments');
+        Route::post('/admin/agendamentos/{appointment}/status', [App\Http\Controllers\AppointmentController::class, 'updateStatus'])
+            ->name('appointments.status');
+    });
+});

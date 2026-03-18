@@ -1,0 +1,500 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use Illuminate\Http\Request;
+use App\Models\Inventario;
+use App\Models\InventarioDetalhe;
+use App\Models\Bem;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+use Barryvdh\DomPDF\Facade\Pdf;
+
+class ScanningController extends Controller
+{
+    /**
+     * Show the Scanning Interface (Conference Mode).
+     */
+    public function show($id)
+    {
+        $inventario = Inventario::with(['detalhes.bem'])->findOrFail($id);
+
+        // Stats calculation (Optimized with consolidated queries)
+        $stats = $inventario->detalhes()
+            ->select('status_leitura', DB::raw('count(*) as total'))
+            ->groupBy('status_leitura')
+            ->pluck('total', 'status_leitura')
+            ->toArray();
+
+        $bensInicial = ($stats['encontrado'] ?? 0) + ($stats['nao_encontrado'] ?? 0);
+        $localizados = $stats['encontrado'] ?? 0;
+        $novos = $stats['novo_sistema'] ?? 0;
+        $pendentes = $stats['nao_encontrado'] ?? 0;
+
+        $prevista = ($bensInicial > 0) ? round(($localizados / $bensInicial) * 100, 2) : 0;
+        $bensFinal = $localizados + $novos;
+        $resultado = ($bensInicial > 0) ? round(($bensFinal / $bensInicial) * 100, 2) : 0;
+
+        // Tratativa counts consolidated
+        $tratativaCounts = $inventario->detalhes()
+            ->whereNotNull('tratativa')
+            ->where('tratativa', '!=', 'nenhuma')
+            ->select('tratativa', DB::raw('count(*) as total'))
+            ->groupBy('tratativa')
+            ->pluck('total', 'tratativa')
+            ->toArray();
+
+        $tratativaCounts = array_merge([
+            'imprimir' => 0,
+            'encontrado' => 0,
+            'alterar' => 0,
+            'transferir' => 0,
+            'excluir' => 0
+        ], $tratativaCounts);
+
+        $ultimosLeituras = $inventario->detalhes()
+            ->whereNotNull('timestamp_leitura')
+            ->orderBy('timestamp_leitura', 'desc')
+            ->take(50)
+            ->with('bem')
+            ->get();
+
+        // Map recent readings for the frontend history list
+        $historyInitial = $ultimosLeituras->map(function ($d) {
+            return [
+                'barcode' => $d->id_bem,
+                'descricao' => $d->bem ? $d->bem->descricao : 'ITEM NÃO ENCONTRADO',
+                'dependencia' => $d->bem ? $d->bem->id_dependencia : '---',
+                'situacao' => $d->status_leitura === 'encontrado' ? 'CONFERIDO' : ($d->status_leitura === 'nao_encontrado' ? 'PENDENTE' : 'DIVERGÊNCIA'),
+                'is_cross_church' => str_contains($d->observacao ?? '', 'LOCALIDADE'),
+                'lido' => true
+            ];
+        });
+
+        // Pass all pendencies for the modal (Optimized payload)
+        $allDetalhes = $inventario->detalhes()
+            ->with([
+                'bem' => function ($q) {
+                    $q->select('id_bem', 'descricao', 'id_dependencia', 'id_igreja', 'id_status', 'origem');
+                }
+            ])
+            ->get(['id', 'inventario_id', 'id_bem', 'status_leitura', 'tratativa', 'observacao', 'is_doacao', 'documento_doacao_path']);
+
+        return view('inventarios.scan', compact(
+            'inventario',
+            'bensInicial',
+            'localizados',
+            'pendentes',
+            'prevista',
+            'novos',
+            'bensFinal',
+            'resultado',
+            'tratativaCounts',
+            'historyInitial',
+            'allDetalhes'
+        ));
+    }
+
+    public function saveTratativa(Request $request, $id)
+    {
+        $request->validate([
+            'detalhe_ids' => 'present|array', // Allow empty array
+            'detalhe_ids.*' => 'integer',
+            'tratativa' => 'required|string',
+            'observacao' => 'nullable|string',
+        ]);
+
+        $ids = $request->detalhe_ids ?? [];
+        $tratativa = $request->tratativa;
+        $observacao = $request->observacao;
+        $generatedForms = [];
+        $createdDetalhe = null;
+
+        DB::connection('tenant')->beginTransaction();
+
+        try {
+            $inventario = Inventario::findOrFail($id);
+            $idsToProcess = [];
+
+            // 1) SPECIAL CASE: Adding a new item OFFLINE (No Tag/detalhe_ids)
+            if (empty($ids) && $tratativa === 'novo') {
+                if (!$request->nova_descricao || !$request->nova_dependencia) {
+                    throw new \Exception("Descrição e Dependência são obrigatórios para um Novo Bem Sem Etiqueta.");
+                }
+
+                // Generate a shadow Barcode (MAX 12 digits: NW + UNIX Time)
+                $shadowBarcode = 'NW' . time();
+
+                // Create the Shadow Bem
+                $shadowBem = Bem::create([
+                    'id_bem' => $shadowBarcode,
+                    'descricao' => strtoupper($request->nova_descricao),
+                    'id_igreja' => $inventario->id_igreja,
+                    'id_dependencia' => $request->nova_dependencia,
+                    'id_status' => 1,
+                    'origem' => 'manual'
+                ]);
+
+                // Record the Divergence
+                \App\Models\Divergencia::create([
+                    'inventario_id' => $inventario->id,
+                    'id_bem' => $shadowBarcode,
+                    'codigo_divergencia' => '02',
+                    'descricao' => 'BEM SEM ETIQUETA ADICIONADO NA CONFERÊNCIA',
+                    'id_dependencia_nova' => $request->nova_dependencia,
+                    'registrado_por' => Auth::user()->nome
+                ]);
+
+                // Create the Detalhe directly linked to this inventory
+                $newDetalhe = InventarioDetalhe::create([
+                    'inventario_id' => $inventario->id,
+                    'id_bem' => $shadowBarcode,
+                    'status_leitura' => 'encontrado', // Since we just created it and "found" it
+                    'tratativa' => 'novo',
+                    'observacao' => $observacao ?: "NOVO BEM SEM ETIQUETA REGISTRADO",
+                    'user_id_conferencia' => Auth::id(),
+                    'timestamp_leitura' => now()
+                ]);
+
+                $newDetalhe->load('bem', 'bem.dependencia');
+                $createdDetalhe = $newDetalhe;
+
+                // Add this new detail's ID to process Doacao/Forms loop below if needed
+                $idsToProcess[] = $newDetalhe->id;
+            } else {
+                $idsToProcess = $ids;
+            }
+
+            foreach ($idsToProcess as $detalheId) {
+                $detalhe = InventarioDetalhe::where('inventario_id', $id)
+                    ->where('id', $detalheId)
+                    ->firstOrFail();
+
+                $detalhe->tratativa = $tratativa;
+                $detalhe->observacao = $observacao;
+
+                $bem = $detalhe->bem;
+
+                switch ($tratativa) {
+                    case 'novo':
+                        $detalhe->status_leitura = 'encontrado';
+                        $detalhe->timestamp_leitura = now();
+                        $detalhe->user_id_conferencia = Auth::id();
+
+                        if ($request->has('nova_descricao')) {
+                            if ($bem && $bem->origem === 'scanner_manual') {
+                                $bem->update([
+                                    'descricao' => strtoupper($request->nova_descricao),
+                                    'id_dependencia' => $request->nova_dependencia,
+                                    'id_status' => 1 // Active
+                                ]);
+                            }
+
+                            $prefix = " [NOVO BEM REGISTRADO: " . strtoupper($request->nova_descricao) . " em DEP {$request->nova_dependencia}]";
+                            $detalhe->observacao = ($detalhe->observacao ?: "") . $prefix;
+
+                            \App\Models\Divergencia::create([
+                                'inventario_id' => $id,
+                                'id_bem' => $detalhe->id_bem,
+                                'codigo_divergencia' => '01',
+                                'descricao' => 'NOVO BEM REGISTRADO: ' . strtoupper($request->nova_descricao),
+                                'id_dependencia_anterior' => null,
+                                'id_dependencia_nova' => $request->nova_dependencia,
+                                'registrado_por' => Auth::user()->nome
+                            ]);
+                        }
+                        // Formularios 14.1 e 14.2 serão gerados no fechamento do relatório se is_doacao for verdadeiro.
+                        if ($request->is_doacao) {
+                            $detalhe->is_doacao = true;
+                        }
+                        break;
+
+                    case 'encontrado':
+                        $detalhe->status_leitura = 'encontrado';
+                        $detalhe->timestamp_leitura = now();
+                        $detalhe->user_id_conferencia = Auth::id();
+                        break;
+
+                    case 'imprimir':
+                        // Apenas atualizará tratativa = 'imprimir'
+                        $detalhe->status_leitura = 'nao_encontrado'; // Continua pendente até ser impresso/localizado fisicamente se essa for a regra
+                        break;
+
+                    case 'alterar':
+                        $detalhe->status_leitura = 'encontrado'; // Alterou significa que tem o bem em mãos
+                        $detalhe->timestamp_leitura = now();
+                        $detalhe->user_id_conferencia = Auth::id();
+
+                        $updates = [];
+                        $obsParts = [];
+                        if ($request->has('nova_descricao') && $request->nova_descricao) {
+                            $updates['descricao'] = strtoupper($request->nova_descricao);
+                            $obsParts[] = "Novo Descritivo: " . strtoupper($request->nova_descricao);
+                        }
+
+                        if ($request->has('nova_dependencia') && $request->nova_dependencia && $bem->id_dependencia != $request->nova_dependencia) {
+                            $oldDep = $bem->id_dependencia;
+                            $updates['id_dependencia'] = $request->nova_dependencia;
+                            $obsParts[] = "Localização Física: De {$oldDep} para {$request->nova_dependencia}";
+
+                            \App\Models\Divergencia::create([
+                                'inventario_id' => $id,
+                                'id_bem' => $detalhe->id_bem,
+                                'codigo_divergencia' => '05', // Ajuste cadastral
+                                'descricao' => "Localização Corrigida Física: De {$oldDep} para {$request->nova_dependencia}",
+                                'id_dependencia_anterior' => $oldDep,
+                                'id_dependencia_nova' => $request->nova_dependencia,
+                                'registrado_por' => Auth::user()->nome
+                            ]);
+                        }
+
+                        if (!empty($updates) && $bem) {
+                            $bem->update($updates);
+                        }
+
+                        if (!empty($obsParts)) {
+                            $prefix = implode(' | ', $obsParts);
+                            $detalhe->observacao = $detalhe->observacao ? $detalhe->observacao . ' - ' . $prefix : $prefix;
+                        }
+                        break;
+
+                    case 'transferir':
+                        $detalhe->status_leitura = 'encontrado'; // Está com o bem mas será transferido
+                        $detalhe->timestamp_leitura = now();
+                        $detalhe->user_id_conferencia = Auth::id();
+
+                        if ($request->has('nova_igreja') && $request->nova_igreja && $bem) {
+                            $oldIgreja = $bem->id_igreja;
+                            $bem->update(['id_igreja' => $request->nova_igreja]);
+
+                            $novaIgrejaObj = \App\Models\Igreja::find($request->nova_igreja);
+                            $nomeNovaIgreja = $novaIgrejaObj ? $novaIgrejaObj->nome : $request->nova_igreja;
+
+                            $prefix = "Transferência detectada: De {$oldIgreja} para {$request->nova_igreja} ({$nomeNovaIgreja})";
+                            $detalhe->observacao = $detalhe->observacao ? $detalhe->observacao . ' - ' . $prefix : $prefix;
+
+                            \App\Models\Divergencia::create([
+                                'inventario_id' => $id,
+                                'id_bem' => $detalhe->id_bem,
+                                'codigo_divergencia' => '03',
+                                'descricao' => "Transferência para outra Igreja/Localidade detectada: De {$oldIgreja} para {$request->nova_igreja} ({$nomeNovaIgreja})",
+                                'id_dependencia_anterior' => $bem->id_dependencia,
+                                'id_dependencia_nova' => null,
+                                'registrado_por' => Auth::user()->nome
+                            ]);
+                        }
+                        break;
+
+                    case 'excluir':
+                        // O status_leitura ideal seria manter como nao_encontrado com a marcação de excluir
+                        if ($bem) {
+                            $bem->update(['id_status' => 0]); // Marcado como inativo para não aparecer mais nos próximos inventários
+                        }
+                        break;
+                }
+
+                $detalhe->save();
+            }
+
+            DB::connection('tenant')->commit();
+            $count = count($idsToProcess);
+
+            // Generated forms logic has been moved to a post-inventory process
+            return response()->json([
+                'status' => 'success',
+                'message' => $count > 1 ? "{$count} tratativas salvas com sucesso." : 'Tratativa salva com sucesso.',
+                'new_detalhe' => $createdDetalhe
+            ]);
+
+        } catch (\Exception $e) {
+            DB::connection('tenant')->rollBack();
+            return response()->json(['status' => 'error', 'message' => $e->getMessage()], 500);
+        }
+    }
+
+    /**
+     * Process a Barcode Scan.
+     */
+    public function searchByDescription(Request $request, $id)
+    {
+        $request->validate(['query' => 'required|string|min:3']);
+        $query = mb_strtolower($request->input('query'));
+
+        $inventario = Inventario::findOrFail($id);
+
+        // 1. Search in items ALREADY assigned to this inventory
+        $results = InventarioDetalhe::where('inventario_id', $inventario->id)
+            ->whereHas('bem', function ($q) use ($query) {
+                $q->where('descricao', 'like', "%{$query}%");
+            })
+            ->with('bem')
+            ->get();
+
+        // 2. If no direct inventory matches, search GLOBALLY in the current church (id_igreja)
+        if ($results->count() === 0) {
+            $globalBens = Bem::where('id_igreja', $inventario->id_igreja)
+                ->where('descricao', 'like', "%{$query}%")
+                ->take(10) // Limit global results for performance
+                ->get();
+
+            if ($globalBens->count() === 0) {
+                return response()->json(['status' => 'not_found', 'message' => "Nenhum item com a descrição '{$query}' foi encontrado nesta localidade."]);
+            }
+
+            return response()->json([
+                'status' => $globalBens->count() === 1 ? 'single_match' : 'multiple_matches',
+                'is_global' => true,
+                'items' => $globalBens->map(function ($b) {
+                    return [
+                        'id_bem' => $b->id_bem,
+                        'descricao' => $b->descricao,
+                        'detalhe_id' => null // Not in inventory yet
+                    ];
+                }),
+                // For logic compatibility with single_match
+                'id_bem' => $globalBens->count() === 1 ? $globalBens->first()->id_bem : null,
+                'descricao' => $globalBens->count() === 1 ? $globalBens->first()->descricao : null,
+            ]);
+        }
+
+        // 3. Return Inventory matches
+        if ($results->count() === 1) {
+            $detalhe = $results->first();
+            return response()->json([
+                'status' => 'single_match',
+                'is_global' => false,
+                'id_bem' => $detalhe->bem->id_bem,
+                'descricao' => $detalhe->bem->descricao,
+                'detalhe_id' => $detalhe->id
+            ]);
+        }
+
+        return response()->json([
+            'status' => 'multiple_matches',
+            'is_global' => false,
+            'items' => $results->map(function ($d) {
+                return [
+                    'id_bem' => $d->bem->id_bem,
+                    'descricao' => $d->bem->descricao,
+                    'detalhe_id' => $d->id
+                ];
+            })
+        ]);
+    }
+
+    public function process(Request $request, $id)
+    {
+        $request->validate([
+            'barcode' => 'required|string',
+            'id_dependencia_atual' => 'nullable|integer'
+        ]);
+
+        $barcode = trim($request->barcode);
+        $inventario = Inventario::findOrFail($id);
+        $dependenciaLeitura = $request->id_dependencia_atual;
+
+        // 0. Church ID Validation (Warning only, as requested)
+        $prefix = substr($barcode, 0, 6);
+        $churchWarning = null;
+        if ($prefix != $inventario->id_igreja) {
+            $churchWarning = "⚠️ ATENÇÃO: BEM PERTENCE À LOCALIDADE ID {$prefix}!";
+        }
+
+        // 1. Search in Inventory Details (Pre-populated)
+        $detalhe = InventarioDetalhe::where('inventario_id', $inventario->id)
+            ->where('id_bem', $barcode)
+            ->first();
+
+        if ($detalhe) {
+            $bem = $detalhe->bem;
+
+            if ($detalhe->status_leitura === 'encontrado') {
+                return response()->json([
+                    'status' => 'warning',
+                    'message' => 'Bem já conferido anteriormente!',
+                    'bem' => $bem
+                ]);
+            }
+
+            // Check for Dependency Divergence
+            if ($dependenciaLeitura && $bem->id_dependencia != $dependenciaLeitura) {
+                \App\Models\Divergencia::create([
+                    'inventario_id' => $inventario->id,
+                    'id_bem' => $bem->id_bem,
+                    'codigo_divergencia' => '03',
+                    'descricao' => "Transferência física detectada: De {$bem->id_dependencia} para {$dependenciaLeitura}",
+                    'id_dependencia_anterior' => $bem->id_dependencia,
+                    'id_dependencia_nova' => $dependenciaLeitura,
+                    'registrado_por' => Auth::user()->nome
+                ]);
+            }
+
+            // Mark as found
+            $detalhe->status_leitura = 'encontrado';
+            $detalhe->user_id_conferencia = Auth::id();
+            $detalhe->timestamp_leitura = now();
+            if ($churchWarning) {
+                $detalhe->observacao = ($detalhe->observacao ? $detalhe->observacao . " | " : "") . $churchWarning;
+            }
+            $detalhe->save();
+
+            return response()->json([
+                'status' => 'success',
+                'message' => $churchWarning ?: 'Item conferido com sucesso.',
+                'bem' => $bem,
+                'is_cross_church' => !!$churchWarning
+            ]);
+        }
+
+        // 2. Not in details -> Divergence (Items in CO not in report)
+        $bem = Bem::find($barcode);
+
+        // If the barcode is not in the system AT ALL, we create a shadow record to satisfy foreign keys
+        // as requested: "se houver um bem novo ainda não registrado no ERP, inserir como bem novo"
+        if (!$bem) {
+            $bem = Bem::create([
+                'id_bem' => $barcode,
+                'descricao' => 'BEM NÃO CADASTRADO - [PENDENTE DE IDENTIFICAÇÃO]',
+                'id_igreja' => $inventario->id_igreja,
+                'id_dependencia' => $dependenciaLeitura ?: 102, // Default to Almoxarifado if unknown
+                'id_status' => 1, // Assumed active/draft
+                'origem' => 'scanner_manual'
+            ]);
+        }
+
+        $codigo = '02';
+        $msg = $bem->origem === 'scanner_manual' ? 'NOVO BEM DETECTADO (Não consta no SIGA)' : 'Bem catalogado mas fora da lista inicial.';
+
+        if ($churchWarning) {
+            $msg = $churchWarning . " " . $msg;
+        }
+
+        // Create Divergencia record
+        \App\Models\Divergencia::create([
+            'inventario_id' => $inventario->id,
+            'id_bem' => $barcode,
+            'codigo_divergencia' => $codigo,
+            'descricao' => $msg,
+            'id_dependencia_nova' => $dependenciaLeitura,
+            'registrado_por' => Auth::user()->nome
+        ]);
+
+        // Create InventarioDetalhe (Foreign key is now satisfied by the 'shadow' Bem)
+        $newDetalhe = InventarioDetalhe::create([
+            'inventario_id' => $inventario->id,
+            'id_bem' => $barcode,
+            'status_leitura' => 'novo_sistema',
+            'tratativa' => 'cadastrar', // Default for new found items
+            'observacao' => $msg,
+            'user_id_conferencia' => Auth::id(),
+            'timestamp_leitura' => now()
+        ]);
+
+        return response()->json([
+            'status' => 'info',
+            'message' => $msg,
+            'detalhe' => $newDetalhe->load('bem'),
+            'is_cross_church' => !!$churchWarning
+        ]);
+    }
+}

@@ -1,0 +1,11 @@
+AddType application/x-ms-application .application
+AddType application/x-ms-manifest .manifest
+
+<FilesMatch "\.(application|manifest)$">
+    # Impede cache pelo Cloudflare e proxies intermediarios
+    Header set Cache-Control "no-store, no-cache, must-revalidate, max-age=0"
+    Header set Pragma "no-cache"
+    Header set Expires "0"
+    Header set Cloudflare-CDN-Cache-Control "no-store"
+</FilesMatch>
+

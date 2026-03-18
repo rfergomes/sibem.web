@@ -1,0 +1,7 @@
+{
+  "name": "SIBEM CCB v4 - Web",
+  "description": "Sistema para Inventário de Bens Móveis para a Congregação Cristã no Brasil, com gestão hierárquica e controle de acesso rigoroso.",
+  "requestFramePermissions": [
+    "camera"
+  ]
+}
