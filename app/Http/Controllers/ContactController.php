@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\AutoReplyMail;
 use App\Mail\ContactMail;
 use App\Models\ContactMessage;
 use App\Services\NotificationService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 
 class ContactController extends Controller
@@ -37,12 +39,21 @@ class ContactController extends Controller
             'ip_address' => $request->ip(),
         ]);
 
-        // Envia e-mail via SMTP (credenciais definidas no .env)
+        // Envia e-mail de notificação (Admin + CC)
         try {
             Mail::to(config('mail.from.address'))
+                ->cc('rfergomes@gmail.com')
                 ->send(new ContactMail($contact));
         } catch (\Exception $e) {
             \Log::error("Erro ao enviar e-mail de contato: " . $e->getMessage());
+        }
+
+        // Envia e-mail de resposta automática ao remetente
+        try {
+            Mail::to($contact->email)
+                ->send(new AutoReplyMail($contact));
+        } catch (\Exception $e) {
+            \Log::error("Erro ao enviar auto-reply: " . $e->getMessage());
         }
 
         try {
