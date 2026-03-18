@@ -308,9 +308,9 @@
             </div><!-- End Section Title -->
             <div class="container" data-aos="fade-up" data-aos-delay="100">
                 <object id="tabelaVersao" type="text/html" width="100%" height="600"
-                    data="{{ asset('landing/app/home.html') }}" title="Tabela de versões">
+                    data="{{ asset('app/home.html') }}" title="Tabela de versões">
                     <p>Não foi possível carregar o conteúdo. Acesse diretamente
-                        <a href="{{ asset('landing/app/home.html') }}" target="_blank" rel="noopener">app/home.html</a>.
+                        <a href="{{ asset('app/home.html') }}" target="_blank" rel="noopener">app/home.html</a>.
                     </p>
                 </object>
             </div>
