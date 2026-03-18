@@ -75,9 +75,9 @@
             <p>Recebemos sua mensagem enviada através do nosso formulário de contato.</p>
             <p>Agradecemos o seu interesse no <strong>SIBEM (Sistema para Inventário de Bens Móveis)</strong>. Nossa equipe analisará sua solicitação e entrará em contato com você o mais breve possível no endereço <strong>{{ $contact->email }}</strong>.</p>
             
-            <p>Enquanto isso, você pode conferir nossa documentação ou novidades em nosso site.</p>
+            <p>Enquanto isso, você pode conferir nossa documentação ou novidades em nosso portal.</p>
             
-            <a href="{{ config('app.url') }}" class="btn">Visitar nosso site</a>
+            <a href="{{ config('app.url') }}" class="btn">Visitar nosso portal</a>
 
             <p style="margin-top: 30px;">Atenciosamente,<br>Equipe SIBEM</p>
         </div>
