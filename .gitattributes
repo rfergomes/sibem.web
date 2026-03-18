@@ -9,3 +9,14 @@
 /.github export-ignore
 CHANGELOG.md export-ignore
 .styleci.yml export-ignore
+
+# Tratar arquivos do ClickOnce como binarios para preservar hashes exatos
+*.config binary
+*.manifest binary
+*.application binary
+*.exe binary
+*.dll binary
+*.db binary
+*.ico binary
+*.png binary
+*.pdf binary
