@@ -64,6 +64,25 @@
             background: transparent;
             color: var(--accent-color);
         }
+
+        /* Success Message Styling */
+        .php-email-form .sent-message {
+            display: none;
+            color: #fff;
+            background: #18d26e;
+            text-align: center;
+            padding: 20px;
+            font-weight: 500;
+            border-radius: 8px;
+            margin-bottom: 24px;
+            box-shadow: 0 4px 15px rgba(24, 210, 110, 0.2);
+            animation: fadeIn 0.5s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
     </style>
 </head>
 
@@ -474,7 +493,10 @@
                                 <div class="col-md-12 text-center">
                                     <div class="loading">Enviando...</div>
                                     <div class="error-message"></div>
-                                    <div class="sent-message">Sua mensagem foi enviada com sucesso! Deus abençoe.</div>
+                                    <div class="sent-message">
+                                        <i class="bi bi-check-circle-fill me-2"></i>
+                                        Sua mensagem foi enviada com sucesso! Recebemos seu contato e em breve nossa equipe retornará no seu e-mail. Deus abençoe.
+                                    </div>
 
                                     <button type="submit">Enviar Mensagem</button>
                                 </div>
