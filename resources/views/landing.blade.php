@@ -307,12 +307,13 @@
                 <p>Uma vez instalado, o sistema busca por atualizações automaticamente</p>
             </div><!-- End Section Title -->
             <div class="container" data-aos="fade-up" data-aos-delay="100">
-                <object id="tabelaVersao" type="text/html" width="100%" height="600"
-                    data="{{ asset('app/home.html') }}" title="Tabela de versões">
+                <iframe id="tabelaVersao" src="{{ asset('app/home.html') }}" width="100%" height="600"
+                    frameborder="0" title="Tabela de versões"
+                    style="border:none; overflow:hidden;">
                     <p>Não foi possível carregar o conteúdo. Acesse diretamente
                         <a href="{{ asset('app/home.html') }}" target="_blank" rel="noopener">app/home.html</a>.
                     </p>
-                </object>
+                </iframe>
             </div>
         </section>
 
