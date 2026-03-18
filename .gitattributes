@@ -1,22 +1,31 @@
-* text=auto eol=lf
+# Arquivos de codigo-fonte: normalizar para LF
+*.php text eol=lf
+*.blade.php text eol=lf diff=html
+*.css text eol=lf diff=css
+*.html text eol=lf diff=html
+*.md text eol=lf diff=markdown
+*.json text eol=lf
+*.js text eol=lf
+*.ts text eol=lf
+*.yml text eol=lf
+*.yaml text eol=lf
+*.env text eol=lf
+*.xml text eol=lf
+*.sql text eol=lf
+*.txt text eol=lf
 
-*.blade.php diff=html
-*.css diff=css
-*.html diff=html
-*.md diff=markdown
-*.php diff=php
+# Arquivos do ClickOnce: NUNCA converter (preservar hashes SHA256 exatos)
+# Usar -text desabilita qualquer normalizacao de EOL
+*.config -text
+*.manifest -text
+*.application -text
+*.exe -text
+*.dll -text
+*.db -text
+*.ico -text
+*.png -text
+*.pdf -text
 
 /.github export-ignore
 CHANGELOG.md export-ignore
 .styleci.yml export-ignore
-
-# Tratar arquivos do ClickOnce como binarios para preservar hashes exatos
-*.config binary
-*.manifest binary
-*.application binary
-*.exe binary
-*.dll binary
-*.db binary
-*.ico binary
-*.png binary
-*.pdf binary
