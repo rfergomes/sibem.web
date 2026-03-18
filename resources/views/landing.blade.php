@@ -111,7 +111,7 @@
                     </div>
                 </div>
                 <div class="text-center" data-aos="zoom-out" data-aos-delay="100">
-                    <a href="{{ asset('landing/app/setup.exe') }}" class="btn-get-started">Download V4.0.0.22</a>
+                    <a href="{{ asset('app/setup.exe') }}" class="btn-get-started">Download V4.0.0.23</a>
                 </div>
 
                 <div class="row gy-4 mt-5">

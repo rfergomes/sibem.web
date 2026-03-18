@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\ContactMail;
 use App\Models\ContactMessage;
 use App\Services\NotificationService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
 
 class ContactController extends Controller
 {
@@ -34,6 +36,14 @@ class ContactController extends Controller
             'message' => $validated['message'],
             'ip_address' => $request->ip(),
         ]);
+
+        // Envia e-mail via SMTP (credenciais definidas no .env)
+        try {
+            Mail::to(config('mail.from.address'))
+                ->send(new ContactMail($contact));
+        } catch (\Exception $e) {
+            \Log::error("Erro ao enviar e-mail de contato: " . $e->getMessage());
+        }
 
         try {
             $this->notificationService->createLandingContactNotification($contact);
