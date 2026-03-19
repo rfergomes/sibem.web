@@ -27,17 +27,29 @@ class Handler extends ExceptionHandler
         $this->reportable(function (Throwable $e) {
             //
         });
+    }
 
-        $this->renderable(function (TokenMismatchException $e, $request) {
-            if ($request->expectsJson()) {
+    /**
+     * Render an exception into an HTTP response.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \Throwable  $e
+     * @return \Symfony\Component\HttpFoundation\Response
+     *
+     * @throws \Throwable
+     */
+    public function render($request, Throwable $e)
+    {
+        if ($e instanceof TokenMismatchException) {
+            if ($request->expectsJson() || $request->wantsJson()) {
                 return response()->json(['message' => 'Sua sessão expirou. Por favor, atualize a página e tente novamente.'], 419);
             }
 
-            if (auth()->check()) {
-                return redirect()->route('dashboard');
-            }
+            return redirect()->guest(route('login'))->withErrors([
+                'email' => 'Sua sessão expirou ou o token é inválido. Por favor, faça login novamente.'
+            ]);
+        }
 
-            return redirect()->route('login')->withErrors(['email' => 'Sua sessão expirou. Por favor, faça login novamente.']);
-        });
+        return parent::render($request, $e);
     }
 }
