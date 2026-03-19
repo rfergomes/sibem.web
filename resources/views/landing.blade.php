@@ -126,6 +126,7 @@
                 <div class="row justify-content-center" data-aos="zoom-out">
                     <div class="col-xl-7 col-lg-9 text-center">
                         <h1>Sistema para Inventário de Bens Móveis</h1>
+                        <h5><span class="fw-bold muted">Ativo Imobilizado</span></h5>
                         <p>Uso exclusivo da Congregação Cristã no Brasil</p>
                     </div>
                 </div>
