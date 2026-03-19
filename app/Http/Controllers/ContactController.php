@@ -42,7 +42,6 @@ class ContactController extends Controller
         // Envia e-mail de notificação (Admin + CC)
         try {
             Mail::to(config('mail.from.address'))
-                ->cc('rfergomes@gmail.com')
                 ->send(new ContactMail($contact));
         } catch (\Exception $e) {
             \Log::error("Erro ao enviar e-mail de contato: " . $e->getMessage());
