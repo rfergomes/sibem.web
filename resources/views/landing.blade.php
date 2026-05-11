@@ -80,8 +80,15 @@
         }
 
         @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(-10px); }
-            to { opacity: 1; transform: translateY(0); }
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
     </style>
 </head>
@@ -131,7 +138,7 @@
                     </div>
                 </div>
                 <div class="text-center" data-aos="zoom-out" data-aos-delay="100">
-                    <a href="{{ asset('app/setup.exe') }}" class="btn-get-started">Download V4.0.0.26</a>
+                    <a href="{{ asset('app/setup.exe') }}" class="btn-get-started">Download V4.0.0.27</a>
                 </div>
 
                 <div class="row gy-4 mt-5">
@@ -327,9 +334,8 @@
                 <p>Uma vez instalado, o sistema busca por atualizações automaticamente</p>
             </div><!-- End Section Title -->
             <div class="container" data-aos="fade-up" data-aos-delay="100">
-                <iframe id="tabelaVersao" src="{{ asset('app/home.html') }}" width="100%" height="600"
-                    frameborder="0" title="Tabela de versões"
-                    style="border:none; overflow:hidden;">
+                <iframe id="tabelaVersao" src="{{ asset('app/home.html') }}" width="100%" height="600" frameborder="0"
+                    title="Tabela de versões" style="border:none; overflow:hidden;">
                     <p>Não foi possível carregar o conteúdo. Acesse diretamente
                         <a href="{{ asset('app/home.html') }}" target="_blank" rel="noopener">app/home.html</a>.
                     </p>
@@ -496,7 +502,8 @@
                                     <div class="error-message"></div>
                                     <div class="sent-message">
                                         <i class="bi bi-check-circle-fill me-2"></i>
-                                        Sua mensagem foi enviada com sucesso! Recebemos seu contato e em breve nossa equipe retornará no seu e-mail. Deus abençoe.
+                                        Sua mensagem foi enviada com sucesso! Recebemos seu contato e em breve nossa
+                                        equipe retornará no seu e-mail. Deus abençoe.
                                     </div>
 
                                     <button type="submit">Enviar Mensagem</button>
