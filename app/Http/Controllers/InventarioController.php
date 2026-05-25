@@ -1,0 +1,114 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use App\Models\Inventario;
+use App\Models\Igreja;
+use App\Models\Local;
+
+class InventarioController extends Controller
+{
+    public function concluidos(Request $request)
+    {
+        $user = Auth::user();
+        $activeLocalId = session()->get('active_admlc_id') ?? $user->local_id;
+
+        // Fetch local info
+        $local = Local::find($activeLocalId);
+
+        // Fetch filter options based on the active local
+        // Using dynamic connection 'tenant'
+        $anos = [];
+        $setores = [];
+        $igrejas = [];
+        $inventarios = collect();
+        $chartValues = array_fill(0, 12, 0);
+        $selectedYear = $request->input('ano', date('Y'));
+
+        if ($local) {
+            try {
+                $anos = Inventario::selectRaw('YEAR(data) as ano')
+                    ->distinct()
+                    ->whereNotNull('data')
+                    ->orderBy('ano', 'desc')
+                    ->pluck('ano');
+                
+                $setores = Igreja::where('admlc_id', $activeLocalId)
+                    ->whereNotNull('cod_setor')
+                    ->select('cod_setor as setor')
+                    ->distinct()
+                    ->orderBy('cod_setor')
+                    ->pluck('setor');
+
+                $igrejas = Igreja::where('admlc_id', $activeLocalId)
+                    ->orderBy('igreja')
+                    ->get();
+
+                // Build query
+                $query = Inventario::with('igreja')->orderBy('data', 'desc');
+
+                // Apply filters
+                if ($request->filled('ano')) {
+                    $query->whereRaw('YEAR(data) = ?', [$request->ano]);
+                }
+
+                if ($request->filled('setor')) {
+                    $setor = $request->setor;
+                    $query->whereHas('igreja', function ($q) use ($setor) {
+                        $q->where('cod_setor', $setor);
+                    });
+                }
+
+                if ($request->filled('igreja_id')) {
+                    $codigoCcb = $request->igreja_id;
+                    $query->where('igreja_id', $codigoCcb);
+                }
+
+                $inventarios = $query->paginate(15)->withQueryString();
+
+                // Chart Data (consolidated monthly completed inventories for selected/default year)
+                $selectedYear = $request->input('ano', $anos->first() ?? date('Y'));
+                
+                $chartDataRaw = Inventario::selectRaw('MONTH(data) as mes, COUNT(*) as total')
+                    ->whereRaw('YEAR(data) = ?', [$selectedYear])
+                    ->whereIn('situacao', ['Finalizado', 'Concluído', 'Auditado'])
+                    ->groupByRaw('MONTH(data)')
+                    ->orderByRaw('MONTH(data)')
+                    ->get()
+                    ->pluck('total', 'mes')
+                    ->toArray();
+
+                // Initialize 12 months array
+                $chartData = array_fill(1, 12, 0);
+                foreach ($chartDataRaw as $mes => $total) {
+                    $chartData[$mes] = $total;
+                }
+                $chartValues = array_values($chartData);
+            } catch (\Exception $e) {
+                // Handle case where tenant database connection fails or tables don't exist
+                session()->flash('error', 'Falha ao conectar com o banco da Administração Local: ' . $e->getMessage());
+            }
+        }
+
+        // Convert keys to Portuguese month names for labels
+        $monthNames = [
+            1 => 'Jan', 2 => 'Fev', 3 => 'Mar', 4 => 'Abr', 5 => 'Mai', 6 => 'Jun',
+            7 => 'Jul', 8 => 'Ago', 9 => 'Set', 10 => 'Out', 11 => 'Nov', 12 => 'Dez'
+        ];
+        
+        $chartLabels = array_values($monthNames);
+
+        return view('inventarios.concluidos', compact(
+            'inventarios',
+            'anos',
+            'setores',
+            'igrejas',
+            'chartLabels',
+            'chartValues',
+            'selectedYear',
+            'local'
+        ));
+    }
+}
