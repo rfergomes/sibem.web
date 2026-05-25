@@ -57,7 +57,7 @@ class AuthController extends Controller
 
     public function forgotPassword(Request $request)
     {
-        $request->validate(['email' => 'required|email|exists:mysql_sys.users,email']);
+        $request->validate(['email' => 'required|email|exists:mysql_sys.users_v2,email']);
 
         $user = User::where('email', $request->email)->first();
         
@@ -92,7 +92,7 @@ class AuthController extends Controller
     {
         $request->validate([
             'token' => 'required',
-            'email' => 'required|email|exists:mysql_sys.users,email',
+            'email' => 'required|email|exists:mysql_sys.users_v2,email',
             'password' => 'required|min:6|confirmed',
         ]);
 
