@@ -36,7 +36,7 @@ class Inventario extends Model
 
     public function igreja()
     {
-        return $this->belongsTo(Igreja::class, 'igreja_id', 'codigo_ccb');
+        return $this->belongsTo(Igreja::class, 'igreja_id', 'igreja_id');
     }
 
     // Accessors for backward compatibility
