@@ -32,13 +32,20 @@ class DynamicTenancy
             }
 
             if ($activeLocalId) {
-                $local = Local::find($activeLocalId);
-                if ($local && $local->db_name) {
+                // Fetch connection parameters from servidores_v2 table in central db
+                $server = DB::connection('mysql_sys')
+                    ->table('servidores_v2')
+                    ->where('admlc_id', $activeLocalId)
+                    ->where('ativo', 1)
+                    ->first();
+
+                if ($server && $server->banco) {
                     config([
-                        'database.connections.tenant.host' => $local->db_host,
-                        'database.connections.tenant.database' => $local->db_name,
-                        'database.connections.tenant.username' => $local->db_user,
-                        'database.connections.tenant.password' => $local->db_password ?? '',
+                        'database.connections.tenant.host' => $server->servidor,
+                        'database.connections.tenant.port' => $server->porta ?? '3306',
+                        'database.connections.tenant.database' => $server->banco,
+                        'database.connections.tenant.username' => $server->usuario,
+                        'database.connections.tenant.password' => $server->senha ?? '',
                     ]);
 
                     DB::purge('tenant');
