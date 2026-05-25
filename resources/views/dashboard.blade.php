@@ -7,7 +7,6 @@
     <!-- Header Page Info -->
     <div class="col-12 mb-4 d-flex align-items-center justify-content-between">
         <div>
-            <h3>Dashboard Gerencial</h3>
             <p class="text-muted mb-0">Visão geral do sistema SIBEM. Administração Ativa: <span class="fw-bold text-primary">{{ $activeLocal->nome ?? 'Nenhuma' }}</span></p>
         </div>
     </div>

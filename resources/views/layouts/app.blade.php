@@ -21,6 +21,7 @@
     <!-- Template CSS Files -->
     <link rel="stylesheet" href="{{ asset('assets/css/style.css') }}" id="main-style-link">
     <link rel="stylesheet" href="{{ asset('assets/css/style-preset.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/css/ccb-theme.css') }}">
     
     <!-- SweetAlert2 -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
@@ -28,7 +29,7 @@
     @yield('styles')
 </head>
 
-<body data-pc-preset="preset-1" data-pc-sidebar-theme="dark" data-pc-sidebar-caption="true" data-pc-direction="ltr" data-pc-theme="light">
+<body data-pc-preset="preset-10" data-pc-sidebar-theme="dark" data-pc-sidebar-caption="true" data-pc-direction="ltr" data-pc-theme="light">
     
     <!-- Preloader -->
     <div class="loader-bg">
@@ -44,11 +45,6 @@
                 <a href="{{ route('dashboard') }}" class="b-brand text-primary">
                     <img src="{{ asset('assets/images/logo-white.svg') }}" alt="logo" class="logo-lg" style="max-height: 40px;">
                 </a>
-                <div class="pc-h-item">
-                    <a href="#" class="pc-sidebar-collapse" id="sidebar-hide">
-                        <i class="ti ti-chevrons-left"></i>
-                    </a>
-                </div>
             </div>
             
             <div class="navbar-content">
@@ -106,6 +102,11 @@
                 <ul class="list-unstyled">
                     <!-- Sidebar collapse trigger -->
                     <li class="pc-h-item pc-sidebar-collapse">
+                        <a href="#" class="pc-head-link ms-0" id="sidebar-hide">
+                            <i class="ti ti-menu-2"></i>
+                        </a>
+                    </li>
+                    <li class="pc-h-item pc-sidebar-popup">
                         <a href="#" class="pc-head-link ms-0" id="mobile-collapse">
                             <i class="ti ti-menu-2"></i>
                         </a>
@@ -124,7 +125,7 @@
                     <!-- Theme toggler -->
                     <li class="dropdown pc-h-item">
                         <a class="pc-head-link dropdown-toggle arrow-none me-0" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="false" aria-expanded="false">
-                            <i class="ti ti-settings"></i>
+                            <i class="ti ti-sun"></i>
                         </a>
                         <div class="dropdown-menu dropdown-menu-end pc-h-dropdown">
                             <a href="#!" class="dropdown-item" onclick="layout_change('light')">
@@ -132,6 +133,9 @@
                             </a>
                             <a href="#!" class="dropdown-item" onclick="layout_change('dark')">
                                 <i class="ti ti-moon"></i><span>Modo Escuro</span>
+                            </a>
+                            <a href="#!" class="dropdown-item" onclick="layout_change_default()">
+                                <i class="ti ti-device-desktop"></i><span>Padrão do Sistema</span>
                             </a>
                         </div>
                     </li>
@@ -163,6 +167,30 @@
     <!-- [ Main Content ] start -->
     <div class="pc-container">
         <div class="pc-content">
+            <!-- [ breadcrumb ] start -->
+            <div class="page-header">
+                <div class="page-block">
+                    <div class="row align-items-center justify-content-between">
+                        <div class="col-sm-auto">
+                            <div class="page-header-title">
+                                <h5 class="mb-0">@yield('title', 'Painel')</h5>
+                            </div>
+                        </div>
+                        <div class="col-sm-auto">
+                            <ul class="breadcrumb">
+                                <li class="breadcrumb-item"><a href="{{ route('dashboard') }}"><i class="ti ti-home"></i></a></li>
+                                @if(Request::routeIs('admin.*'))
+                                    <li class="breadcrumb-item"><a href="javascript: void(0)">Administração</a></li>
+                                @elseif(!Request::routeIs('dashboard'))
+                                    <li class="breadcrumb-item"><a href="javascript: void(0)">Navegação</a></li>
+                                @endif
+                                <li class="breadcrumb-item" aria-current="page">@yield('title', 'Painel')</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- [ breadcrumb ] end -->
             
             <!-- Toast System Alerts -->
             @if(session('success'))
@@ -199,9 +227,9 @@
     <script>
         layout_change('light');
         layout_sidebar_change('dark');
-        layout_header_change('light');
+        layout_header_change('dark');
         change_box_container('false');
-        preset_change("preset-1");
+        preset_change("preset-10");
     </script>
     
     @yield('scripts')

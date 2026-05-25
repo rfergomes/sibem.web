@@ -1,0 +1,180 @@
+/* CCB Visual Identity Overrides for Preset-10 and Root */
+:root, [data-pc-preset="preset-10"] {
+    /* Font family override */
+    --bs-body-font-family: Verdana, Geneva, sans-serif !important;
+    
+    /* Primary brand colors (CCB Azul Escuro) */
+    --bs-primary: #033D60 !important;
+    --bs-primary-rgb: 3, 61, 96 !important;
+    --bs-primary-light: #e6ecf0 !important; /* tom claro de azul escuro */
+    --bs-link-color: #033D60 !important;
+    --bs-link-color-rgb: 3, 61, 96 !important;
+    --bs-link-hover-color: #02253a !important;
+    --bs-link-hover-color-rgb: 2, 37, 58 !important;
+    --pc-sidebar-active-color: #033D60 !important;
+    
+    /* Secondary/Status Colors */
+    --bs-success: #5DB196 !important;
+    --bs-success-rgb: 93, 177, 150 !important;
+    
+    --bs-warning: #FFCC66 !important;
+    --bs-warning-rgb: 255, 204, 102 !important;
+    
+    --bs-danger: #DC3C00 !important;
+    --bs-danger-rgb: 220, 60, 0 !important;
+    
+    --bs-info: #98CDBD !important;
+    --bs-info-rgb: 152, 205, 189 !important;
+    
+    --bs-secondary: #49656C !important;
+    --bs-secondary-rgb: 73, 101, 108 !important;
+    
+    --bs-dark: #201E1E !important;
+    --bs-dark-rgb: 32, 30, 30 !important;
+    
+    --bs-gray-300: #CDD4DC !important;
+    --bs-gray-500: #A5A5A5 !important;
+    
+    /* Sidebar / Brand Header Customization */
+    --pc-brand-background: #02253a !important;
+    --pc-sidebar-background: #201E1E !important;
+    --pc-sidebar-caption-color: #CDD4DC !important;
+    
+    /* Top Header Dark Mode Colors */
+    --pc-header-background: #033D60 !important;
+    --pc-header-color: #ffffff !important;
+}
+
+body {
+    font-family: Verdana, Geneva, sans-serif !important;
+}
+
+/* Button overrides for standard elements */
+.btn-primary {
+    --bs-btn-color: #ffffff !important;
+    --bs-btn-bg: #033D60 !important;
+    --bs-btn-border-color: #033D60 !important;
+    --bs-btn-hover-color: #ffffff !important;
+    --bs-btn-hover-bg: #02253a !important;
+    --bs-btn-hover-border-color: #02253a !important;
+    --bs-btn-focus-shadow-rgb: 3, 61, 96 !important;
+    --bs-btn-active-color: #ffffff !important;
+    --bs-btn-active-bg: #02253a !important;
+    --bs-btn-active-border-color: #02253a !important;
+}
+
+.btn-light-primary {
+    background: #e6ecf0 !important;
+    color: #033D60 !important;
+    border-color: #e6ecf0 !important;
+}
+
+.btn-light-primary:hover, .btn-light-primary:focus, .btn-light-primary:active {
+    background: #033D60 !important;
+    color: #ffffff !important;
+    border-color: #033D60 !important;
+}
+
+.btn-link-primary {
+    color: #033D60 !important;
+}
+
+.btn-link-primary:hover {
+    color: #02253a !important;
+}
+
+/* Sidebar active navigation styling */
+.pc-sidebar {
+    background: #201E1E !important;
+}
+
+.pc-sidebar .pc-navbar > .pc-item.active > .pc-link {
+    background: #033D60 !important;
+    color: #ffffff !important;
+}
+
+.pc-sidebar .pc-navbar > .pc-item > .pc-link:hover {
+    background: rgba(255, 255, 255, 0.05) !important;
+    color: #ffffff !important;
+}
+
+/* Accordion highlight styling */
+.accordion {
+    --bs-accordion-btn-focus-border-color: #033D60 !important;
+    --bs-accordion-active-color: #033D60 !important;
+    --bs-accordion-active-bg: #e6ecf0 !important;
+}
+
+/* List group overrides */
+.list-group {
+    --bs-list-group-active-bg: #033D60 !important;
+    --bs-list-group-active-border-color: #033D60 !important;
+}
+
+/* Progress bar bg override */
+.progress {
+    --bs-progress-bar-bg: #033D60 !important;
+}
+
+/* Accent Card gradients (Dashboard stats) */
+.bg-grd-primary {
+    background: linear-gradient(135deg, #033D60 0%, #49656C 100%) !important;
+}
+.bg-grd-success {
+    background: linear-gradient(135deg, #5DB196 0%, #98CDBD 100%) !important;
+}
+.bg-grd-warning {
+    background: linear-gradient(135deg, #DC3C00 0%, #FFCC66 100%) !important;
+}
+.bg-grd-info {
+    background: linear-gradient(135deg, #98CDBD 0%, #49656C 100%) !important;
+}
+
+/* Alert styling overrides */
+.alert-success {
+    border-left: 5px solid #5DB196 !important;
+    background-color: rgba(93, 177, 150, 0.15) !important;
+    color: #02253a !important;
+}
+
+.alert-danger {
+    border-left: 5px solid #DC3C00 !important;
+    background-color: rgba(220, 60, 0, 0.1) !important;
+    color: #DC3C00 !important;
+}
+
+.alert-warning {
+    border-left: 5px solid #FFCC66 !important;
+    background-color: rgba(255, 204, 102, 0.15) !important;
+    color: #5d4300 !important;
+}
+
+/* Links color override inside tables/cards */
+.link-primary {
+    color: #033D60 !important;
+}
+
+.link-primary:hover, .link-primary:focus {
+    color: #02253a !important;
+}
+
+/* Badges override */
+.badge.bg-primary {
+    background-color: #033D60 !important;
+    color: #ffffff !important;
+}
+
+.badge.bg-success {
+    background-color: #5DB196 !important;
+    color: #ffffff !important;
+}
+
+.badge.bg-warning {
+    background-color: #FFCC66 !important;
+    color: #201E1E !important;
+}
+
+.badge.bg-danger {
+    background-color: #DC3C00 !important;
+    color: #ffffff !important;
+}
