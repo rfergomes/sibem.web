@@ -11,7 +11,7 @@ class TenantSelectionController extends Controller
     public function select(Request $request)
     {
         $request->validate([
-            'local_id' => 'required|exists:mysql_sys.locais,id'
+            'local_id' => 'required|exists:mysql_sys.admlcs_v2,admlc_id'
         ]);
 
         $user = Auth::user();
