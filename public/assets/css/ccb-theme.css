@@ -210,8 +210,8 @@ body {
 .card-header,
 .card-header.bg-dark,
 .card-header.bg-light {
-    background-color: #CDD4DC !important;
-    background: #CDD4DC !important;
+    background-color: #033D60 !important;
+    background: #033D60 !important;
     border-bottom: 1px solid rgba(255, 255, 255, 0.1) !important;
 }
 
