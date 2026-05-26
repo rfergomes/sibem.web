@@ -79,19 +79,23 @@
                             </a>
                         </li>
 
+                        @if(Auth::user()->isAdminSistema() || Auth::user()->isAdminRegional() || Auth::user()->isAdminLocal())
                         <li class="pc-item {{ Request::routeIs('admin.tokens.*') ? 'active' : '' }}">
                             <a href="{{ route('admin.tokens.index') }}" class="pc-link">
                                 <span class="pc-micon"><i class="ti ti-key"></i></span>
                                 <span class="pc-mtext">Tokens de Acesso</span>
                             </a>
                         </li>
+                        @endif
 
+                        @if(Auth::user()->isAdminSistema() || Auth::user()->isAdminRegional())
                         <li class="pc-item {{ Request::routeIs('admin.token-requests.*') ? 'active' : '' }}">
                             <a href="{{ route('admin.token-requests.index') }}" class="pc-link">
                                 <span class="pc-micon"><i class="ti ti-mail-opened"></i></span>
                                 <span class="pc-mtext">Solicitações de Tokens</span>
                             </a>
                         </li>
+                        @endif
 
                         <li class="pc-item pc-caption">
                             <label>Estrutura e Cadastros</label>
