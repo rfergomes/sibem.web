@@ -100,7 +100,7 @@ body {
     background: #02253a !important;
 }
 
-.pc-sidebar .pc-navbar .pc-item.active > .pc-link {
+.pc-sidebar .pc-navbar .pc-item.active>.pc-link {
     background: linear-gradient(135deg, #055a8c 0%, #02253a 100%) !important;
     color: #ffffff !important;
     font-weight: 600 !important;
@@ -111,7 +111,7 @@ body {
     color: #ffffff !important;
 }
 
-.pc-sidebar .pc-navbar .pc-item.active > .pc-link:hover {
+.pc-sidebar .pc-navbar .pc-item.active>.pc-link:hover {
     background: linear-gradient(135deg, #0667a0 0%, #022d46 100%) !important;
     color: #ffffff !important;
 }
@@ -204,7 +204,7 @@ body {
 .card,
 .card.bg-primary,
 .card.card-border-primary {
-    border-top: 4px solid #033D60 !important;
+    border-top: 4px solid #1b6c9e !important;
 }
 
 .card-header,
