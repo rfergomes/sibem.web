@@ -79,10 +79,14 @@ return [
             'prefix_indexes' => true,
             'strict' => true,
             'engine' => null,
+            'reconnect' => true,
             'options' => extension_loaded('pdo_mysql') ? array_filter([
                 (PHP_VERSION_ID >= 80500 ? Mysql::ATTR_SSL_CA : PDO::MYSQL_ATTR_SSL_CA) => env('MYSQL_ATTR_SSL_CA'),
+                PDO::ATTR_TIMEOUT => 30,
+                PDO::MYSQL_ATTR_INIT_COMMAND => "SET SESSION wait_timeout=28800, interactive_timeout=28800, net_read_timeout=60, net_write_timeout=60",
             ]) : [],
         ],
+
 
         'tenant' => [
             'driver' => 'mysql',
