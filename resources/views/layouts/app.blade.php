@@ -282,6 +282,7 @@
     <script src="{{ asset('assets/js/fonts/custom-font.js') }}"></script>
     <script src="{{ asset('assets/js/pcoded.js') }}"></script>
     <script src="{{ asset('assets/js/plugins/feather.min.js') }}"></script>
+    <script src="{{ asset('assets/js/plugins/choices.min.js') }}"></script>
     
     <!-- SweetAlert2 -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
@@ -292,6 +293,49 @@
         layout_header_change('dark');
         change_box_container('false');
         preset_change("preset-10");
+
+        // Inicialização global do Choices.js para selects de formulários
+        document.addEventListener('DOMContentLoaded', function () {
+            document.querySelectorAll('select.form-select').forEach(function (select) {
+                // Pular o seletor de tenant no cabeçalho e selects com a classe no-choices
+                if (select.closest('#tenant-selector-form') || select.classList.contains('no-choices')) {
+                    return;
+                }
+
+                // Inicializa o Choices
+                const choices = new Choices(select, {
+                    placeholder: true,
+                    shouldSort: false,
+                    searchEnabled: true,
+                    removeItemButton: select.hasAttribute('multiple'),
+                    itemSelectText: '',
+                    noResultsText: 'Nenhum resultado encontrado',
+                    noChoicesText: 'Sem opções disponíveis',
+                    placeholderValue: select.getAttribute('placeholder') || (select.options[0] ? select.options[0].text : 'Selecione...'),
+                    searchPlaceholderValue: 'Pesquisar...',
+                });
+
+                // Lida com erros de validação HTML5 requeridos para selects escondidos
+                if (select.hasAttribute('required')) {
+                    select.addEventListener('invalid', function (e) {
+                        e.preventDefault();
+                        const container = select.closest('.choices');
+                        if (container) {
+                            container.classList.add('is-invalid');
+                            container.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                            choices.showDropdown();
+                        }
+                    });
+                    
+                    select.addEventListener('change', function () {
+                        const container = select.closest('.choices');
+                        if (container && select.value) {
+                            container.classList.remove('is-invalid');
+                        }
+                    });
+                }
+            });
+        });
     </script>
     
     @yield('scripts')
