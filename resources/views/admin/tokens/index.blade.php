@@ -101,7 +101,7 @@
                                             <small>{{ $token->created_at ? $token->created_at->format('d/m/Y H:i') : 'N/A' }}</small>
                                         </td>
                                         <td class="text-end">
-                                            <form action="{{ route('admin.tokens.revogar', $token->id) }}" method="POST" class="d-inline-block revoke-token-form">
+                                            <form action="{{ route('admin.tokens.destroy', $token->id) }}" method="POST" class="d-inline-block revoke-token-form">
                                                 @csrf
                                                 @method('DELETE')
                                                 <button type="submit" class="btn btn-sm btn-light-danger" title="Revogar Token">
