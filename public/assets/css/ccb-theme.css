@@ -89,25 +89,30 @@ body {
 
 /* Sidebar active navigation styling */
 .pc-sidebar,
-[data-pc-sidebar-theme="dark"] .pc-sidebar,
+[data-pc-sidebar-theme="dark"] .pc-sidebar {
+    background-color: #033D60 !important;
+    background: #033D60 !important;
+}
+
 .pc-sidebar .m-header,
 [data-pc-sidebar-theme="dark"] .pc-sidebar .m-header {
     background-color: #02253a !important;
     background: #02253a !important;
 }
 
-.pc-sidebar .pc-navbar .pc-item.active>.pc-link {
-    background: #053c5f !important;
+.pc-sidebar .pc-navbar .pc-item.active > .pc-link {
+    background: linear-gradient(135deg, #055a8c 0%, #02253a 100%) !important;
     color: #ffffff !important;
+    font-weight: 600 !important;
 }
 
 .pc-sidebar .pc-navbar .pc-item .pc-link:hover {
-    background: rgba(255, 255, 255, 0.1) !important;
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.12) 0%, rgba(255, 255, 255, 0.03) 100%) !important;
     color: #ffffff !important;
 }
 
-.pc-sidebar .pc-navbar .pc-item.active>.pc-link:hover {
-    background: #053c5f !important;
+.pc-sidebar .pc-navbar .pc-item.active > .pc-link:hover {
+    background: linear-gradient(135deg, #0667a0 0%, #022d46 100%) !important;
     color: #ffffff !important;
 }
 
