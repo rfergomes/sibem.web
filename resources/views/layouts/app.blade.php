@@ -344,6 +344,9 @@
         }
     </script>
     
+    <!-- Dummy para evitar erro de classe ausente no script do tema -->
+    <div class="footer-wrapper d-none"></div>
+    
     @yield('scripts')
 </body>
 </html>
