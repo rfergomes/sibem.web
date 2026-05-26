@@ -92,12 +92,12 @@ body {
 [data-pc-sidebar-theme="dark"] .pc-sidebar,
 .pc-sidebar .m-header,
 [data-pc-sidebar-theme="dark"] .pc-sidebar .m-header {
-    background-color: #033D60 !important;
-    background: #033D60 !important;
+    background-color: #02253a !important;
+    background: #02253a !important;
 }
 
-.pc-sidebar .pc-navbar .pc-item.active > .pc-link {
-    background: #02253a !important;
+.pc-sidebar .pc-navbar .pc-item.active>.pc-link {
+    background: #053c5f !important;
     color: #ffffff !important;
 }
 
@@ -106,8 +106,8 @@ body {
     color: #ffffff !important;
 }
 
-.pc-sidebar .pc-navbar .pc-item.active > .pc-link:hover {
-    background: #011522 !important;
+.pc-sidebar .pc-navbar .pc-item.active>.pc-link:hover {
+    background: #053c5f !important;
     color: #ffffff !important;
 }
 
@@ -228,6 +228,7 @@ body {
     border-color: #02253a !important;
     color: #ffffff !important;
 }
+
 .card-header .btn-primary:hover {
     background-color: #011522 !important;
     border-color: #011522 !important;
