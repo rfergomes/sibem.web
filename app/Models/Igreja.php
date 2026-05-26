@@ -75,4 +75,9 @@ class Igreja extends Model
     {
         return $this->belongsTo(Local::class, 'admlc_id', 'admlc_id');
     }
+
+    public function tipoImovel()
+    {
+        return $this->belongsTo(TipoImovel::class, 'tipo_id', 'id');
+    }
 }

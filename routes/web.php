@@ -6,6 +6,14 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\TenantSelectionController;
 use App\Http\Controllers\InventarioController;
 use App\Http\Controllers\Admin\TokenRequestController;
+use App\Http\Controllers\Admin\UserController;
+use App\Http\Controllers\Admin\TokenController;
+use App\Http\Controllers\Admin\RegionalController;
+use App\Http\Controllers\Admin\LocalController;
+use App\Http\Controllers\Admin\SetorController;
+use App\Http\Controllers\Admin\DependenciaController;
+use App\Http\Controllers\Admin\IgrejaController;
+use App\Http\Controllers\Admin\TipoImovelController;
 
 // Public Landing Page
 Route::get('/', function () {
@@ -55,11 +63,24 @@ Route::middleware(['auth', 'tenant'])->group(function () {
     // Inventórios Realizados (View of Tenant inventories)
     Route::get('/inventarios/concluidos', [InventarioController::class, 'concluidos'])->name('inventarios.concluidos');
 
-    // Admin Group: Token Requests from Desktop System
+    // Admin Group: User Management and Base cadastros
     Route::prefix('admin')->name('admin.')->group(function () {
+        // Token Requests
         Route::get('/solicitacoes', [TokenRequestController::class, 'index'])->name('token-requests.index');
         Route::post('/solicitacoes/{id}/approve', [TokenRequestController::class, 'approve'])->name('token-requests.approve');
         Route::post('/solicitacoes/{id}/reject', [TokenRequestController::class, 'reject'])->name('token-requests.reject');
+
+        // CRUDs
+        Route::resource('usuarios', UserController::class)->names('usuarios');
+        Route::post('usuarios/{usuario}/tokens/gerar', [UserController::class, 'generateToken'])->name('usuarios.tokens.gerar');
+        
+        Route::resource('tokens', TokenController::class)->names('tokens');
+        Route::resource('regionais', RegionalController::class)->names('regionais');
+        Route::resource('locais', LocalController::class)->names('locais');
+        Route::resource('setores', SetorController::class)->names('setores');
+        Route::resource('dependencias', DependenciaController::class)->names('dependencias');
+        Route::resource('igrejas', IgrejaController::class)->names('igrejas');
+        Route::resource('tipos-imovel', TipoImovelController::class)->names('tipos-imovel');
     });
 });
 
