@@ -204,14 +204,14 @@ body {
 .card,
 .card.bg-primary,
 .card.card-border-primary {
-    border-top: 4px solid #A5A5A5 !important;
+    border-top: 4px solid #49656C !important;
 }
 
 .card-header,
 .card-header.bg-dark,
 .card-header.bg-light {
-    background-color: #49656C !important;
-    background: #49656C !important;
+    background-color: #CDD4DC !important;
+    background: #CDD4DC !important;
     border-bottom: 1px solid rgba(255, 255, 255, 0.1) !important;
 }
 
@@ -285,8 +285,4 @@ body {
     background-position: right 30px center !important;
     background-size: 16px 16px !important;
     padding-right: 50px !important;
-}
-
-.header-user-profile i {
-    color: #ffffff !important;
 }
