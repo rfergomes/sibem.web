@@ -1,45 +1,47 @@
 /* CCB Visual Identity Overrides for Preset-10 and Root */
-:root, [data-pc-preset="preset-10"] {
+:root,
+[data-pc-preset="preset-10"] {
     /* Font family override */
     --bs-body-font-family: Verdana, Geneva, sans-serif !important;
-    
+
     /* Primary brand colors (CCB Azul Escuro) */
     --bs-primary: #033D60 !important;
-    --bs-primary-rgb: 3, 61, 96 !important;
-    --bs-primary-light: #e6ecf0 !important; /* tom claro de azul escuro */
+    /*--bs-primary-rgb: 3, 61, 96 !important;*/
+    --bs-primary-light: #e6ecf0 !important;
+    /* tom claro de azul escuro */
     --bs-link-color: #033D60 !important;
-    --bs-link-color-rgb: 3, 61, 96 !important;
+    /*--bs-link-color-rgb: 3, 61, 96 !important;*/
     --bs-link-hover-color: #02253a !important;
     --bs-link-hover-color-rgb: 2, 37, 58 !important;
     --pc-sidebar-active-color: #033D60 !important;
-    
+
     /* Secondary/Status Colors */
     --bs-success: #5DB196 !important;
     --bs-success-rgb: 93, 177, 150 !important;
-    
+
     --bs-warning: #FFCC66 !important;
     --bs-warning-rgb: 255, 204, 102 !important;
-    
+
     --bs-danger: #DC3C00 !important;
     --bs-danger-rgb: 220, 60, 0 !important;
-    
+
     --bs-info: #98CDBD !important;
     --bs-info-rgb: 152, 205, 189 !important;
-    
+
     --bs-secondary: #49656C !important;
     --bs-secondary-rgb: 73, 101, 108 !important;
-    
+
     --bs-dark: #201E1E !important;
     --bs-dark-rgb: 32, 30, 30 !important;
-    
+
     --bs-gray-300: #CDD4DC !important;
     --bs-gray-500: #A5A5A5 !important;
-    
+
     /* Sidebar / Brand Header Customization */
     --pc-brand-background: #02253a !important;
-    --pc-sidebar-background: #201E1E !important;
+    --pc-sidebar-background: #033D60 !important;
     --pc-sidebar-caption-color: #CDD4DC !important;
-    
+
     /* Top Header Dark Mode Colors */
     --pc-header-background: #033D60 !important;
     --pc-header-color: #ffffff !important;
@@ -69,7 +71,9 @@ body {
     border-color: #e6ecf0 !important;
 }
 
-.btn-light-primary:hover, .btn-light-primary:focus, .btn-light-primary:active {
+.btn-light-primary:hover,
+.btn-light-primary:focus,
+.btn-light-primary:active {
     background: #033D60 !important;
     color: #ffffff !important;
     border-color: #033D60 !important;
@@ -88,12 +92,12 @@ body {
     background: #201E1E !important;
 }
 
-.pc-sidebar .pc-navbar > .pc-item.active > .pc-link {
+.pc-sidebar .pc-navbar>.pc-item.active>.pc-link {
     background: #033D60 !important;
     color: #ffffff !important;
 }
 
-.pc-sidebar .pc-navbar > .pc-item > .pc-link:hover {
+.pc-sidebar .pc-navbar>.pc-item>.pc-link:hover {
     background: rgba(255, 255, 255, 0.05) !important;
     color: #ffffff !important;
 }
@@ -120,12 +124,15 @@ body {
 .bg-grd-primary {
     background: linear-gradient(135deg, #033D60 0%, #49656C 100%) !important;
 }
+
 .bg-grd-success {
     background: linear-gradient(135deg, #5DB196 0%, #98CDBD 100%) !important;
 }
+
 .bg-grd-warning {
     background: linear-gradient(135deg, #DC3C00 0%, #FFCC66 100%) !important;
 }
+
 .bg-grd-info {
     background: linear-gradient(135deg, #98CDBD 0%, #49656C 100%) !important;
 }
@@ -154,7 +161,8 @@ body {
     color: #033D60 !important;
 }
 
-.link-primary:hover, .link-primary:focus {
+.link-primary:hover,
+.link-primary:focus {
     color: #02253a !important;
 }
 
@@ -177,4 +185,10 @@ body {
 .badge.bg-danger {
     background-color: #DC3C00 !important;
     color: #ffffff !important;
+}
+
+.card,
+.card.bg-primary,
+.card.card-border-primary {
+    border-top: 4px solid #033D60;
 }

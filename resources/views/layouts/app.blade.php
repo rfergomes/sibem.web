@@ -69,13 +69,75 @@
 
                     @if(Auth::user()->isAdminSistema() || Auth::user()->isAdminRegional() || Auth::user()->isAdminLocal())
                         <li class="pc-item pc-caption">
-                            <label>Administração</label>
+                            <label>Administração de Acesso</label>
+                        </li>
+
+                        <li class="pc-item {{ Request::routeIs('admin.usuarios.*') ? 'active' : '' }}">
+                            <a href="{{ route('admin.usuarios.index') }}" class="pc-link">
+                                <span class="pc-micon"><i class="ti ti-users"></i></span>
+                                <span class="pc-mtext">Usuários</span>
+                            </a>
+                        </li>
+
+                        <li class="pc-item {{ Request::routeIs('admin.tokens.*') ? 'active' : '' }}">
+                            <a href="{{ route('admin.tokens.index') }}" class="pc-link">
+                                <span class="pc-micon"><i class="ti ti-key"></i></span>
+                                <span class="pc-mtext">Tokens de Acesso</span>
+                            </a>
                         </li>
 
                         <li class="pc-item {{ Request::routeIs('admin.token-requests.*') ? 'active' : '' }}">
                             <a href="{{ route('admin.token-requests.index') }}" class="pc-link">
-                                <span class="pc-micon"><i class="ti ti-key"></i></span>
+                                <span class="pc-micon"><i class="ti ti-mail-opened"></i></span>
                                 <span class="pc-mtext">Solicitações de Tokens</span>
+                            </a>
+                        </li>
+
+                        <li class="pc-item pc-caption">
+                            <label>Estrutura e Cadastros</label>
+                        </li>
+
+                        @if(Auth::user()->isAdminSistema())
+                            <li class="pc-item {{ Request::routeIs('admin.regionais.*') ? 'active' : '' }}">
+                                <a href="{{ route('admin.regionais.index') }}" class="pc-link">
+                                    <span class="pc-micon"><i class="ti ti-map-pin"></i></span>
+                                    <span class="pc-mtext">Adm. Regionais</span>
+                                </a>
+                            </li>
+                        @endif
+
+                        <li class="pc-item {{ Request::routeIs('admin.locais.*') ? 'active' : '' }}">
+                            <a href="{{ route('admin.locais.index') }}" class="pc-link">
+                                <span class="pc-micon"><i class="ti ti-building"></i></span>
+                                <span class="pc-mtext">Adm. Locais</span>
+                            </a>
+                        </li>
+
+                        <li class="pc-item {{ Request::routeIs('admin.setores.*') ? 'active' : '' }}">
+                            <a href="{{ route('admin.setores.index') }}" class="pc-link">
+                                <span class="pc-micon"><i class="ti ti-chart-bar"></i></span>
+                                <span class="pc-mtext">Setores</span>
+                            </a>
+                        </li>
+
+                        <li class="pc-item {{ Request::routeIs('admin.dependencias.*') ? 'active' : '' }}">
+                            <a href="{{ route('admin.dependencias.index') }}" class="pc-link">
+                                <span class="pc-micon"><i class="ti ti-folders"></i></span>
+                                <span class="pc-mtext">Dependências</span>
+                            </a>
+                        </li>
+
+                        <li class="pc-item {{ Request::routeIs('admin.igrejas.*') ? 'active' : '' }}">
+                            <a href="{{ route('admin.igrejas.index') }}" class="pc-link">
+                                <span class="pc-micon"><i class="ti ti-building-community"></i></span>
+                                <span class="pc-mtext">Igrejas (CCB)</span>
+                            </a>
+                        </li>
+
+                        <li class="pc-item {{ Request::routeIs('admin.tipos-imovel.*') ? 'active' : '' }}">
+                            <a href="{{ route('admin.tipos-imovel.index') }}" class="pc-link">
+                                <span class="pc-micon"><i class="ti ti-folder"></i></span>
+                                <span class="pc-mtext">Tipos de Imóvel</span>
                             </a>
                         </li>
                     @endif
