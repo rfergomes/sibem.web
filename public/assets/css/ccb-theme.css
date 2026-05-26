@@ -88,7 +88,11 @@ body {
 }
 
 /* Sidebar active navigation styling */
-.pc-sidebar {
+.pc-sidebar,
+[data-pc-sidebar-theme="dark"] .pc-sidebar,
+.pc-sidebar .m-header,
+[data-pc-sidebar-theme="dark"] .pc-sidebar .m-header {
+    background-color: #033D60 !important;
     background: #033D60 !important;
 }
 
@@ -190,7 +194,38 @@ body {
 .card,
 .card.bg-primary,
 .card.card-border-primary {
-    border-top: 4px solid #033D60;
+    border-top: 4px solid #033D60 !important;
+}
+
+.card-header,
+.card-header.bg-dark,
+.card-header.bg-light {
+    background-color: #033D60 !important;
+    background: #033D60 !important;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1) !important;
+}
+
+.card-header h1,
+.card-header h2,
+.card-header h3,
+.card-header h4,
+.card-header h5,
+.card-header h6,
+.card-header p,
+.card-header span,
+.card-header i {
+    color: #ffffff !important;
+}
+
+/* Garante que os botões dentro do card-header fiquem destacados no fundo azul */
+.card-header .btn-primary {
+    background-color: #02253a !important;
+    border-color: #02253a !important;
+    color: #ffffff !important;
+}
+.card-header .btn-primary:hover {
+    background-color: #011522 !important;
+    border-color: #011522 !important;
 }
 
 /* Choices.js custom style overrides for CCB theme */
