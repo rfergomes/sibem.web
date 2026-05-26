@@ -6,11 +6,11 @@
 
     /* Primary brand colors (CCB Azul Escuro) */
     --bs-primary: #033D60 !important;
-    /*--bs-primary-rgb: 3, 61, 96 !important;*/
+    --bs-primary-rgb: 3, 61, 96 !important;
     --bs-primary-light: #e6ecf0 !important;
     /* tom claro de azul escuro */
     --bs-link-color: #033D60 !important;
-    /*--bs-link-color-rgb: 3, 61, 96 !important;*/
+    --bs-link-color-rgb: 3, 61, 96 !important;
     --bs-link-hover-color: #02253a !important;
     --bs-link-hover-color-rgb: 2, 37, 58 !important;
     --pc-sidebar-active-color: #033D60 !important;
@@ -31,8 +31,8 @@
     --bs-secondary: #49656C !important;
     --bs-secondary-rgb: 73, 101, 108 !important;
 
-    --bs-dark: #201E1E !important;
-    --bs-dark-rgb: 32, 30, 30 !important;
+    --bs-dark: #033D60 !important;
+    --bs-dark-rgb: 3, 61, 96 !important;
 
     --bs-gray-300: #CDD4DC !important;
     --bs-gray-500: #A5A5A5 !important;
@@ -89,16 +89,16 @@ body {
 
 /* Sidebar active navigation styling */
 .pc-sidebar {
-    background: #201E1E !important;
+    background: #033D60 !important;
 }
 
 .pc-sidebar .pc-navbar>.pc-item.active>.pc-link {
-    background: #033D60 !important;
+    background: #02253a !important;
     color: #ffffff !important;
 }
 
 .pc-sidebar .pc-navbar>.pc-item>.pc-link:hover {
-    background: rgba(255, 255, 255, 0.05) !important;
+    background: rgba(3, 61, 96, 0.05) !important;
     color: #ffffff !important;
 }
 
@@ -217,7 +217,7 @@ body {
 .choices__list--dropdown {
     border-radius: 6px !important;
     border-color: #dee2e6 !important;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.08) !important;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08) !important;
     z-index: 1050 !important;
 }
 
