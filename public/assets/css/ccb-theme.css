@@ -204,7 +204,7 @@ body {
 .card,
 .card.bg-primary,
 .card.card-border-primary {
-    border-top: 4px solid #49656C !important;
+    border-top: 4px solid #98CDBD !important;
 }
 
 .card-header,
@@ -213,6 +213,7 @@ body {
     background-color: #033D60 !important;
     background: #033D60 !important;
     border-bottom: 1px solid rgba(255, 255, 255, 0.1) !important;
+
 }
 
 .card-header h1,
