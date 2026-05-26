@@ -288,12 +288,6 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     
     <script>
-        layout_change('light');
-        layout_sidebar_change('dark');
-        layout_header_change('dark');
-        change_box_container('false');
-        preset_change("preset-10");
-
         // Inicialização global do Choices.js para selects de formulários
         document.addEventListener('DOMContentLoaded', function () {
             document.querySelectorAll('select.form-select').forEach(function (select) {
@@ -304,6 +298,7 @@
 
                 // Inicializa o Choices
                 const choices = new Choices(select, {
+                    allowHTML: true,
                     placeholder: true,
                     shouldSort: false,
                     searchEnabled: true,
@@ -336,6 +331,17 @@
                 }
             });
         });
+
+        // Configurações visuais de tema/layout envelopadas em try-catch
+        try {
+            layout_change('light');
+            layout_sidebar_change('dark');
+            layout_header_change('dark');
+            change_box_container('false');
+            preset_change("preset-10");
+        } catch (error) {
+            console.warn("Erro ao configurar personalização do layout/tema:", error);
+        }
     </script>
     
     @yield('scripts')
