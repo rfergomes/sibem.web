@@ -286,3 +286,9 @@ body {
     background-size: 16px 16px !important;
     padding-right: 50px !important;
 }
+
+.header-user-profile {
+    background-color: #49656C !important;
+    border-color: #49656C !important;
+    color: #ffffff !important;
+}
