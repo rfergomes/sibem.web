@@ -43,7 +43,7 @@
         <div class="navbar-wrapper">
             <div class="m-header">
                 <a href="{{ route('dashboard') }}" class="b-brand text-primary">
-                    <img src="{{ asset('assets/images/logo-white.svg') }}" alt="logo" class="logo-lg" style="max-height: 40px;">
+                    <img src="{{ asset('assets/images/sibem_logo_novo.png') }}" alt="logo" class="logo-lg" style="max-height: 40px;">
                 </a>
             </div>
             
@@ -207,7 +207,7 @@
                     </li>
 
                     <!-- User Profile Dropdown -->
-                    <li class="dropdown pc-h-item header-user-profile">
+                    <li class="dropdown pc-h-item header-userc:\Users\Rodrigo.Lima\Downloads\sibem_logo_novo.png-profile">
                         <a class="pc-head-link dropdown-toggle arrow-none me-0" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="false" aria-expanded="false">
                             <div class="avatar bg-primary text-white rounded-circle d-flex align-items-center justify-content-center" style="width: 38px; height: 38px; font-weight: 600;">
                                 {{ substr(Auth::user()->nome, 0, 2) }}
