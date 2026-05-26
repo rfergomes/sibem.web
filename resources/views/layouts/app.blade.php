@@ -332,20 +332,12 @@
             });
         });
 
-        // Configurações visuais de tema/layout envelopadas em try-catch
-        try {
-            layout_change('light');
-            layout_sidebar_change('dark');
-            layout_header_change('dark');
-            change_box_container('false');
-            preset_change("preset-10");
-        } catch (error) {
-            console.warn("Erro ao configurar personalização do layout/tema:", error);
-        }
+        // Configurações visuais de tema/layout
+        layout_change('light');
+        layout_sidebar_change('dark');
+        layout_header_change('dark');
+        preset_change("preset-10");
     </script>
-    
-    <!-- Dummy para evitar erro de classe ausente no script do tema -->
-    <div class="footer-wrapper d-none"></div>
     
     @yield('scripts')
 </body>
