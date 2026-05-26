@@ -287,8 +287,7 @@ body {
     padding-right: 50px !important;
 }
 
-.header-user-profile {
-    background-color: #49656C !important;
-    border-color: #49656C !important;
+.header-user-profile,
+.header-user-profile i {
     color: #ffffff !important;
 }
