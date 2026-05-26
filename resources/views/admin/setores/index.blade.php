@@ -40,7 +40,7 @@
                         <table class="table table-hover align-middle mb-0">
                             <thead class="table-light">
                                 <tr>
-                                    <th>ID Setor</th>
+                                    <th>ID</th>
                                     <th>Cód. Setor</th>
                                     <th>Descrição</th>
                                     <th>Administração Local</th>
@@ -51,7 +51,7 @@
                             <tbody>
                                 @foreach($setores as $setor)
                                     <tr>
-                                        <td>{{ $setor->setor_id }}</td>
+                                        <td>{{ $setor->id }}</td>
                                         <td><span class="badge bg-light-info text-info fw-bold">{{ $setor->cod_setor }}</span></td>
                                         <td><span class="fw-bold text-dark">{{ $setor->descricao }}</span></td>
                                         <td>{{ $setor->local->nome ?? 'N/A' }}</td>

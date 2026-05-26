@@ -69,7 +69,6 @@ class SetorController extends Controller
         $currentUser = Auth::user();
 
         $validated = $request->validate([
-            'setor_id' => 'required|integer|unique:mysql_sys.setores_v2,setor_id',
             'cod_setor' => 'required|string|max:3',
             'descricao' => 'required|string|max:60',
             'admlc_id' => 'required|integer|exists:mysql_sys.admlcs_v2,admlc_id',
@@ -146,7 +145,6 @@ class SetorController extends Controller
         $currentUser = Auth::user();
 
         $validated = $request->validate([
-            'setor_id' => 'required|integer|unique:mysql_sys.setores_v2,setor_id,' . $setor->id,
             'cod_setor' => 'required|string|max:3',
             'descricao' => 'required|string|max:60',
             'admlc_id' => 'required|integer|exists:mysql_sys.admlcs_v2,admlc_id',

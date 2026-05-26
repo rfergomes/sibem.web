@@ -15,14 +15,6 @@
                     @csrf
 
                     <div class="mb-3">
-                        <label class="form-label fw-bold">ID Setor (Único)</label>
-                        <input type="number" name="setor_id" class="form-control @error('setor_id') is-invalid @enderror" value="{{ old('setor_id') }}" placeholder="Ex: 101" required>
-                        @error('setor_id')
-                            <div class="invalid-feedback">{{ $message }}</div>
-                        @enderror
-                    </div>
-
-                    <div class="mb-3">
                         <label class="form-label fw-bold">Código do Setor (3 dígitos)</label>
                         <input type="text" name="cod_setor" class="form-control @error('cod_setor') is-invalid @enderror" value="{{ old('cod_setor') }}" placeholder="Ex: 001" maxlength="3" required>
                         @error('cod_setor')

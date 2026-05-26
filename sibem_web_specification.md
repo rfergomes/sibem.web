@@ -40,7 +40,7 @@ Stores configuration, metadata, user access, and central registry.
    - `adm_regional` (VARCHAR 200), `uf` (VARCHAR 2)
 
 3. **`setores_v2` (Sectors) $\rightarrow$ `Setor` Model**
-   - `id` (BIGINT UNSIGNED, PK), `setor_id` (BIGINT UNSIGNED, UNIQUE)
+   - `id` (BIGINT UNSIGNED, PK)
    - `cod_setor` (VARCHAR 3), `descricao` (VARCHAR 60), `admlc_id` (BIGINT UNSIGNED)
 
 4. **`igrejas_v2` (Churches/Templo) $\rightarrow$ `Igreja` Model**

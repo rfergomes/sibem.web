@@ -14,8 +14,8 @@
                 <table class="table table-striped align-middle">
                     <tbody>
                         <tr>
-                            <td class="fw-bold text-muted" style="width: 40%;">ID Setor:</td>
-                            <td><span class="fw-bold text-dark">{{ $setor->setor_id }}</span></td>
+                            <td class="fw-bold text-muted" style="width: 40%;">ID:</td>
+                            <td><span class="fw-bold text-dark">{{ $setor->id }}</span></td>
                         </tr>
                         <tr>
                             <td class="fw-bold text-muted">Código:</td>
