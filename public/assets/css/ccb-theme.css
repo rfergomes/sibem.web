@@ -96,13 +96,18 @@ body {
     background: #033D60 !important;
 }
 
-.pc-sidebar .pc-navbar>.pc-item.active>.pc-link {
+.pc-sidebar .pc-navbar .pc-item.active > .pc-link {
     background: #02253a !important;
     color: #ffffff !important;
 }
 
-.pc-sidebar .pc-navbar>.pc-item>.pc-link:hover {
-    background: rgba(3, 61, 96, 0.05) !important;
+.pc-sidebar .pc-navbar .pc-item .pc-link:hover {
+    background: rgba(255, 255, 255, 0.1) !important;
+    color: #ffffff !important;
+}
+
+.pc-sidebar .pc-navbar .pc-item.active > .pc-link:hover {
+    background: #011522 !important;
     color: #ffffff !important;
 }
 
