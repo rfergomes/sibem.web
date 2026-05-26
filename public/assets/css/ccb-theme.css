@@ -204,14 +204,14 @@ body {
 .card,
 .card.bg-primary,
 .card.card-border-primary {
-    border-top: 4px solid #1b6c9e !important;
+    border-top: 4px solid #A5A5A5 !important;
 }
 
 .card-header,
 .card-header.bg-dark,
 .card-header.bg-light {
-    background-color: #033D60 !important;
-    background: #033D60 !important;
+    background-color: #49656C !important;
+    background: #49656C !important;
     border-bottom: 1px solid rgba(255, 255, 255, 0.1) !important;
 }
 
