@@ -175,7 +175,7 @@
         .logo-top {
             max-height: 36px;
             margin-bottom: 24px;
-            filter: brightness(0) saturate(100%) invert(17%) sepia(67%) saturate(600%) hue-rotate(175deg) brightness(85%) contrast(100%);
+            opacity: 0.85;
         }
     </style>
 </head>
@@ -191,7 +191,7 @@
     <div class="error-403-page">
         <div class="error-card">
 
-            <img src="{{ asset('assets/images/logo.svg') }}" alt="SIBEM Web" class="logo-top">
+            <img src="{{ asset('assets/images/logo-dark.svg') }}" alt="SIBEM Web" class="logo-top">
 
             <div class="error-icon-wrapper">
                 <i class="ti ti-lock"></i>
@@ -235,6 +235,7 @@
 
     <script src="{{ asset('assets/js/plugins/popper.min.js') }}"></script>
     <script src="{{ asset('assets/js/plugins/bootstrap.min.js') }}"></script>
+    <script src="{{ asset('assets/js/plugins/feather.min.js') }}"></script>
     <script src="{{ asset('assets/js/pcoded.js') }}"></script>
     <script>
         layout_change('light');
