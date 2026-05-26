@@ -13,15 +13,6 @@ if (file_exists($maintenance = __DIR__.'/../storage/framework/maintenance.php'))
 // Register the Composer autoloader...
 require __DIR__.'/../vendor/autoload.php';
 
-if (isset($_GET['clear_cache'])) {
-    /** @var Application $app */
-    $app = require_once __DIR__.'/../bootstrap/app.php';
-    $kernel = $app->make(\Illuminate\Contracts\Console\Kernel::class);
-    $kernel->call('optimize:clear');
-    echo "Cache cleared successfully!";
-    exit;
-}
-
 // Bootstrap Laravel and handle the request...
 /** @var Application $app */
 $app = require_once __DIR__.'/../bootstrap/app.php';
