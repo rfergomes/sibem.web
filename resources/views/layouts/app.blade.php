@@ -43,7 +43,7 @@
         <div class="navbar-wrapper">
             <div class="m-header">
                 <a href="{{ route('dashboard') }}" class="b-brand text-primary">
-                    <img src="{{ asset('assets/images/sibem_logo.png') }}" alt="logo" class="logo-lg" style="max-height: 40px;">
+                    <img src="{{ asset('assets/images/sibem_logo.png') }}" alt="logo" class="logo-lg" style="max-height: 58px;">
                 </a>
             </div>
             
