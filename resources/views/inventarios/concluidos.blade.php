@@ -96,19 +96,19 @@
                                 <tr>
                                     <th>Inventário Nº</th>
                                     <th>Comum</th>
+                                    <th>SIGA</th>
                                     <th>Status</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 @foreach($inventarios as $inv)
                                     <tr>
-                                        <td>
-                                            <code>{{ $inv->codigo_unico }}</code>
-                                        </td>
+                                        <td><span class="fw-bold">{{ $inv->codigo_unico }}</span></td>
                                          <td>
                                             <span class="fw-bold">{{ $inv->igreja->nome ?? 'Não identificada' }}</span>
                                             <small class="text-muted d-block">{{ $inv->data ? date('d/m/Y H:i', strtotime($inv->data)) : 'N/A' }}@if(isset($inv->igreja->setor)) | Setor: {{ $inv->igreja->setor }} @endif</small>
                                         </td>
+                                        <td>{{ $inv->siga_ok ? '✓' : '✗' }}</td>
                                         <td>
                                             @if($inv->status === 'aberto')
                                                 <span class="badge bg-light-warning text-warning">Aberto</span>
