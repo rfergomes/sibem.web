@@ -69,7 +69,9 @@
                                             <span class="d-block"><span class="badge bg-light-primary text-primary">{{ $local->admlc_id }}</span> / <code>{{ $local->cnpj }}</code></span>
                                         </td>
                                         <td>{{ $local->cidade }} / <span class="badge bg-light-primary text-primary">{{ $local->uf }}</span></td>
-                                        <td>{{ $local->regional->adm_regional ?? 'N/A' }}</td>
+                                        <td>{{ $local->regional->adm_regional ?? 'N/A' }}
+                                            <span class="d-block">{{ $local->cidade }} / <span class="badge bg-light-primary text-primary">{{ $local->uf }}</span>
+                                        </td>
                                         <td>
                                             <span class="badge bg-light-info text-info fw-bold me-1" title="Igrejas">
                                                 {{ $local->igrejas_count }} <i class="ti ti-building-community"></i>
