@@ -401,11 +401,11 @@
                 <div class="modal-body p-5" style="background-color: #f4f7fa;">
                     <div class="d-flex align-items-center justify-content-between mb-4">
                         <div class="d-flex align-items-end">
-                            <img src="{{ asset('assets/images/sibem_logo.png') }}" alt="logo" style="max-height: 50px;">
+                            <img src="{{ asset('assets/images/sibem_logo.png') }}" alt="logo" style="max-height: 70px;">
                             <span class="ms-3 text-muted" style="font-size: 20px; font-weight: 300; line-height: 1;">Versão 4.1</span>
                         </div>
                         <div>
-                            <img src="{{ asset('assets/images/CCB_fundo_escuro.png') }}" alt="CCB" style="max-height: 60px;">
+                            <img src="{{ asset('assets/images/CCB_fundo_escuro.png') }}" alt="CCB" style="max-height: 80px;">
                         </div>
                     </div>
                     
