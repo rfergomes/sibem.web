@@ -41,7 +41,7 @@
                             <thead class="table-light">
                                 <tr>
                                     <th>Cód. Setor</th>
-                                    <th>Descrição</th>
+                                    <th>Setor</th>
                                     <th>Administração Local</th>
                                     <th>Regional</th>
                                     <th>Igrejas</th>
