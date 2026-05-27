@@ -9,6 +9,7 @@ use App\Models\Local;
 use App\Models\Igreja;
 use App\Models\User;
 use App\Models\Inventario;
+use App\Models\Setor;
 use App\Models\TokenV2;
 
 class DashboardController extends Controller
