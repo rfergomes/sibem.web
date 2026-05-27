@@ -14,6 +14,7 @@
                 <form action="{{ route('admin.igrejas.update', $igreja->id) }}" method="POST">
                     @csrf
                     @method('PUT')
+                    <input type="hidden" name="redirect_url" value="{{ $redirectUrl }}">
 
                     <div class="row g-3">
                         <div class="col-md-4">
@@ -156,7 +157,7 @@
                     </div>
 
                     <div class="mt-4 d-flex justify-content-between">
-                        <a href="{{ route('admin.igrejas.index') }}" class="btn btn-light-secondary">
+                        <a href="{{ $redirectUrl ?? route('admin.igrejas.index') }}" class="btn btn-light-secondary">
                             <i class="ti ti-arrow-left me-1"></i> Voltar
                         </a>
                         <button type="submit" class="btn btn-success">

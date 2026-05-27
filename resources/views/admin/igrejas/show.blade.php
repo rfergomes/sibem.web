@@ -91,12 +91,12 @@
                 </table>
 
                 <div class="mt-4 d-flex justify-content-between">
-                    <a href="{{ route('admin.igrejas.index') }}" class="btn btn-light-secondary">
+                    <a href="{{ $redirectUrl ?? route('admin.igrejas.index') }}" class="btn btn-light-secondary">
                         <i class="ti ti-arrow-left me-1"></i> Voltar
                     </a>
 
                     @if(Auth::user()->isAdminSistema() || Auth::user()->isAdminRegional() || Auth::user()->isAdminLocal())
-                        <a href="{{ route('admin.igrejas.edit', $igreja->id) }}" class="btn btn-primary">
+                        <a href="{{ route('admin.igrejas.edit', [$igreja->id, 'redirect_url' => $redirectUrl]) }}" class="btn btn-primary">
                             <i class="ti ti-edit me-1"></i> Editar Templo
                         </a>
                     @endif
