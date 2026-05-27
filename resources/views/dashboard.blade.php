@@ -203,14 +203,14 @@
                 <div class="card-header bg-transparent border-0 d-flex align-items-center justify-content-between pt-4 px-4">
                     <h5 class="mb-0 text-dark"><i class="ti ti-chart-bar me-2 text-primary"></i>Inventários Concluídos por Administração</h5>
                 </div>
-                <div class="card-body px-4 pb-4 d-flex align-items-center justify-content-center" style="min-height: 300px;">
+                <div class="card-body px-4 pb-4 d-block">
                     @if(collect($regLocaisStats)->sum('inventarios_concluidos') == 0)
                         <div class="text-center py-5">
                             <i class="ti ti-chart-bar text-muted" style="font-size: 48px;"></i>
                             <p class="text-muted mt-2">Nenhum inventário concluído no ano de {{ $selectedYear }}.</p>
                         </div>
                     @else
-                        <div class="w-100" style="position: relative; height: 100%; min-height: 280px;">
+                        <div style="position: relative; width: 100%; height: 300px;">
                             <canvas id="regionalChart"></canvas>
                         </div>
                     @endif
