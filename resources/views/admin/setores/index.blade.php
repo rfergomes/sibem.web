@@ -51,7 +51,7 @@
                             <tbody>
                                 @foreach($setores as $setor)
                                     <tr>
-                                        <td><span class="fw-bold badge bg-light-secondary text-dark">{{ $setor->cod_setor }}</span></td>
+                                        <td><span class="fw-bold badge bg-secondary text-white">{{ $setor->cod_setor }}</span></td>
                                         <td><span class="fw-bold text-dark">{{ $setor->descricao }}</span></td>
                                         <td>{{ $setor->local->nome ?? 'N/A' }}</td>
                                         <td>{{ $setor->local->regional->adm_regional ?? 'N/A' }}</td>
