@@ -4,50 +4,14 @@
 
 @section('content')
 <div class="row">
-    <!-- Generate Token Card -->
-    <div class="col-md-4 mb-4">
-        <div class="card">
-            <div class="card-header bg-dark text-white">
-                <h4 class="mb-0 text-white"><i class="ti ti-key me-2"></i>Gerar Novo Token</h4>
-            </div>
-            <div class="card-body">
-                <form action="{{ route('admin.tokens.store') }}" method="POST">
-                    @csrf
-                    
-                    <div class="mb-3">
-                        <label class="form-label fw-bold">Associar ao Usuário</label>
-                        <select name="user_id" class="form-select @error('user_id') is-invalid @enderror" required>
-                            <option value="">Selecione o Usuário...</option>
-                            @foreach($users as $user)
-                                <option value="{{ $user->id }}">{{ $user->name }} ({{ $user->local->nome ?? 'Sem Localidade' }})</option>
-                            @endforeach
-                        </select>
-                        @error('user_id')
-                            <div class="invalid-feedback">{{ $message }}</div>
-                        @enderror
-                    </div>
-
-                    <div class="mb-3">
-                        <label class="form-label fw-bold">Descrição da Máquina / Computador</label>
-                        <input type="text" name="dispositivo" class="form-control @error('dispositivo') is-invalid @enderror" placeholder="Ex: Recepção, Caixa, Notebook Ti" required>
-                        @error('dispositivo')
-                            <div class="invalid-feedback">{{ $message }}</div>
-                        @enderror
-                    </div>
-
-                    <button type="submit" class="btn btn-success w-100">
-                        <i class="ti ti-plus me-1"></i> Gerar Token Ativo
-                    </button>
-                </form>
-            </div>
-        </div>
-    </div>
-
     <!-- Active Tokens List -->
-    <div class="col-md-8">
+    <div class="col-12">
         <div class="card">
             <div class="card-header bg-dark d-flex align-items-center justify-content-between">
                 <h4 class="mb-0 text-white"><i class="ti ti-list me-2"></i>Tokens Desktop Ativos</h4>
+                <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#gerarTokenModal">
+                    <i class="ti ti-plus me-1"></i> Gerar Novo Token
+                </button>
             </div>
             
             <div class="card-body">
@@ -80,7 +44,7 @@
                                     <th>Máquina / Dispositivo</th>
                                     <th>Token</th>
                                     <th>Gerado em</th>
-                                    <th class="text-end">Ações</th>
+                                    <th class="text-end" style="min-width: 280px;">Ações</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -101,6 +65,31 @@
                                             <small>{{ $token->created_at ? $token->created_at->format('d/m/Y H:i') : 'N/A' }}</small>
                                         </td>
                                         <td class="text-end">
+                                            @if($token->user && $token->user->email)
+                                                <form action="{{ route('admin.tokens.send-email', $token->id) }}" method="POST" class="d-inline-block">
+                                                    @csrf
+                                                    <button type="submit" class="btn btn-sm btn-light-primary" title="Enviar por E-mail">
+                                                        <i class="ti ti-mail me-1"></i> E-mail
+                                                    </button>
+                                                </form>
+                                            @endif
+
+                                            @if($token->user && $token->user->telefone)
+                                                @php
+                                                    $telefoneLimpo = preg_replace('/\D/', '', $token->user->telefone);
+                                                    if (strlen($telefoneLimpo) > 0 && !str_starts_with($telefoneLimpo, '55') && strlen($telefoneLimpo) <= 11) {
+                                                        $telefoneLimpo = '55' . $telefoneLimpo;
+                                                    }
+                                                    $msg = "A Paz de Deus!\nSegue token para acesso ao sistema de inventários SIBEM CCB\n\n" . $token->token;
+                                                    $msgUrl = rawurlencode($msg);
+                                                @endphp
+                                                @if(strlen($telefoneLimpo) > 0)
+                                                    <a href="https://wa.me/{{ $telefoneLimpo }}?text={{ $msgUrl }}" target="_blank" class="btn btn-sm btn-light-success" title="Enviar por WhatsApp">
+                                                        <i class="fab fa-whatsapp me-1"></i> WhatsApp
+                                                    </a>
+                                                @endif
+                                            @endif
+
                                             <form action="{{ route('admin.tokens.destroy', $token->id) }}" method="POST" class="d-inline-block revoke-token-form">
                                                 @csrf
                                                 @method('DELETE')
@@ -120,6 +109,64 @@
                     </div>
                 @endif
             </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Gerar Novo Token -->
+<div class="modal fade" id="gerarTokenModal" tabindex="-1" aria-labelledby="gerarTokenModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header bg-dark text-white">
+                <h5 class="modal-title text-white" id="gerarTokenModalLabel"><i class="ti ti-key me-2"></i>Gerar Novo Token</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form action="{{ route('admin.tokens.store') }}" method="POST">
+                @csrf
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Associar ao Usuário</label>
+                        <select name="user_id" class="form-select no-choices @error('user_id') is-invalid @enderror" required>
+                            <option value="">Selecione o Usuário...</option>
+                            @foreach($users as $user)
+                                <option value="{{ $user->id }}" {{ old('user_id') == $user->id ? 'selected' : '' }}>
+                                    {{ $user->name }} ({{ $user->local->nome ?? 'Sem Localidade' }})
+                                </option>
+                            @endforeach
+                        </select>
+                        @error('user_id')
+                            <div class="invalid-feedback d-block">{{ $message }}</div>
+                        @enderror
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Administração</label>
+                        <select name="admlc_id" class="form-select no-choices @error('admlc_id') is-invalid @enderror" required>
+                            <option value="">Selecione a Administração...</option>
+                            @foreach($locais as $local)
+                                <option value="{{ $local->admlc_id }}" {{ old('admlc_id') == $local->admlc_id ? 'selected' : '' }}>
+                                    {{ $local->nome }}
+                                </option>
+                            @endforeach
+                        </select>
+                        @error('admlc_id')
+                            <div class="invalid-feedback d-block">{{ $message }}</div>
+                        @enderror
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Descrição da Máquina / Computador</label>
+                        <input type="text" name="dispositivo" class="form-control @error('dispositivo') is-invalid @enderror" placeholder="Ex: Recepção, Caixa, Notebook Ti" value="{{ old('dispositivo') }}" required>
+                        @error('dispositivo')
+                            <div class="invalid-feedback d-block">{{ $message }}</div>
+                        @enderror
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+                    <button type="submit" class="btn btn-success">Gerar Token Ativo</button>
+                </div>
+            </form>
         </div>
     </div>
 </div>
@@ -146,5 +193,13 @@
             });
         });
     });
+
+    // Auto-open modal on validation errors
+    @if($errors->has('user_id') || $errors->has('admlc_id') || $errors->has('dispositivo'))
+    document.addEventListener('DOMContentLoaded', function () {
+        var myModal = new bootstrap.Modal(document.getElementById('gerarTokenModal'));
+        myModal.show();
+    });
+    @endif
 </script>
 @endsection

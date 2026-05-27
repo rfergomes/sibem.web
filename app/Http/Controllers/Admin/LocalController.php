@@ -33,7 +33,7 @@ class LocalController extends Controller
             return redirect()->route('admin.locais.show', $currentUser->admlc_id);
         }
 
-        $query = Local::with('regional')->orderBy('adm_local');
+        $query = Local::with('regional')->withCount(['igrejas', 'setores'])->orderBy('adm_local');
 
         if ($currentUser->isAdminRegional()) {
             $query->where('admrg_id', $currentUser->regional_id);

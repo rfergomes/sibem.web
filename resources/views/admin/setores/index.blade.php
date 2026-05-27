@@ -45,6 +45,7 @@
                                     <th>Descrição</th>
                                     <th>Administração Local</th>
                                     <th>Regional</th>
+                                    <th>Igrejas Vinculadas</th>
                                     <th class="text-end" style="min-width: 150px;">Ações</th>
                                 </tr>
                             </thead>
@@ -56,6 +57,9 @@
                                         <td><span class="fw-bold text-dark">{{ $setor->descricao }}</span></td>
                                         <td>{{ $setor->local->nome ?? 'N/A' }}</td>
                                         <td>{{ $setor->local->regional->adm_regional ?? 'N/A' }}</td>
+                                        <td>
+                                            <span class="badge bg-light-info text-info fw-bold">{{ $setor->igrejas_count }}</span>
+                                        </td>
                                         <td class="text-end">
                                             <div class="d-flex justify-content-end gap-1">
                                                 <a href="{{ route('admin.setores.show', $setor->id) }}" class="btn btn-sm btn-icon btn-light-info" title="Ver Detalhes">

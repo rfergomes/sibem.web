@@ -29,14 +29,19 @@ class InventarioController extends Controller
 
         if ($local) {
             try {
-                $anos = Inventario::selectRaw('YEAR(data) as ano')
+                $anos = \Illuminate\Support\Facades\DB::connection('tenant')
+                    ->table('inventarios_v2')
+                    ->selectRaw('YEAR(data) as ano')
                     ->distinct()
                     ->whereNotNull('data')
                     ->orderBy('ano', 'desc')
                     ->pluck('ano');
                 
-                $setores = Igreja::where('admlc_id', $activeLocalId)
+                $setores = \Illuminate\Support\Facades\DB::connection('mysql_sys')
+                    ->table('igrejas_v2')
+                    ->where('admlc_id', $activeLocalId)
                     ->whereNotNull('cod_setor')
+                    ->where('cod_setor', '<>', '')
                     ->select('cod_setor as setor')
                     ->distinct()
                     ->orderBy('cod_setor')
@@ -71,12 +76,13 @@ class InventarioController extends Controller
                 // Chart Data (consolidated monthly completed inventories for selected/default year)
                 $selectedYear = $request->input('ano', $anos->first() ?? date('Y'));
                 
-                $chartDataRaw = Inventario::selectRaw('MONTH(data) as mes, COUNT(*) as total')
+                $chartDataRaw = \Illuminate\Support\Facades\DB::connection('tenant')
+                    ->table('inventarios_v2')
+                    ->selectRaw('MONTH(data) as mes, COUNT(*) as total')
                     ->whereRaw('YEAR(data) = ?', [$selectedYear])
                     ->whereIn('situacao', ['Finalizado', 'Concluído', 'Auditado'])
                     ->groupByRaw('MONTH(data)')
                     ->orderByRaw('MONTH(data)')
-                    ->get()
                     ->pluck('total', 'mes')
                     ->toArray();
 

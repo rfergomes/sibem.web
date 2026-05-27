@@ -96,11 +96,20 @@
                 <form action="{{ route('admin.usuarios.tokens.gerar', $usuario->id) }}" method="POST">
                     @csrf
                     <div class="row g-3 align-items-end">
-                        <div class="col-md-8">
+                        <div class="col-md-5">
                             <label class="form-label fw-bold">Descrição da Máquina / Computador</label>
-                            <input type="text" name="dispositivo" class="form-control" placeholder="Ex: Recepção, Notebook Rodrigo, PC Comum, etc." required>
+                            <input type="text" name="dispositivo" class="form-control" placeholder="Ex: Recepção, Notebook Rodrigo, etc." required>
                         </div>
                         <div class="col-md-4">
+                            <label class="form-label fw-bold">Administração</label>
+                            <select name="admlc_id" class="form-select" required>
+                                <option value="">Selecione...</option>
+                                @foreach($locais as $local)
+                                    <option value="{{ $local->admlc_id }}">{{ $local->nome }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="col-md-3">
                             <button type="submit" class="btn btn-success w-100 d-flex align-items-center justify-content-center">
                                 <i class="ti ti-plus me-1"></i> Gerar Token
                             </button>
@@ -126,10 +135,11 @@
                             <thead class="table-light">
                                 <tr>
                                     <th>Máquina / Dispositivo</th>
+                                    <th>Administração</th>
                                     <th>Token</th>
                                     <th>Status</th>
                                     <th>Gerado em</th>
-                                    <th class="text-end">Ações</th>
+                                    <th class="text-end" style="min-width: 280px;">Ações</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -137,6 +147,9 @@
                                     <tr>
                                         <td>
                                             <span class="fw-bold">{{ $token->dispositivo }}</span>
+                                        </td>
+                                        <td>
+                                            {{ $token->local->nome ?? 'Sem Localidade' }}
                                         </td>
                                         <td>
                                             <code>{{ $token->token }}</code>
@@ -147,7 +160,32 @@
                                         <td>
                                             <small>{{ $token->created_at ? $token->created_at->format('d/m/Y H:i') : 'N/A' }}</small>
                                         </td>
-                                        <td class="text-end">
+                                        <td class="text-end" style="min-width: 280px;">
+                                            @if($usuario->email)
+                                                <form action="{{ route('admin.tokens.send-email', $token->id) }}" method="POST" class="d-inline-block">
+                                                    @csrf
+                                                    <button type="submit" class="btn btn-sm btn-light-primary" title="Enviar por E-mail">
+                                                        <i class="ti ti-mail me-1"></i> E-mail
+                                                    </button>
+                                                </form>
+                                            @endif
+
+                                            @if($usuario->telefone)
+                                                @php
+                                                    $telefoneLimpo = preg_replace('/\D/', '', $usuario->telefone);
+                                                    if (strlen($telefoneLimpo) > 0 && !str_starts_with($telefoneLimpo, '55') && strlen($telefoneLimpo) <= 11) {
+                                                        $telefoneLimpo = '55' . $telefoneLimpo;
+                                                    }
+                                                    $msg = "A Paz de Deus!\nSegue token para acesso ao sistema de inventários SIBEM CCB\n\n" . $token->token;
+                                                    $msgUrl = rawurlencode($msg);
+                                                @endphp
+                                                @if(strlen($telefoneLimpo) > 0)
+                                                    <a href="https://wa.me/{{ $telefoneLimpo }}?text={{ $msgUrl }}" target="_blank" class="btn btn-sm btn-light-success" title="Enviar por WhatsApp">
+                                                        <i class="fab fa-whatsapp me-1"></i> WhatsApp
+                                                    </a>
+                                                @endif
+                                            @endif
+
                                             <form action="{{ route('admin.tokens.destroy', $token->id) }}" method="POST" class="d-inline-block revoke-token-form">
                                                 @csrf
                                                 @method('DELETE')

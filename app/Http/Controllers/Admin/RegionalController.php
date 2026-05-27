@@ -21,7 +21,7 @@ class RegionalController extends Controller
     {
         $this->checkAccess();
         $search = $request->input('search');
-        $query = Regional::orderBy('adm_regional');
+        $query = Regional::withCount('locais')->orderBy('adm_regional');
 
         if ($search) {
             $query->where('adm_regional', 'like', "%{$search}%")

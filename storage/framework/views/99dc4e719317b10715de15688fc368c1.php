@@ -1,108 +1,126 @@
 <!DOCTYPE html>
-<html lang="<?php echo e(str_replace('_', '-', app()->getLocale())); ?>" class="h-full bg-gray-50">
-
+<html lang="pt-br">
+<!-- [Head] start -->
 <head>
+    <title>Login | SIBEM Web</title>
+    <!-- [Meta] -->
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Login - SIBEM CCB</title>
-    <?php echo app('Illuminate\Foundation\Vite')(['resources/css/app.css', 'resources/js/app.js']); ?>
+    <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=0,minimal-ui">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="description" content="SIBEM Web - Login">
+    
+    <!-- [Favicon] icon -->
+    <link rel="icon" href="<?php echo e(asset('assets/images/favicon.svg')); ?>" type="image/x-icon">
+    <!-- [Google Font] -->
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Icons -->
+    <link rel="stylesheet" href="<?php echo e(asset('assets/fonts/tabler-icons.min.css')); ?>">
+    <link rel="stylesheet" href="<?php echo e(asset('assets/fonts/feather.css')); ?>">
+    <link rel="stylesheet" href="<?php echo e(asset('assets/fonts/fontawesome.css')); ?>">
+    <link rel="stylesheet" href="<?php echo e(asset('assets/fonts/material.css')); ?>">
+    <!-- Template CSS Files -->
+    <link rel="stylesheet" href="<?php echo e(asset('assets/css/style.css')); ?>" id="main-style-link">
+    <link rel="stylesheet" href="<?php echo e(asset('assets/css/style-preset.css')); ?>">
+    <link rel="stylesheet" href="<?php echo e(asset('assets/css/ccb-theme.css')); ?>?v=<?php echo e(time()); ?>">
 </head>
+<!-- [Head] end -->
 
-<body class="h-full font-sans antialiased text-gray-900 bg-gray-100 flex items-center justify-center">
-
-    <div class="w-full max-w-md bg-white rounded-2xl shadow-xl overflow-hidden animate-scaleIn m-4">
-        <div class="bg-[#111827] px-8 py-10 text-center relative overflow-hidden">
-            <div class="absolute inset-0 bg-gradient-to-br from-blue-900/30 to-transparent"></div>
-            <div class="relative z-10 flex flex-col items-center">
-                <img src="<?php echo e(asset('img/SIBEM_Logo_Cinza_Claro.png')); ?>" alt="SIBEM Logo"
-                    class="h-25 object-contain mb-2">
-            </div>
+<!-- [Body] Start -->
+<body data-pc-preset="preset-10" data-pc-sidebar-theme="dark" data-pc-sidebar-caption="true" data-pc-direction="ltr" data-pc-theme="light">
+    <!-- [ Pre-loader ] start -->
+    <div class="loader-bg">
+        <div class="pc-loader">
+            <div class="loader-fill"></div>
         </div>
+    </div>
+    <!-- [ Pre-loader ] End -->
 
-        <div class="p-8">
-            <h3 class="text-lg font-bold text-gray-800 text-center mb-6">Acesso ao Sistema</h3>
+    <div class="auth-main v2">
+        <div class="bg-overlay bg-dark"></div>
+        <div class="auth-wrapper">
+            <div class="auth-sidecontent">
+                <div class="text-start px-3 px-md-5">
+                    <a href="/" class="d-block mt-5">
+                        <img src="<?php echo e(asset('assets/images/logo-white.svg')); ?>" alt="logo" class="img-fluid" style="max-height: 50px;">
+                    </a>
+                    <p class="text-white mt-2 mt-md-4">SIBEM CCB - Sistema para Inventário de Bens Móveis. Gerenciamento unificado e controle de acesso integrado.</p>
+                </div>
+            </div>
 
-            <?php if($errors->any()): ?>
-                <div
-                    class="bg-red-50 text-red-600 p-4 rounded-lg text-sm mb-6 border border-red-100 flex items-start gap-3">
-                    <svg class="w-5 h-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
-                    </svg>
-                    <div>
-                        <span class="font-bold block">Erro no Login</span>
-                        <?php echo e($errors->first()); ?>
+            <div class="auth-form">
+                <div class="card my-5 mx-3">
+                    <div class="card-header bg-dark">
+                        <h4 class="text-center text-white mb-0 f-w-500">Acesse o Sistema</h4>
+                    </div>
+                    <div class="card-body">
+                        <form action="<?php echo e(route('login')); ?>" method="POST">
+                            <?php echo csrf_field(); ?>
 
+                            <!-- Error Alert -->
+                            <?php if($errors->any()): ?>
+                                <div class="alert alert-danger">
+                                    <ul class="mb-0">
+                                        <?php $__currentLoopData = $errors->all(); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $error): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                            <li><?php echo e($error); ?></li>
+                                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                                    </ul>
+                                </div>
+                            <?php endif; ?>
+
+                            <?php if(session('success')): ?>
+                                <div class="alert alert-success">
+                                    <?php echo e(session('success')); ?>
+
+                                </div>
+                            <?php endif; ?>
+
+                            <div class="form-group mb-3">
+                                <label class="form-label" for="email">E-mail</label>
+                                <input type="email" name="email" class="form-control" id="email" placeholder="nome@exemplo.com" value="<?php echo e(old('email')); ?>" required autofocus>
+                            </div>
+                            
+                            <div class="form-group mb-3">
+                                <label class="form-label" for="password">Senha</label>
+                                <input type="password" name="password" class="form-control" id="password" placeholder="Senha" required>
+                            </div>
+
+                            <div class="d-flex mt-1 justify-content-between align-items-center">
+                                <div class="form-check">
+                                    <input class="form-check-input input-primary" type="checkbox" id="customCheckc1" name="remember" checked>
+                                    <label class="form-check-label text-muted" for="customCheckc1">Lembrar-me</label>
+                                </div>
+                                <a href="<?php echo e(route('password.request')); ?>" class="text-muted">Esqueceu a senha?</a>
+                            </div>
+
+                            <div class="d-grid mt-4">
+                                <button type="submit" class="btn btn-primary">Entrar</button>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="card-footer border-top text-center">
+                        <p class="mb-0 text-muted">© <?php echo e(date('Y')); ?> SIBEM CCB. Todos os direitos reservados.</p>
                     </div>
                 </div>
-            <?php endif; ?>
-
-            <form method="POST" action="<?php echo e(route('login.post')); ?>" class="space-y-5">
-                <?php echo csrf_field(); ?>
-
-                <div>
-                    <label for="email" class="block text-xs font-bold text-gray-500 uppercase mb-2">E-mail ou
-                        Usuário</label>
-                    <input type="email" name="email" id="email" required autofocus
-                        class="w-full bg-gray-50 border border-gray-200 rounded-xl focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 text-sm px-4 py-3 font-medium transition-all duration-300 placeholder-gray-400"
-                        placeholder="seu.email@sibem.ccb.org.br">
-                </div>
-
-                <div>
-                    <div class="flex items-center justify-between mb-1">
-                        <label class="block text-xs font-bold text-gray-500 uppercase mb-2">Senha</label>
-                        <a href="<?php echo e(route('password.request')); ?>"
-                            class="text-xs font-bold text-blue-600 hover:text-blue-800">Esqueceu sua senha?</a>
-                    </div>
-                    <input type="password" name="password" required
-                        class="w-full bg-gray-50 border border-gray-200 rounded-xl focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 text-sm px-4 py-3 font-medium transition-all duration-300 placeholder-gray-400"
-                        placeholder="••••••••">
-                </div>
-
-                <div class="flex items-center justify-between">
-                    <label class="flex items-center gap-2 cursor-pointer">
-                        <input type="checkbox" name="remember"
-                            class="rounded border-gray-300 text-blue-600 focus:ring-blue-500/20">
-                        <span class="text-xs font-medium text-gray-600">Lembrar-me</span>
-                    </label>
-                </div>
-
-                <button type="submit"
-                    class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 rounded-lg shadow-lg shadow-blue-500/30 transition-all active:scale-[0.98]">
-                    ENTRAR
-                </button>
-            </form>
-
-            <div class="mt-8 pt-6 border-t border-gray-100 text-center">
-                <p class="text-xs text-gray-400">Não possui acesso? <a href="<?php echo e(route('access-request.create')); ?>"
-                        class="text-blue-600 font-bold hover:underline">Solicitar cadastro</a></p>
             </div>
-        </div>
-
-        <div class="bg-gray-50 p-4 border-t border-gray-100 text-center">
-            <p class="text-[10px] text-gray-400 font-medium">© <?php echo e(date('Y')); ?> SIBEM CCB. Todos os direitos reservados.
-            </p>
         </div>
     </div>
 
-    <style>
-        @keyframes scaleIn {
-            from {
-                transform: scale(0.95);
-                opacity: 0;
-            }
-
-            to {
-                transform: scale(1);
-                opacity: 1;
-            }
-        }
-
-        .animate-scaleIn {
-            animation: scaleIn 0.3s ease-out;
-        }
-    </style>
+    <!-- Required Js -->
+    <script src="<?php echo e(asset('assets/js/plugins/popper.min.js')); ?>"></script>
+    <script src="<?php echo e(asset('assets/js/plugins/simplebar.min.js')); ?>"></script>
+    <script src="<?php echo e(asset('assets/js/plugins/bootstrap.min.js')); ?>"></script>
+    <script src="<?php echo e(asset('assets/js/fonts/custom-font.js')); ?>"></script>
+    <script src="<?php echo e(asset('assets/js/pcoded.js')); ?>"></script>
+    <script src="<?php echo e(asset('assets/js/plugins/feather.min.js')); ?>"></script>
+    <script>
+        layout_change('light');
+        layout_sidebar_change('dark');
+        layout_header_change('dark');
+        change_box_container('false');
+        layout_caption_change('true');
+        layout_rtl_change('false');
+        preset_change("preset-1");
+    </script>
 </body>
-
 </html>
 <?php /**PATH D:\xampp\htdocs\sibem.web\resources\views/auth/login.blade.php ENDPATH**/ ?>

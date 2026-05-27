@@ -23,7 +23,7 @@ class TipoImovelController extends Controller
     {
         $this->checkAccess('view');
         $search = $request->input('search');
-        $query = TipoImovel::orderBy('nome');
+        $query = TipoImovel::withCount('igrejas')->orderBy('nome');
 
         if ($search) {
             $query->where('nome', 'like', "%{$search}%");

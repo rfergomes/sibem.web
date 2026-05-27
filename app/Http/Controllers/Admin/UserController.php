@@ -143,9 +143,10 @@ class UserController extends Controller
         }
 
         // Fetch tokens for this user
-        $tokens = TokenV2::where('user_id', $usuario->id)->orderBy('created_at', 'desc')->get();
+        $tokens = TokenV2::with('local')->where('user_id', $usuario->id)->orderBy('created_at', 'desc')->get();
+        $locais = $currentUser->getAvailableLocais();
 
-        return view('admin.usuarios.show', compact('usuario', 'tokens'));
+        return view('admin.usuarios.show', compact('usuario', 'tokens', 'locais'));
     }
 
     public function edit($id)
@@ -296,14 +297,29 @@ class UserController extends Controller
 
         $validated = $request->validate([
             'dispositivo' => 'required|string|max:60',
+            'admlc_id' => 'required|integer|exists:mysql_sys.admlcs_v2,admlc_id',
         ]);
+
+        // Scope check for selected admlc_id
+        if (!$currentUser->isAdminSistema()) {
+            if ($currentUser->isAdminRegional()) {
+                $selectedLocal = Local::where('admlc_id', $validated['admlc_id'])->first();
+                if (!$selectedLocal || $selectedLocal->admrg_id != $currentUser->regional_id) {
+                    return back()->withInput()->with('error', 'A administração selecionada não pertence à sua regional.');
+                }
+            } else { // admin_local
+                if ($validated['admlc_id'] != $currentUser->admlc_id) {
+                    return back()->withInput()->with('error', 'Você só pode gerar tokens para a sua própria administração.');
+                }
+            }
+        }
 
         $tokenStr = Str::random(40);
 
         TokenV2::create([
             'token' => $tokenStr,
             'dispositivo' => $validated['dispositivo'],
-            'admlc_id' => $usuario->admlc_id,
+            'admlc_id' => $validated['admlc_id'],
             'user_id' => $usuario->id,
             'ativo' => 1 // Manually generated tokens are pre-approved
         ]);

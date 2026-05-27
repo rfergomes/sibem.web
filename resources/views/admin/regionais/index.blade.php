@@ -41,6 +41,7 @@
                                     <th>ID Regional</th>
                                     <th>Administração Regional</th>
                                     <th>UF</th>
+                                    <th>Locais Vinculados</th>
                                     <th>Cadastrada em</th>
                                     <th class="text-end" style="min-width: 150px;">Ações</th>
                                 </tr>
@@ -55,6 +56,9 @@
                                             <span class="fw-bold text-dark">{{ $reg->adm_regional }}</span>
                                         </td>
                                         <td><span class="badge bg-light-primary text-primary">{{ $reg->uf }}</span></td>
+                                        <td>
+                                            <span class="badge bg-light-info text-info fw-bold">{{ $reg->locais_count }}</span>
+                                        </td>
                                         <td><small>{{ $reg->created_at ? $reg->created_at->format('d/m/Y H:i') : 'N/A' }}</small></td>
                                         <td class="text-end">
                                             <div class="d-flex justify-content-end gap-1">

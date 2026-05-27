@@ -38,4 +38,10 @@ class Setor extends Model
     {
         return $this->belongsTo(Local::class, 'admlc_id', 'admlc_id');
     }
+
+    public function igrejas()
+    {
+        return $this->hasMany(Igreja::class, 'cod_setor', 'cod_setor')
+            ->whereColumn('igrejas_v2.admlc_id', '=', 'setores_v2.admlc_id');
+    }
 }

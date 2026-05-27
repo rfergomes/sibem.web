@@ -74,6 +74,7 @@ Route::middleware(['auth', 'tenant'])->group(function () {
         Route::resource('usuarios', UserController::class)->names('usuarios');
         Route::post('usuarios/{usuario}/tokens/gerar', [UserController::class, 'generateToken'])->name('usuarios.tokens.gerar');
         
+        Route::post('tokens/{token}/enviar-email', [TokenController::class, 'sendEmail'])->name('tokens.send-email');
         Route::resource('tokens', TokenController::class)->names('tokens');
         Route::resource('regionais', RegionalController::class)->names('regionais');
         Route::resource('locais', LocalController::class)->names('locais');

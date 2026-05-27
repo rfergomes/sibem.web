@@ -95,7 +95,7 @@
                             <thead class="table-light">
                                 <tr>
                                     <th>Comum</th>
-                                    <th>Ref.</th>
+                                    <th>Data</th>
                                     <th>Código Único</th>
                                     <th>Status</th>
                                 </tr>
@@ -108,7 +108,7 @@
                                             <small class="text-muted d-block">{{ $inv->id_igreja }} @if(isset($inv->igreja->setor)) | Setor: {{ $inv->igreja->setor }} @endif</small>
                                         </td>
                                         <td>
-                                            {{ sprintf('%02d/%d', $inv->mes, $inv->ano) }}
+                                            {{ $inv->data ? date('d/m/Y H:i', strtotime($inv->data)) : 'N/A' }}
                                         </td>
                                         <td>
                                             <code>{{ $inv->codigo_unico }}</code>

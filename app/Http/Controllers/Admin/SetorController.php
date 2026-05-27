@@ -23,7 +23,7 @@ class SetorController extends Controller
     private function getScopedQuery()
     {
         $user = Auth::user();
-        $query = Setor::with('local.regional')->orderBy('cod_setor');
+        $query = Setor::with('local.regional')->withCount('igrejas')->orderBy('cod_setor');
 
         if ($user->isAdminSistema()) {
             return $query;

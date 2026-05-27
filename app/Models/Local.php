@@ -48,4 +48,14 @@ class Local extends Model
     {
         return $this->belongsTo(Regional::class, 'admrg_id', 'admrg_id');
     }
+
+    public function igrejas()
+    {
+        return $this->hasMany(Igreja::class, 'admlc_id', 'admlc_id');
+    }
+
+    public function setores()
+    {
+        return $this->hasMany(Setor::class, 'admlc_id', 'admlc_id');
+    }
 }

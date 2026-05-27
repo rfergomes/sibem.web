@@ -46,6 +46,7 @@
                                     <th>CNPJ</th>
                                     <th>Cidade / UF</th>
                                     <th>Regional</th>
+                                    <th>Igrejas / Setores</th>
                                     <th class="text-end" style="min-width: 150px;">Ações</th>
                                 </tr>
                             </thead>
@@ -60,6 +61,14 @@
                                         <td><code>{{ $local->cnpj }}</code></td>
                                         <td>{{ $local->cidade }} / <span class="badge bg-light-primary text-primary">{{ $local->uf }}</span></td>
                                         <td>{{ $local->regional->adm_regional ?? 'N/A' }}</td>
+                                        <td>
+                                            <span class="badge bg-light-info text-info fw-bold me-1" title="Igrejas">
+                                                {{ $local->igrejas_count }} <i class="ti ti-building-community"></i>
+                                            </span>
+                                            <span class="badge bg-light-secondary text-secondary fw-bold" title="Setores">
+                                                {{ $local->setores_count }} <i class="ti ti-chart-bar"></i>
+                                            </span>
+                                        </td>
                                         <td class="text-end">
                                             <div class="d-flex justify-content-end gap-1">
                                                 <a href="{{ route('admin.locais.show', $local->admlc_id) }}" class="btn btn-sm btn-icon btn-light-info" title="Ver Detalhes">

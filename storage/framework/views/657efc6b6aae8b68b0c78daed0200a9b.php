@@ -64,6 +64,32 @@
             background: transparent;
             color: var(--accent-color);
         }
+
+        /* Success Message Styling */
+        .php-email-form .sent-message {
+            display: none;
+            color: #fff;
+            background: #18d26e;
+            text-align: center;
+            padding: 20px;
+            font-weight: 500;
+            border-radius: 8px;
+            margin-bottom: 24px;
+            box-shadow: 0 4px 15px rgba(24, 210, 110, 0.2);
+            animation: fadeIn 0.5s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
     </style>
 </head>
 
@@ -107,11 +133,12 @@
                 <div class="row justify-content-center" data-aos="zoom-out">
                     <div class="col-xl-7 col-lg-9 text-center">
                         <h1>Sistema para Inventário de Bens Móveis</h1>
-                        <p>Uso exclusivo da Congregação Cristã no Brasil</p>
+                        <h4><span class="fw-bold muted">Ativo Imobilizado</span></h4>
+                        <p>Uso exclusivo da Congregação Cristã no Brasil&copy;</p>
                     </div>
                 </div>
                 <div class="text-center" data-aos="zoom-out" data-aos-delay="100">
-                    <a href="<?php echo e(asset('app/setup.exe')); ?>" class="btn-get-started">Download V4.0.0.23</a>
+                    <a href="<?php echo e(asset('app/setup.exe')); ?>" class="btn-get-started">Download V4.0.0.28</a>
                 </div>
 
                 <div class="row gy-4 mt-5">
@@ -307,9 +334,8 @@
                 <p>Uma vez instalado, o sistema busca por atualizações automaticamente</p>
             </div><!-- End Section Title -->
             <div class="container" data-aos="fade-up" data-aos-delay="100">
-                <iframe id="tabelaVersao" src="<?php echo e(asset('app/home.html')); ?>" width="100%" height="600"
-                    frameborder="0" title="Tabela de versões"
-                    style="border:none; overflow:hidden;">
+                <iframe id="tabelaVersao" src="<?php echo e(asset('app/home.html')); ?>" width="100%" height="600" frameborder="0"
+                    title="Tabela de versões" style="border:none; overflow:hidden;">
                     <p>Não foi possível carregar o conteúdo. Acesse diretamente
                         <a href="<?php echo e(asset('app/home.html')); ?>" target="_blank" rel="noopener">app/home.html</a>.
                     </p>
@@ -474,7 +500,11 @@
                                 <div class="col-md-12 text-center">
                                     <div class="loading">Enviando...</div>
                                     <div class="error-message"></div>
-                                    <div class="sent-message">Sua mensagem foi enviada com sucesso! Deus abençoe.</div>
+                                    <div class="sent-message">
+                                        <i class="bi bi-check-circle-fill me-2"></i>
+                                        Sua mensagem foi enviada com sucesso! Recebemos seu contato e em breve nossa
+                                        equipe retornará no seu e-mail. Deus abençoe.
+                                    </div>
 
                                     <button type="submit">Enviar Mensagem</button>
                                 </div>
@@ -524,10 +554,6 @@
             <div class="container copyright text-center mt-4">
                 <p>© <span>Copyright</span> <strong class="px-1 sitename">SIBEM v4</strong> <span>Todos os direitos
                         reservados</span></p>
-                <div class="credits">
-                    Designed by <a href="https://bootstrapmade.com/">BootstrapMade</a> Distributed by <a
-                        href="https://themewagon.com">ThemeWagon</a>
-                </div>
             </div>
 
     </footer>
@@ -554,5 +580,4 @@
 
 </body>
 
-</html>
-<?php /**PATH D:\xampp\htdocs\sibem.web\resources\views/landing.blade.php ENDPATH**/ ?>
+</html><?php /**PATH D:\xampp\htdocs\sibem.web\resources\views/landing.blade.php ENDPATH**/ ?>
