@@ -6,7 +6,7 @@
 <div class="row">
     <!-- Header Page Info -->
     <div class="col-12 mb-4">
-        <p class="text-muted">Análise e listagem dos inventários fechados e consolidados na Administração: <span class="fw-bold text-success">{{ $local->nome ?? 'Nenhuma' }}</span></p>
+        <p class="text-muted">Análise e listagem dos inventários fechados e consolidados na Administração: <span class="fw-bold">{{ $local->nome ?? 'Nenhuma' }}</span></p>
     </div>
 
     <!-- Filters Column -->
