@@ -20,7 +20,12 @@
                         </tr>
                         <tr>
                             <td class="fw-bold text-muted">Cód. SIGA:</td>
-                            <td><span class="fw-bold text-primary">{{ $igreja->cod_siga }}</span></td>
+                            <td>
+                                <span class="fw-bold text-primary">{{ $igreja->cod_siga }}</span>
+                                @if($igreja->cod_setor)
+                                    <small class="text-muted d-block">Setor: {{ $igreja->cod_setor }}</small>
+                                @endif
+                            </td>
                         </tr>
                         <tr>
                             <td class="fw-bold text-muted">Comum Congregação:</td>
