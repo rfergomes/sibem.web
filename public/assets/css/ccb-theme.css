@@ -311,3 +311,14 @@ nav.d-flex.justify-content-between.align-items-center {
     justify-content: center !important;
     margin-bottom: 0 !important;
 }
+
+/* Fix SweetAlert2 Toast container blocking clicks and displaying backdrop */
+body.swal2-toast-shown .swal2-container {
+    pointer-events: none !important;
+    background: transparent !important;
+    background-color: transparent !important;
+}
+
+body.swal2-toast-shown .swal2-container .swal2-popup.swal2-toast {
+    pointer-events: auto !important;
+}
