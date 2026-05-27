@@ -69,7 +69,7 @@
                                                     default => $user->tipo
                                                 };
                                             @endphp
-                                            <small class="d-block mt-1 badge {{ $badgeClass }}">{{ $labelText }}</small>
+                                            <small class="d-block mt-1 badge align-items-le {{ $badgeClass }}">{{ $labelText }}</small>
                                         </td>
                                         <td>{{ $user->email }}</td>
                                         <td>{{ $user->telefone ?? 'Não informado' }}</td>
