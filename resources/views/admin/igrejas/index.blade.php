@@ -66,9 +66,8 @@
                                             <span class="badge bg-light-primary text-primary fw-bold" style="font-size: 0.9em;">{{ $igreja->cod_siga }}</span>
                                         </td>
                                         <td>
-                                            <span class="fw-bold text-dark">{{ $igreja->igreja }}
-                                                <span class="d-block mt-1 text-muted">Setor: @if($igreja->cod_setor) {{$igreja->cod_setor}} @else Não informado @endif</span>
-                                            </span>
+                                            <span class="fw-bold text-dark">{{ $igreja->igreja }}</span>
+                                            <small class="d-block mt-1 text-muted">Setor @if($igreja->cod_setor) {{$igreja->cod_setor}} @else Não informado @endif</small>
                                         </td>
                                         <td>
                                             @if($igreja->tipoImovel)
