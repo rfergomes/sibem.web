@@ -198,7 +198,7 @@
 
     <div class="row">
         <!-- Visual Comparison Chart -->
-        <div class="col-lg-12 mb-4">
+        <div class="col-lg-8 mb-4">
             <div class="card border-0 shadow-sm h-100">
                 <div class="card-header bg-transparent border-0 d-flex align-items-center justify-content-between pt-4 px-4">
                     <h5 class="mb-0 text-dark"><i class="ti ti-chart-bar me-2 text-primary"></i>Inventários Concluídos por Administração</h5>
@@ -214,6 +214,47 @@
                             <canvas id="regionalChart"></canvas>
                         </div>
                     @endif
+                </div>
+            </div>
+        </div>
+
+        <!-- Speedometer/Gauge Chart -->
+        <div class="col-lg-4 mb-4">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-header bg-transparent border-0 pt-4 px-4">
+                    <h5 class="mb-0 text-dark"><i class="ti ti-dashboard me-2 text-primary"></i>Nível de Conclusão da Regional</h5>
+                </div>
+                <div class="card-body px-4 pb-4 d-flex flex-column justify-content-between align-items-center">
+                    @php
+                        $progressoRegional = $stats['igrejas'] > 0 ? min(100, round(($stats['inventarios_concluidos'] / $stats['igrejas']) * 100, 1)) : 0;
+                    @endphp
+                    <div class="position-relative w-100 d-flex justify-content-center align-items-center mt-3" style="height: 180px;">
+                        <canvas id="gaugeChart" style="max-height: 150px; max-width: 250px;"></canvas>
+                        <div class="position-absolute" style="top: 50%; transform: translateY(-30%); text-align: center;">
+                            <h2 class="mb-0 fw-bold text-dark" style="font-size: 2.2rem;">{{ $progressoRegional }}%</h2>
+                            <small class="text-muted fw-bold">Concluído</small>
+                        </div>
+                    </div>
+                    
+                    <div class="w-100 text-center border-top pt-3 mt-2">
+                        <span class="badge bg-light-success text-success fw-bold px-3 py-2 mb-3">
+                            Meta de Inventário
+                        </span>
+                        <div class="row">
+                            <div class="col-4 border-end">
+                                <small class="text-muted d-block style-small">Igrejas</small>
+                                <span class="fw-bold text-dark fs-5">{{ $stats['igrejas'] }}</span>
+                            </div>
+                            <div class="col-4 border-end">
+                                <small class="text-muted d-block style-small">Feitos</small>
+                                <span class="fw-bold text-success fs-5">{{ $stats['inventarios_concluidos'] }}</span>
+                            </div>
+                            <div class="col-4">
+                                <small class="text-muted d-block style-small">Restam</small>
+                                <span class="fw-bold text-warning fs-5">{{ $stats['inventarios_abertos'] }}</span>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -516,97 +557,123 @@
                     </div>
                 </div>
             @endif
-        </div>
-    </div>
-@endif
-@endsection
-
-@section('scripts')
-@if(isset($regional) && collect($regLocaisStats)->sum('inventarios_concluidos') > 0)
+     @section('scripts')
+@if(isset($regional))
     <!-- Dynamic Chart Rendering for Regional Panel -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function () {
-            const ctx = document.getElementById('regionalChart').getContext('2d');
-            
-            // Get values from PHP data
-            const labels = {!! json_encode(collect($regLocaisStats)->pluck('adm_local')->toArray()) !!};
-            const completedData = {!! json_encode(collect($regLocaisStats)->pluck('inventarios_concluidos')->toArray()) !!};
-            const pendingData = {!! json_encode(collect($regLocaisStats)->pluck('inventarios_pendentes')->toArray()) !!};
+            // 1. Regional Bar Chart (Comparison)
+            const regionalChartEl = document.getElementById('regionalChart');
+            if (regionalChartEl) {
+                const ctx = regionalChartEl.getContext('2d');
+                const labels = {!! json_encode(collect($regLocaisStats)->pluck('adm_local')->toArray()) !!};
+                const completedData = {!! json_encode(collect($regLocaisStats)->pluck('inventarios_concluidos')->toArray()) !!};
+                const pendingData = {!! json_encode(collect($regLocaisStats)->pluck('inventarios_pendentes')->toArray()) !!};
 
-            new Chart(ctx, {
-                type: 'bar',
-                data: {
-                    labels: labels,
-                    datasets: [
-                        {
-                            label: 'Inventários Concluídos',
-                            data: completedData,
-                            backgroundColor: '#2ca58d', // Emerald Green
-                            borderRadius: 4,
-                            borderSkipped: false
-                        },
-                        {
-                            label: 'Inventários Pendentes',
-                            data: pendingData,
-                            backgroundColor: '#ffb703', // Warm Orange
-                            borderRadius: 4,
-                            borderSkipped: false
-                        }
-                    ]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: {
-                        legend: {
-                            position: 'top',
-                            labels: {
-                                usePointStyle: true,
-                                boxWidth: 6,
-                                font: {
-                                    family: "'Open Sans', sans-serif",
-                                    size: 11
-                                }
+                new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                        labels: labels,
+                        datasets: [
+                            {
+                                label: 'Inventários Concluídos',
+                                data: completedData,
+                                backgroundColor: '#2ca58d',
+                                borderRadius: 4,
+                                borderSkipped: false
+                            },
+                            {
+                                label: 'Inventários Pendentes',
+                                data: pendingData,
+                                backgroundColor: '#ffb703',
+                                borderRadius: 4,
+                                borderSkipped: false
                             }
-                        },
-                        tooltip: {
-                            padding: 12,
-                            cornerRadius: 8,
-                            bodyFont: {
-                                family: "'Open Sans', sans-serif"
-                            }
-                        }
+                        ]
                     },
-                    scales: {
-                        x: {
-                            stacked: true,
-                            grid: {
-                                display: false
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: {
+                                position: 'top',
+                                labels: {
+                                    usePointStyle: true,
+                                    boxWidth: 6,
+                                    font: {
+                                        family: "'Open Sans', sans-serif",
+                                        size: 11
+                                    }
+                                }
                             },
-                            ticks: {
-                                font: {
-                                    family: "'Open Sans', sans-serif",
-                                    size: 10
+                            tooltip: {
+                                padding: 12,
+                                cornerRadius: 8,
+                                bodyFont: {
+                                    family: "'Open Sans', sans-serif"
                                 }
                             }
                         },
-                        y: {
-                            stacked: true,
-                            grid: {
-                                color: '#f0f0f0'
-                            },
-                            ticks: {
-                                font: {
-                                    family: "'Open Sans', sans-serif",
-                                    size: 10
+                        scales: {
+                            x: {
+                                stacked: true,
+                                grid: {
+                                    display: false
                                 },
-                                stepSize: 1
+                                ticks: {
+                                    font: {
+                                        family: "'Open Sans', sans-serif",
+                                        size: 10
+                                    }
+                                }
+                            },
+                            y: {
+                                stacked: true,
+                                grid: {
+                                    color: '#f0f0f0'
+                                },
+                                ticks: {
+                                    font: {
+                                        family: "'Open Sans', sans-serif",
+                                        size: 10
+                                    },
+                                    stepSize: 1
+                                }
                             }
                         }
                     }
-                }
-            });
+                });
+            }
+
+            // 2. Speedometer Gauge Chart (Overall Progress)
+            const gaugeChartEl = document.getElementById('gaugeChart');
+            if (gaugeChartEl) {
+                const gaugeCtx = gaugeChartEl.getContext('2d');
+                const progress = {{ $progressoRegional }};
+
+                new Chart(gaugeCtx, {
+                    type: 'doughnut',
+                    data: {
+                        datasets: [{
+                            data: [progress, 100 - progress],
+                            backgroundColor: ['#2ca58d', '#e9ecef'],
+                            borderWidth: 0,
+                            cutout: '80%'
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        circumference: 180,
+                        rotation: 270,
+                        plugins: {
+                            legend: { display: false },
+                            tooltip: { enabled: false }
+                        }
+                    }
+                });
+            }
         });
     </script>
 @endif
