@@ -405,7 +405,7 @@
                             <span class="ms-3 text-muted" style="font-size: 20px; font-weight: 300; line-height: 1;">Versão 4.1</span>
                         </div>
                         <div>
-                            <img src="{{ asset('assets/images/CCB_fundo_claro.png') }}" alt="CCB" style="max-height: 60px;">
+                            <img src="{{ asset('assets/images/CCB_fundo_escuro.png') }}" alt="CCB" style="max-height: 60px;">
                         </div>
                     </div>
                     
