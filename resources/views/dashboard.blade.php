@@ -131,7 +131,7 @@
     <!-- ============================================================== -->
     <div class="row">
         <!-- Stats Card Grid -->
-        <div class="col-md-6 col-lg-3 mb-4">
+        <div class="col-sm-6 col-xl-6 col-xxl-3 mb-4">
             <div class="card bg-grd-primary text-white border-0 shadow-sm card-hover">
                 <div class="card-body">
                     <div class="d-flex justify-content-between align-items-center">
@@ -147,7 +147,7 @@
             </div>
         </div>
 
-        <div class="col-md-6 col-lg-3 mb-4">
+        <div class="col-sm-6 col-xl-6 col-xxl-3 mb-4">
             <div class="card bg-grd-info text-white border-0 shadow-sm card-hover">
                 <div class="card-body">
                     <div class="d-flex justify-content-between align-items-center">
@@ -163,7 +163,7 @@
             </div>
         </div>
 
-        <div class="col-md-6 col-lg-3 mb-4">
+        <div class="col-sm-6 col-xl-6 col-xxl-3 mb-4">
             <div class="card bg-grd-success text-white border-0 shadow-sm card-hover">
                 <div class="card-body">
                     <div class="d-flex justify-content-between align-items-center">
@@ -179,7 +179,7 @@
             </div>
         </div>
 
-        <div class="col-md-6 col-lg-3 mb-4">
+        <div class="col-sm-6 col-xl-6 col-xxl-3 mb-4">
             <div class="card bg-grd-warning text-white border-0 shadow-sm card-hover">
                 <div class="card-body">
                     <div class="d-flex justify-content-between align-items-center">
@@ -198,7 +198,7 @@
 
     <div class="row">
         <!-- Visual Comparison Chart -->
-        <div class="col-lg-8 mb-4">
+        <div class="col-xxl-8 col-xl-12 mb-4">
             <div class="card border-0 shadow-sm h-100">
                 <div class="card-header bg-transparent border-0 d-flex align-items-center justify-content-between pt-4 px-4">
                     <h5 class="mb-0 text-dark"><i class="ti ti-chart-bar me-2 text-primary"></i>Inventários Concluídos por Administração</h5>
@@ -219,7 +219,7 @@
         </div>
 
         <!-- Speedometer/Gauge Chart -->
-        <div class="col-lg-4 mb-4">
+        <div class="col-xxl-4 col-xl-12 mb-4">
             <div class="card border-0 shadow-sm h-100">
                 <div class="card-header bg-transparent border-0 pt-4 px-4">
                     <h5 class="mb-0 text-dark"><i class="ti ti-dashboard me-2 text-primary"></i>Nível de Conclusão da Regional</h5>
@@ -338,7 +338,7 @@
         <!-- Stats Card Grid -->
         @if(Auth::user()->isAdminSistema())
             <!-- System Admin Main Counters -->
-            <div class="col-md-6 col-lg-3 mb-4">
+            <div class="col-sm-6 col-xl-6 col-xxl-3 mb-4">
                 <div class="card bg-grd-primary text-white border-0 shadow-sm card-hover">
                     <div class="card-body">
                         <div class="d-flex justify-content-between align-items-center">
@@ -354,7 +354,7 @@
                 </div>
             </div>
             
-            <div class="col-md-6 col-lg-3 mb-4">
+            <div class="col-sm-6 col-xl-6 col-xxl-3 mb-4">
                 <div class="card bg-grd-info text-white border-0 shadow-sm card-hover">
                     <div class="card-body">
                         <div class="d-flex justify-content-between align-items-center">
@@ -371,7 +371,7 @@
             </div>
         @else
             <!-- Standard Local stats -->
-            <div class="col-md-6 col-lg-3 mb-4">
+            <div class="col-sm-6 col-xl-6 col-xxl-3 mb-4">
                 <div class="card bg-grd-info text-white border-0 shadow-sm card-hover">
                     <div class="card-body">
                         <div class="d-flex justify-content-between align-items-center">
@@ -387,7 +387,7 @@
                 </div>
             </div>
 
-            <div class="col-md-6 col-lg-3 mb-4">
+            <div class="col-sm-6 col-xl-6 col-xxl-3 mb-4">
                 <div class="card bg-grd-primary text-white border-0 shadow-sm card-hover">
                     <div class="card-body">
                         <div class="d-flex justify-content-between align-items-center">
@@ -404,7 +404,7 @@
             </div>
         @endif
 
-        <div class="col-md-6 col-lg-3 mb-4">
+        <div class="col-sm-6 col-xl-6 col-xxl-3 mb-4">
             <div class="card bg-grd-success text-white border-0 shadow-sm card-hover">
                 <div class="card-body">
                     <div class="d-flex justify-content-between align-items-center">
@@ -420,7 +420,7 @@
             </div>
         </div>
 
-        <div class="col-md-6 col-lg-3 mb-4">
+        <div class="col-sm-6 col-xl-6 col-xxl-3 mb-4">
             <div class="card bg-grd-warning text-white border-0 shadow-sm card-hover">
                 <div class="card-body">
                     <div class="d-flex justify-content-between align-items-center">
@@ -440,7 +440,7 @@
     <div class="row">
         <!-- Sector Breakdown for active local -->
         @if(!$setoresStats->isEmpty())
-            <div class="col-lg-8 mb-4">
+            <div class="col-xxl-8 col-xl-12 mb-4">
                 <div class="card border-0 shadow-sm">
                     <div class="card-header bg-transparent border-0 pt-4 px-4">
                         <h5 class="mb-0 text-dark"><i class="ti ti-chart-bar me-2 text-primary"></i>Progresso Patrimonial por Setor</h5>
@@ -498,7 +498,7 @@
         @endif
 
         <!-- Recent Token Requests or Extra Info -->
-        <div class="col-lg-{{ $setoresStats->isEmpty() ? '12' : '4' }} mb-4">
+        <div class="col-xxl-{{ $setoresStats->isEmpty() ? '12' : '4' }} col-xl-12 mb-4">
             @if(Auth::user()->isAdminSistema())
                 <div class="card border-0 shadow-sm h-100">
                     <div class="card-header bg-transparent border-0 d-flex align-items-center justify-content-between pt-4 px-4">

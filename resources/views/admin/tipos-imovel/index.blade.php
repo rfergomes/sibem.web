@@ -42,7 +42,7 @@
                                 <tr>
                                     <th style="width: 15%;">ID</th>
                                     <th>Nome / Descrição do Tipo</th>
-                                    <th>Igrejas Relacionadas</th>
+                                    <th>Igrejas</th>
                                     <th>Cadastrado em</th>
                                     <th class="text-end" style="min-width: 150px;">Ações</th>
                                 </tr>

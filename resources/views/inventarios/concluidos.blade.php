@@ -95,7 +95,7 @@
                             <thead class="table-light">
                                 <tr>
                                     <th>Inventário Nº</th>
-                                    <th>Comum</th>
+                                    <th>Localidade</th>
                                     <th>SIGA</th>
                                     <th>Status</th>
                                 </tr>

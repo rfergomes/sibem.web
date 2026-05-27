@@ -5,7 +5,7 @@
 @section('content')
 <div class="row">
     <!-- User Profile Details Card -->
-    <div class="col-md-5">
+    <div class="col-xxl-5 col-xl-12 mb-4">
         <div class="card">
             <div class="card-header bg-dark text-white">
                 <h4 class="mb-0 text-white"><i class="ti ti-user me-2"></i>Perfil do Usuário</h4>
@@ -19,7 +19,8 @@
                     <p class="text-muted">{{ $usuario->email }}</p>
                 </div>
 
-                <table class="table table-borderless align-middle">
+                <div class="table-responsive">
+                    <table class="table table-borderless align-middle">
                     <tbody>
                         <tr>
                             <td class="fw-bold text-muted" style="width: 40%;">Perfil:</td>
@@ -72,6 +73,7 @@
                         </tr>
                     </tbody>
                 </table>
+                </div>
 
                 <div class="mt-4 text-center">
                     <a href="{{ route('admin.usuarios.edit', $usuario->id) }}" class="btn btn-primary btn-sm">
@@ -86,7 +88,7 @@
     </div>
 
     <!-- Active Tokens Card -->
-    <div class="col-md-7">
+    <div class="col-xxl-7 col-xl-12">
         <!-- Generate Token Form -->
         <div class="card mb-4">
             <div class="card-header bg-dark text-white">

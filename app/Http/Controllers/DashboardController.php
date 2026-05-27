@@ -91,12 +91,6 @@ class DashboardController extends Controller
                             ->whereIn('situacao', ['Finalizado', 'Concluído', 'Auditado'])
                             ->count();
 
-                        $pendentes = \Illuminate\Support\Facades\DB::connection($connectionName)
-                            ->table('inventarios_v2')
-                            ->whereRaw('YEAR(data) = ?', [$selectedYear])
-                            ->where('situacao', 'Pendente')
-                            ->count();
-
                         $statusConexao = 'online';
                     } catch (\Exception $e) {
                         logger()->error("Erro ao conectar no banco local da adm {$local->admlc_id}: " . $e->getMessage());
@@ -105,6 +99,8 @@ class DashboardController extends Controller
                         \Illuminate\Support\Facades\DB::purge($connectionName);
                     }
                 }
+
+                $pendentes = max(0, $local->igrejas_count - $concluidos);
 
                 $totalIgrejas += $local->igrejas_count;
                 $totalInventariosConcluidos += $concluidos;

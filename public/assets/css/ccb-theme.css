@@ -322,3 +322,20 @@ body.swal2-toast-shown .swal2-container {
 body.swal2-toast-shown .swal2-container .swal2-popup.swal2-toast {
     pointer-events: auto !important;
 }
+
+/* Evitar transbordo horizontal (scroll lateral) em telas menores/com zoom */
+html, body {
+    max-width: 100% !important;
+    overflow-x: hidden !important;
+}
+
+/* Garantir que controles de formulário respeitem a largura do contêiner */
+.form-select, .form-control, .choices, .choices__inner {
+    max-width: 100% !important;
+}
+
+/* Garantir que as tabelas quebrem as palavras longas em vez de expandir a largura da página */
+table.table td, table.table th {
+    white-space: normal !important;
+    word-break: break-word !important;
+}
