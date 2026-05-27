@@ -50,7 +50,6 @@ class User extends Authenticatable
      */
     protected $casts = [
         'email_verified_at' => 'datetime',
-        'password' => 'hashed',
     ];
 
     // Relations
@@ -124,6 +123,43 @@ class User extends Authenticatable
             return Local::where('admrg_id', $this->regional_id)->orderBy('adm_local')->get();
         } else {
             return Local::where('admlc_id', $this->admlc_id)->get();
+        }
+    }
+
+    /**
+     * Get the password for the user.
+     * Recombines the salt and password hash so that the custom PBKDF2 hasher can verify it.
+     *
+     * @return string
+     */
+    public function getAuthPassword()
+    {
+        if (!empty($this->senha_salt)) {
+            return "pbkdf2:{$this->senha_salt}:{$this->password}";
+        }
+        return $this->password;
+    }
+
+    /**
+     * Set the password attribute.
+     * Intercepts PBKDF2 strings and splits them into password and senha_salt.
+     *
+     * @param  string  $value
+     * @return void
+     */
+    public function setPasswordAttribute($value)
+    {
+        if (empty($value)) {
+            return;
+        }
+
+        if (str_starts_with($value, 'pbkdf2:')) {
+            $parts = explode(':', $value, 3);
+            $this->attributes['senha_salt'] = $parts[1];
+            $this->attributes['password'] = $parts[2];
+        } else {
+            $this->attributes['password'] = $value;
+            $this->attributes['senha_salt'] = null;
         }
     }
 }
