@@ -11,7 +11,7 @@
             </div>
             
             <div class="card-body">
-                <table class="table table-striped align-middle">
+                <table class="table table-sm table-striped align-middle">
                     <tbody>
                         <tr>
                             <td class="fw-bold text-muted" style="width: 40%;">ID Local (Código):</td>

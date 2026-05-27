@@ -37,12 +37,11 @@
                     </div>
                 @else
                     <div class="table-responsive">
-                        <table class="table table-hover align-middle mb-0">
+                        <table class="table table-sm table-hover align-middle mb-0">
                             <thead class="table-light">
                                 <tr>
                                     <th>ID Local</th>
                                     <th>Administração Local</th>
-                                    <th>Razão Social</th>
                                     <th>CNPJ</th>
                                     <th>Cidade / UF</th>
                                     <th>Regional</th>
@@ -57,7 +56,6 @@
                                         <td>
                                             <span class="fw-bold text-dark">{{ $local->adm_local }}</span>
                                         </td>
-                                        <td>{{ $local->razao_social }}</td>
                                         <td><code>{{ $local->cnpj }}</code></td>
                                         <td>{{ $local->cidade }} / <span class="badge bg-light-primary text-primary">{{ $local->uf }}</span></td>
                                         <td>{{ $local->regional->adm_regional ?? 'N/A' }}</td>

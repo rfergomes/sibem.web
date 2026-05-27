@@ -37,7 +37,7 @@
                     </div>
                 @else
                     <div class="table-responsive">
-                        <table class="table table-hover align-middle mb-0">
+                        <table class="table table-sm table-hover align-middle mb-0">
                             <thead class="table-light">
                                 <tr>
                                     <th>Cód. SIGA</th>
@@ -46,7 +46,6 @@
                                     <th>Tipo de Imóvel</th>
                                     <th>Administração Local</th>
                                     <th>Cidade / UF</th>
-                                    <th>CNPJ</th>
                                     <th class="text-end" style="min-width: 150px;">Ações</th>
                                 </tr>
                             </thead>
@@ -67,7 +66,6 @@
                                         </td>
                                         <td>{{ $igreja->local->nome ?? 'N/A' }}</td>
                                         <td>{{ $igreja->cidade ?? 'N/A' }} / {{ $igreja->uf ?? 'N/A' }}</td>
-                                        <td><small class="text-muted">{{ $igreja->cnpj ?? 'Não informado' }}</small></td>
                                         <td class="text-end">
                                             <div class="d-flex justify-content-end gap-1">
                                                 <a href="{{ route('admin.igrejas.show', $igreja->id) }}" class="btn btn-sm btn-icon btn-light-info" title="Ver Detalhes">

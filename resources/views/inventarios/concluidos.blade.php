@@ -63,7 +63,7 @@
 
 <div class="row">
     <!-- Chart Column -->
-    <div class="col-lg-6 mb-4">
+    <div class="col-lg-12 mb-4">
         <div class="card h-100">
             <div class="card-header bg-light d-flex justify-content-between align-items-center">
                 <h5 class="mb-0"><i class="ti ti-chart-bar me-2"></i>Consolidado Mensal (Ano: {{ $selectedYear }})</h5>
@@ -77,7 +77,7 @@
     </div>
 
     <!-- Inventories List Column -->
-    <div class="col-lg-6 mb-4">
+    <div class="col-lg-12 mb-4">
         <div class="card h-100">
             <div class="card-header bg-light d-flex justify-content-between align-items-center">
                 <h5 class="mb-0"><i class="ti ti-list me-2"></i>Registros de Inventários</h5>
@@ -91,7 +91,7 @@
                     </div>
                 @else
                     <div class="table-responsive">
-                        <table class="table table-hover align-middle mb-0">
+                        <table class="table table-sm table-hover align-middle mb-0">
                             <thead class="table-light">
                                 <tr>
                                     <th>Comum</th>
