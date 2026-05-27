@@ -96,7 +96,6 @@
                                 <tr>
                                     <th>Comum</th>
                                     <th>Data</th>
-                                    <th>Código Único</th>
                                     <th>Status</th>
                                 </tr>
                             </thead>
@@ -109,9 +108,6 @@
                                         </td>
                                         <td>
                                             {{ $inv->data ? date('d/m/Y H:i', strtotime($inv->data)) : 'N/A' }}
-                                        </td>
-                                        <td>
-                                            <code>{{ $inv->codigo_unico }}</code>
                                         </td>
                                         <td>
                                             @if($inv->status === 'aberto')
