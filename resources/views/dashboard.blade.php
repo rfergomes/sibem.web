@@ -557,7 +557,12 @@
                     </div>
                 </div>
             @endif
-     @section('scripts')
+        </div>
+    </div>
+@endif
+@endsection
+
+@section('scripts')
 @if(isset($regional))
     <!-- Dynamic Chart Rendering for Regional Panel -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
