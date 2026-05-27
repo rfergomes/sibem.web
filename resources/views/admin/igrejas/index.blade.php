@@ -55,7 +55,6 @@
                                     <th>Cód. SIGA</th>
                                     <th>Comum Congregação</th>
                                     <th>Tipo de Imóvel</th>
-                                    <th>Administração Local</th>
                                     <th>Cidade / UF</th>
                                     <th class="text-end" style="min-width: 150px;">Ações</th>
                                 </tr>
@@ -76,8 +75,9 @@
                                                 <span class="text-muted">Não definido</span>
                                             @endif
                                         </td>
-                                        <td>{{ $igreja->local->nome ?? 'N/A' }}</td>
-                                        <td>{{ $igreja->cidade ?? 'N/A' }} / {{ $igreja->uf ?? 'N/A' }}</td>
+                                        <td>{{ $igreja->cidade ?? 'N/A' }} / {{ $igreja->uf ?? 'N/A' }}
+                                            <small class="d-block text-muted">{{ $igreja->local->adm_local ?? 'N/A' }}</small>
+                                        </td>
                                         <td class="text-end">
                                             <div class="d-flex justify-content-end gap-1">
                                                 <a href="{{ route('admin.igrejas.show', $igreja->id) }}" class="btn btn-sm btn-icon btn-light-info" title="Ver Detalhes">
