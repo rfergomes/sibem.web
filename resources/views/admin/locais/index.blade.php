@@ -54,8 +54,6 @@
                                 <tr>
 
                                     <th>Administração Local</th>
-
-                                    <th>Cidade / UF</th>
                                     <th>Regional</th>
                                     <th>Igrejas / Setores</th>
                                     <th class="text-end" style="min-width: 150px;">Ações</th>
@@ -68,9 +66,8 @@
                                             <span class="fw-bold text-dark">{{ $local->adm_local }}</span>
                                             <span class="d-block"><span class="badge bg-light-primary text-primary">{{ $local->admlc_id }}</span> / <code>{{ $local->cnpj }}</code></span>
                                         </td>
-                                        <td>{{ $local->cidade }} / <span class="badge bg-light-primary text-primary">{{ $local->uf }}</span></td>
                                         <td>{{ $local->regional->adm_regional ?? 'N/A' }}
-                                            <span class="d-block">{{ $local->cidade }} / <span class="badge bg-light-primary text-primary">{{ $local->uf }}</span>
+                                            <small class="d-block text-muted">{{ $local->cidade }} / <span class="badge bg-light-primary text-primary">{{ $local->uf }}</span>
                                         </td>
                                         <td>
                                             <span class="badge bg-light-info text-info fw-bold me-1" title="Igrejas">
