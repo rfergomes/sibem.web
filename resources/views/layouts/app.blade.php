@@ -40,7 +40,7 @@
 
     <!-- [ Sidebar ] start -->
     <nav class="pc-sidebar">
-        <div class="navbar-wrapper">
+        <div class="navbar-wrapper" style="position: relative; height: 100%;">
             <div class="m-header">
                 <a href="{{ route('dashboard') }}" class="b-brand text-primary">
                     <img src="{{ asset('assets/images/sibem_logo.png') }}" alt="logo" class="logo-lg" style="max-height: 58px;">
@@ -146,7 +146,7 @@
                         </li>
                     @endif
                     
-                    <li class="pc-item mt-4">
+                    <li class="pc-item mt-4" style="margin-bottom: 60px;">
                         <a href="{{ route('logout') }}" class="pc-link text-danger" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
                             <span class="pc-micon"><i class="ti ti-logout text-danger"></i></span>
                             <span class="pc-mtext text-danger">Sair do Sistema</span>
@@ -156,6 +156,12 @@
                         </form>
                     </li>
                 </ul>
+            </div>
+            <!-- FIXED BOTTOM FOOTER -->
+            <div class="pc-sidebar-footer" style="position: absolute; bottom: 0; left: 0; right: 0; padding: 12px 20px; border-top: 1px solid rgba(255, 255, 255, 0.08); background: #033D60; text-align: center; z-index: 10;">
+                <button type="button" class="btn btn-sm w-100 d-flex align-items-center justify-content-center" style="background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.15); color: #fff; font-size: 12px; font-weight: 500; border-radius: 6px; padding: 8px 12px; transition: all 0.2s;" data-bs-toggle="modal" data-bs-target="#sobreProjetoModal" onmouseover="this.style.background='rgba(255,255,255,0.1)'; this.style.borderColor='rgba(255,255,255,0.25)';" onmouseout="this.style.background='rgba(255,255,255,0.05)'; this.style.borderColor='rgba(255,255,255,0.15)';">
+                    <i class="ti ti-info-circle me-2" style="font-size: 15px;"></i> Sobre o SIBEM
+                </button>
             </div>
         </div>
     </nav>
@@ -382,6 +388,62 @@
         preset_change("preset-10");
     </script>
     
+    <!-- Modal Sobre o Projeto -->
+    <div class="modal fade" id="sobreProjetoModal" tabindex="-1" aria-labelledby="sobreProjetoModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content" style="border: none; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.15); overflow: hidden;">
+                <div class="modal-header d-flex align-items-center justify-content-between py-3" style="background: #033D60; border-bottom: none;">
+                    <h5 class="modal-title text-white fw-bold d-flex align-items-center" id="sobreProjetoModalLabel">
+                        <i class="ti ti-info-circle me-2" style="font-size: 20px;"></i> Sobre
+                    </h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body p-5" style="background-color: #f4f7fa;">
+                    <div class="d-flex align-items-center justify-content-between mb-4">
+                        <div class="d-flex align-items-end">
+                            <img src="{{ asset('assets/images/sibem_logo.png') }}" alt="logo" style="max-height: 50px;">
+                            <span class="ms-3 text-muted" style="font-size: 20px; font-weight: 300; line-height: 1;">Versão 4</span>
+                        </div>
+                        <div>
+                            <div class="ccb-stamp" style="border: 2px solid #555; padding: 1px; display: inline-block; border-radius: 4px; background: #fff;">
+                                <div style="border: 1px solid #555; padding: 4px 8px; text-align: center; font-family: 'Georgia', serif; font-weight: bold; color: #444; line-height: 1.1;">
+                                    <div style="font-size: 9px; letter-spacing: 0.5px;">CONGREGAÇÃO CRISTÃ</div>
+                                    <div style="font-size: 7px; margin: 1px 0;">NO</div>
+                                    <div style="font-size: 9px; letter-spacing: 1.5px;">BRASIL</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div style="font-size: 14px; line-height: 1.6; color: #333; text-align: justify;">
+                        <p class="mb-3">Este software, SIBEM CCB - Sistema para Inventário de Bens Móveis, foi desenvolvido com dedicação e zelo para atender exclusivamente às necessidades da Congregação Cristã no Brasil, com o objetivo de proporcionar organização e gestão eficiente de seus bens móveis, sempre guiados pelos princípios cristãos de ordem e responsabilidade.</p>
+
+                        <p class="mb-3">A versão 4 do SIBEM CCB reflete o esforço coletivo de irmãos que se dedicaram a este propósito com amor e compromisso.</p>
+
+                        <p class="mb-3">Agradecemos a Deus por nos conceder sabedoria, força e inspiração para concluir este projeto. Nosso reconhecimento especial vai aos irmãos que contribuíram intelectualmente e tecnicamente, cuja colaboração foi fundamental para o sucesso desta versão.</p>
+
+                        <p class="mb-3">Que este trabalho seja uma ferramenta eficaz na administração dos bens da irmandade, sempre para a glória do Senhor.</p>
+
+                        <p class="fst-italic my-4 text-center" style="font-size: 15px; color: #555;">
+                            "Tudo quanto fizerdes, fazei-o de todo o coração, como ao Senhor, e não aos homens." <br>
+                            <span class="fw-bold">(Colossenses 3:23)</span>
+                        </p>
+
+                        <p class="mb-1">Vossos irmãos em Cristo,</p>
+                        
+                        <div class="fw-bold mt-2" style="line-height: 1.4; color: #111;">
+                            Rodrigo Lima<br>
+                            Jackson Passos<br>
+                            Marcos Dias<br>
+                            Marcos Roberto<br>
+                            Emanoel Oliveira
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     @yield('scripts')
 </body>
 </html>
