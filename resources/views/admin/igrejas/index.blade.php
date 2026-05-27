@@ -91,11 +91,11 @@
                                         </td>
                                         <td class="text-end">
                                             <div class="d-flex justify-content-end gap-1">
-                                                <a href="{{ route('admin.igrejas.show', $igreja->id) }}" class="btn btn-sm btn-icon btn-light-info" title="Ver Detalhes">
+                                                <a href="{{ route('admin.igrejas.show', [$igreja->id, 'redirect_url' => request()->fullUrl()]) }}" class="btn btn-sm btn-icon btn-light-info" title="Ver Detalhes">
                                                     <i class="ti ti-eye"></i>
                                                 </a>
                                                 @if(Auth::user()->isAdminSistema() || Auth::user()->isAdminRegional() || Auth::user()->isAdminLocal())
-                                                    <a href="{{ route('admin.igrejas.edit', $igreja->id) }}" class="btn btn-sm btn-icon btn-light-primary" title="Editar Igreja">
+                                                    <a href="{{ route('admin.igrejas.edit', [$igreja->id, 'redirect_url' => request()->fullUrl()]) }}" class="btn btn-sm btn-icon btn-light-primary" title="Editar Igreja">
                                                         <i class="ti ti-edit"></i>
                                                     </a>
                                                     <form action="{{ route('admin.igrejas.destroy', $igreja->id) }}" method="POST" class="d-inline-block delete-igreja-form">

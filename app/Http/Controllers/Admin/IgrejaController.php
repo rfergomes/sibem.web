@@ -179,7 +179,8 @@ class IgrejaController extends Controller
             }
         }
 
-        return view('admin.igrejas.show', compact('igreja'));
+        $redirectUrl = request('redirect_url');
+        return view('admin.igrejas.show', compact('igreja', 'redirectUrl'));
     }
 
     public function edit($id)
@@ -216,7 +217,8 @@ class IgrejaController extends Controller
             $setores = Setor::where('admlc_id', $currentUser->admlc_id)->orderBy('cod_setor')->get();
         }
 
-        return view('admin.igrejas.edit', compact('igreja', 'locais', 'tiposImovel', 'setores'));
+        $redirectUrl = request('redirect_url');
+        return view('admin.igrejas.edit', compact('igreja', 'locais', 'tiposImovel', 'setores', 'redirectUrl'));
     }
 
     public function update(Request $request, $id)
@@ -272,6 +274,14 @@ class IgrejaController extends Controller
         }
 
         $igreja->update($validated);
+
+        $redirectUrl = $request->input('redirect_url');
+        if ($redirectUrl && filter_var($redirectUrl, FILTER_VALIDATE_URL)) {
+            $parsed = parse_url($redirectUrl);
+            if (isset($parsed['host']) && $parsed['host'] === $request->getHost()) {
+                return redirect($redirectUrl)->with('success', 'Igreja atualizada com sucesso.');
+            }
+        }
 
         return redirect()->route('admin.igrejas.index')->with('success', 'Igreja atualizada com sucesso.');
     }
