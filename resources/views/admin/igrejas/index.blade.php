@@ -77,7 +77,7 @@
                                         </td>
                                         <td>
                                             <span class="fw-bold text-dark">{{ $igreja->igreja }}</span>
-                                            <small class="d-block text-muted"><span class="bg-light-success text-success rounded p-1 mt-1"> SETOR @if($igreja->cod_setor) {{$igreja->cod_setor}} </span>@else Não informado @endif</small>
+                                            <small class="d-block text-muted"><span class="bg-light-primary text-primary rounded p-1 mt-1"> SETOR @if($igreja->cod_setor) {{$igreja->cod_setor}} </span>@else Não informado @endif</small>
                                         </td>
                                         <td>
                                             @if($igreja->tipoImovel)
