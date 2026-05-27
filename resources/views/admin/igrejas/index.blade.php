@@ -53,7 +53,6 @@
                                     <tr>
                                         <td>
                                             <span class="badge bg-light-primary text-primary fw-bold" style="font-size: 0.9em;">{{ $igreja->cod_siga }}</span>
-                                            <small class="text-muted d-block"><code>{{ $igreja->igreja_id }}</code>{{ $igreja->id_igreja }}</small>
                                         </td>
                                         <td>
                                             <span class="fw-bold text-dark">{{ $igreja->igreja }}</span>

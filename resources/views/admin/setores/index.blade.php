@@ -40,21 +40,21 @@
                         <table class="table table-hover align-middle mb-0">
                             <thead class="table-light">
                                 <tr>
-                                    <th>ID</th>
                                     <th>Cód. Setor</th>
                                     <th>Descrição</th>
                                     <th>Administração Local</th>
                                     <th>Regional</th>
-                                    <th>Igrejas Vinculadas</th>
+                                    <th>Igrejas</th>
                                     <th class="text-end" style="min-width: 150px;">Ações</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 @foreach($setores as $setor)
                                     <tr>
-                                        <td>{{ $setor->id }}</td>
-                                        <td><span class="badge bg-light-info text-info fw-bold">{{ $setor->cod_setor }}</span></td>
-                                        <td><span class="fw-bold text-dark">{{ $setor->descricao }}</span></td>
+                                        <td>
+                                            <span class="fw-bold text-dark">{{ $setor->descricao }}</span>
+                                            <small class="text-muted d-block"><code>{{ $setor->cod_setor }}</code>{{ $setor->id_setor }}</small>
+                                        </td>
                                         <td>{{ $setor->local->nome ?? 'N/A' }}</td>
                                         <td>{{ $setor->local->regional->adm_regional ?? 'N/A' }}</td>
                                         <td>
