@@ -538,8 +538,47 @@
                     </div>
                 </div>
             @else
+                <!-- Speedometer/Gauge Chart for Local Admin -->
+                <div class="card border-0 shadow-sm mb-4">
+                    <div class="card-header bg-transparent border-0 pt-4 px-4">
+                        <h5 class="mb-0 text-dark"><i class="ti ti-dashboard me-2 text-primary"></i>Nível de Conclusão da Administração</h5>
+                    </div>
+                    <div class="card-body px-4 pb-4 d-flex flex-column justify-content-between align-items-center">
+                        @php
+                            $progressoLocal = $stats['igrejas'] > 0 ? min(100, round(($stats['inventarios_concluidos'] / $stats['igrejas']) * 100, 1)) : 0;
+                        @endphp
+                        <div class="position-relative w-100 d-flex justify-content-center align-items-center mt-3" style="height: 180px;">
+                            <canvas id="localGaugeChart" style="max-height: 150px; max-width: 250px;"></canvas>
+                            <div class="position-absolute" style="top: 50%; transform: translateY(-30%); text-align: center;">
+                                <h2 class="mb-0 fw-bold text-dark" style="font-size: 2.2rem;">{{ $progressoLocal }}%</h2>
+                                <small class="text-muted fw-bold">Concluído</small>
+                            </div>
+                        </div>
+                        
+                        <div class="w-100 text-center border-top pt-3 mt-2">
+                            <span class="badge bg-light-success text-success fw-bold px-3 py-2 mb-3">
+                                Meta de Inventário
+                            </span>
+                            <div class="row">
+                                <div class="col-4 border-end">
+                                    <small class="text-muted d-block style-small">Igrejas</small>
+                                    <span class="fw-bold text-dark fs-5">{{ $stats['igrejas'] }}</span>
+                                </div>
+                                <div class="col-4 border-end">
+                                    <small class="text-muted d-block style-small">Feitos</small>
+                                    <span class="fw-bold text-success fs-5">{{ $stats['inventarios_concluidos'] }}</span>
+                                </div>
+                                <div class="col-4">
+                                    <small class="text-muted d-block style-small">Restam</small>
+                                    <span class="fw-bold text-warning fs-5">{{ $stats['inventarios_abertos'] }}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
                 <!-- Informative panel for Local admin -->
-                <div class="card border-0 shadow-sm bg-light-secondary h-100">
+                <div class="card border-0 shadow-sm bg-light-secondary">
                     <div class="card-body p-4 d-flex flex-column justify-content-between">
                         <div>
                             <h5 class="text-dark mb-3"><i class="ti ti-info-circle me-2 text-primary"></i>Dica do Painel</h5>
@@ -563,9 +602,10 @@
 @endsection
 
 @section('scripts')
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
 @if(isset($regional))
     <!-- Dynamic Chart Rendering for Regional Panel -->
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function () {
             // 1. Regional Bar Chart (Comparison)
@@ -658,6 +698,43 @@
                 const progress = {{ $progressoRegional }};
 
                 new Chart(gaugeCtx, {
+                    type: 'doughnut',
+                    data: {
+                        datasets: [{
+                            data: [progress, 100 - progress],
+                            backgroundColor: ['#2ca58d', '#e9ecef'],
+                            borderWidth: 0,
+                            cutout: '80%'
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        circumference: 180,
+                        rotation: 270,
+                        plugins: {
+                            legend: { display: false },
+                            tooltip: { enabled: false }
+                        }
+                    }
+                });
+            }
+        });
+    </script>
+@else
+    <!-- Dynamic Chart Rendering for Local Panel -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // Local Speedometer Gauge Chart (Overall Local Progress)
+            const localGaugeChartEl = document.getElementById('localGaugeChart');
+            if (localGaugeChartEl) {
+                const localGaugeCtx = localGaugeChartEl.getContext('2d');
+                @php
+                    $progressoLocal = $stats['igrejas'] > 0 ? min(100, round(($stats['inventarios_concluidos'] / $stats['igrejas']) * 100, 1)) : 0;
+                @endphp
+                const progress = {{ $progressoLocal }};
+
+                new Chart(localGaugeCtx, {
                     type: 'doughnut',
                     data: {
                         datasets: [{

@@ -167,13 +167,11 @@ class DashboardController extends Controller
         $setoresStats = collect();
         if ($activeLocal) {
             try {
-                $stats['inventarios_abertos'] = Inventario::whereRaw('YEAR(data) = ?', [$selectedYear])
-                    ->where('situacao', 'Pendente')
-                    ->count();
-
-                $stats['inventarios_concluidos'] = Inventario::whereRaw('YEAR(data) = ?', [$selectedYear])
+                 $stats['inventarios_concluidos'] = Inventario::whereRaw('YEAR(data) = ?', [$selectedYear])
                     ->whereIn('situacao', ['Finalizado', 'Concluído', 'Auditado'])
                     ->count();
+
+                $stats['inventarios_abertos'] = max(0, $stats['igrejas'] - $stats['inventarios_concluidos']);
 
                 // Build sector breakdown in memory safely
                 $igrejas = Igreja::where('admlc_id', $activeLocalId)->get();
@@ -186,19 +184,17 @@ class DashboardController extends Controller
                 $setoresStats = $setores->map(function($setor) use ($igrejas, $inventariosMap) {
                     $igrejasNoSetor = $igrejas->where('cod_setor', $setor->cod_setor);
                     $concluidos = 0;
-                    $pendentes = 0;
 
                     foreach ($igrejasNoSetor as $ig) {
                         $inv = $inventariosMap->get($ig->igreja_id);
                         if ($inv) {
                             if (in_array($inv->situacao, ['Finalizado', 'Concluído', 'Auditado'])) {
                                 $concluidos++;
-                            } elseif ($inv->situacao === 'Pendente') {
-                                $pendentes++;
                             }
                         }
                     }
 
+                    $pendentes = max(0, $igrejasNoSetor->count() - $concluidos);
                     $progresso = $igrejasNoSetor->count() > 0 ? min(100, round(($concluidos / $igrejasNoSetor->count()) * 100, 1)) : 0;
 
                     return (object)[
