@@ -82,7 +82,7 @@
                                             @endif
                                         </td>
                                         <td class="text-center">
-                                            <div class="d-flex justify-content-end gap-1">
+                                            <div class="d-flex justify-content-center gap-1">
                                                 <a href="{{ route('admin.usuarios.show', $user->id) }}" class="btn btn-sm btn-icon btn-light-info" title="Visualizar Detalhes e Tokens">
                                                     <i class="ti ti-eye"></i>
                                                 </a>
