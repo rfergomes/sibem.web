@@ -17,11 +17,11 @@
             
             <div class="card-body">
                 <form action="{{ route('admin.igrejas.index') }}" method="GET" class="row g-3 mb-4" id="filter-form">
-                    <div class="col-md-5 col-lg-4">
+                    <div class="col-md-3">
                         <input type="text" name="search" class="form-control" placeholder="Buscar por comum, siga, cidade..." value="{{ request('search') }}">
                     </div>
                     @if(Auth::user()->isAdminSistema() || Auth::user()->isAdminRegional())
-                        <div class="col-md-4 col-lg-3">
+                        <div class="col-md-3">
                             <select name="admlc_id" class="form-select no-choices" onchange="document.getElementById('filter-form').submit()">
                                 <option value="">-- Todas as Administrações --</option>
                                 @foreach($availableLocais as $localOpt)
@@ -33,10 +33,20 @@
                         </div>
                     @endif
                     <div class="col-md-3">
+                        <select name="cod_setor" class="form-select no-choices" onchange="document.getElementById('filter-form').submit()">
+                            <option value="">-- Todos os Setores --</option>
+                            @foreach($availableSetores as $setorOpt)
+                                <option value="{{ $setorOpt->cod_setor }}" {{ request('cod_setor') == $setorOpt->cod_setor ? 'selected' : '' }}>
+                                    Setor {{ $setorOpt->cod_setor }}
+                                </option>
+                            @endforeach
+                        </select>
+                    </div>
+                    <div class="col-md-3">
                         <button class="btn btn-outline-secondary" type="submit">
                             <i class="ti ti-search"></i> Filtrar
                         </button>
-                        @if(request('search') || request('admlc_id'))
+                        @if(request('search') || request('admlc_id') || request('cod_setor'))
                             <a href="{{ route('admin.igrejas.index') }}" class="btn btn-outline-danger">Limpar</a>
                         @endif
                     </div>
@@ -67,7 +77,7 @@
                                         </td>
                                         <td>
                                             <span class="fw-bold text-dark">{{ $igreja->igreja }}</span>
-                                            <small class="d-block mt-1 text-muted">Setor @if($igreja->cod_setor) {{$igreja->cod_setor}} @else Não informado @endif</small>
+                                            <small class="d-block bg-light-primary text-primary rounded p-1 mt-1 text-muted">Setor @if($igreja->cod_setor) {{$igreja->cod_setor}} @else Não informado @endif</small>
                                         </td>
                                         <td>
                                             @if($igreja->tipoImovel)

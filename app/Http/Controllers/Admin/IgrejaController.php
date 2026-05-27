@@ -60,10 +60,32 @@ class IgrejaController extends Controller
             $query->where('admlc_id', $request->input('admlc_id'));
         }
 
+        if ($request->filled('cod_setor')) {
+            $query->where('cod_setor', $request->input('cod_setor'));
+        }
+
         $availableLocais = $user->getAvailableLocais();
+
+        // Fetch sectors scoped to what the user can see for index filter
+        if ($request->filled('admlc_id')) {
+            $availableSetores = Setor::where('admlc_id', $request->input('admlc_id'))->orderBy('cod_setor')->get()->unique('cod_setor');
+        } else {
+            if ($user->isAdminSistema()) {
+                $availableSetores = Setor::orderBy('cod_setor')->get()->unique('cod_setor');
+            } elseif ($user->isAdminRegional()) {
+                $regionalId = $user->regional_id;
+                $availableSetores = Setor::whereHas('local', function ($q) use ($regionalId) {
+                    $q->where('admrg_id', $regionalId);
+                })->orderBy('cod_setor')->get()->unique('cod_setor');
+            } else {
+                $availableSetores = Setor::where('admlc_id', $user->admlc_id)->orderBy('cod_setor')->get()->unique('cod_setor');
+            }
+        }
+
         $igrejas = $query->paginate(15)->withQueryString();
 
-        return view('admin.igrejas.index', compact('igrejas', 'availableLocais'));
+        return view('admin.igrejas.index', compact('igrejas', 'availableLocais', 'availableSetores'));
+
     }
 
     public function create()
