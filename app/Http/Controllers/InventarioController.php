@@ -47,9 +47,11 @@ class InventarioController extends Controller
                     ->orderBy('cod_setor')
                     ->pluck('setor');
 
-                $igrejas = Igreja::where('admlc_id', $activeLocalId)
-                    ->orderBy('igreja')
-                    ->get();
+                $igrejasQuery = Igreja::where('admlc_id', $activeLocalId)->orderBy('igreja');
+                if ($request->filled('setor')) {
+                    $igrejasQuery->where('cod_setor', $request->setor);
+                }
+                $igrejas = $igrejasQuery->get();
 
                 // Build query
                 $query = Inventario::with('igreja')->orderBy('data', 'desc');

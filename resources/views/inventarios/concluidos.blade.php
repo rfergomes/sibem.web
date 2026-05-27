@@ -182,6 +182,18 @@
                 }
             }
         });
+
+        // Auto-submit form on sector change and clear selected church
+        const setorSelect = document.getElementById('setor');
+        if (setorSelect) {
+            setorSelect.addEventListener('change', function() {
+                const igrejaSelect = document.getElementById('igreja_id');
+                if (igrejaSelect) {
+                    igrejaSelect.value = '';
+                }
+                this.closest('form').submit();
+            });
+        }
     });
 </script>
 @endsection
