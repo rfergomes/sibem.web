@@ -131,7 +131,7 @@
     <!-- ============================================================== -->
     <div class="row">
         <!-- Stats Card Grid -->
-        <div class="col-md-12 col-lg-3 mb-4">
+        <div class="col-md-6 col-lg-3 mb-4">
             <div class="card bg-grd-primary text-white border-0 shadow-sm card-hover">
                 <div class="card-body">
                     <div class="d-flex justify-content-between align-items-center">
@@ -147,7 +147,7 @@
             </div>
         </div>
 
-        <div class="col-md-12 col-lg-3 mb-4">
+        <div class="col-md-6 col-lg-3 mb-4">
             <div class="card bg-grd-info text-white border-0 shadow-sm card-hover">
                 <div class="card-body">
                     <div class="d-flex justify-content-between align-items-center">
@@ -198,7 +198,7 @@
 
     <div class="row">
         <!-- Visual Comparison Chart -->
-        <div class="col-lg-6 mb-4">
+        <div class="col-lg-12 mb-4">
             <div class="card border-0 shadow-sm h-100">
                 <div class="card-header bg-transparent border-0 d-flex align-items-center justify-content-between pt-4 px-4">
                     <h5 class="mb-0 text-dark"><i class="ti ti-chart-bar me-2 text-primary"></i>Inventários Concluídos por Administração</h5>
@@ -219,7 +219,7 @@
         </div>
 
         <!-- Table Breakdown for the Regional -->
-        <div class="col-lg-6 mb-4">
+        <div class="col-lg-12 mb-4">
             <div class="card border-0 shadow-sm h-100">
                 <div class="card-header bg-transparent border-0 pt-4 px-4">
                     <h5 class="mb-0 text-dark"><i class="ti ti-list me-2 text-primary"></i>Panorama das Administrações Locais</h5>
