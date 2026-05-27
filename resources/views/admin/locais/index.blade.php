@@ -66,7 +66,7 @@
                                     <tr>
                                         <td>
                                             <span class="fw-bold text-dark">{{ $local->adm_local }}</span>
-                                            <span class="text-muted d-block"><code><span class="badge bg-light-primary text-primary">{{ $local->admlc_id }}</span> / {{ $local->cnpj }}</code></span>
+                                            <span class="d-block"><span class="badge bg-light-primary text-primary">{{ $local->admlc_id }}</span> / <code>{{ $local->cnpj }}</code></span>
                                         </td>
                                         <td>{{ $local->cidade }} / <span class="badge bg-light-primary text-primary">{{ $local->uf }}</span></td>
                                         <td>{{ $local->regional->adm_regional ?? 'N/A' }}</td>
