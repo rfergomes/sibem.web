@@ -41,7 +41,6 @@
                                     <th>Nome</th>
                                     <th>E-mail</th>
                                     <th>Telefone</th>
-                                    <th>Perfil</th>
                                     <th>Administração Local</th>
                                     <th>Comum / Cidade</th>
                                     <th class="text-end" style="min-width: 150px;">Ações</th>
