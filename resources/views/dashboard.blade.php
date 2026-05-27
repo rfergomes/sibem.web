@@ -110,8 +110,8 @@
                         </div>
                     @endif
                     
-                    <div style="width: 120px;">
-                        <select name="ano" class="form-select" onchange="document.getElementById('filter-form').submit()">
+                    <div style="width: 130px;">
+                        <select name="ano" class="form-select no-choices" onchange="document.getElementById('filter-form').submit()">
                             @foreach($anosDisponiveis as $yr)
                                 <option value="{{ $yr }}" {{ $selectedYear == $yr ? 'selected' : '' }}>
                                     Ano {{ $yr }}
@@ -131,7 +131,7 @@
     <!-- ============================================================== -->
     <div class="row">
         <!-- Stats Card Grid -->
-        <div class="col-md-6 col-lg-3 mb-4">
+        <div class="col-md-12 col-lg-3 mb-4">
             <div class="card bg-grd-primary text-white border-0 shadow-sm card-hover">
                 <div class="card-body">
                     <div class="d-flex justify-content-between align-items-center">
@@ -147,7 +147,7 @@
             </div>
         </div>
 
-        <div class="col-md-6 col-lg-3 mb-4">
+        <div class="col-md-12 col-lg-3 mb-4">
             <div class="card bg-grd-info text-white border-0 shadow-sm card-hover">
                 <div class="card-body">
                     <div class="d-flex justify-content-between align-items-center">
