@@ -53,7 +53,7 @@
                             <thead class="table-light">
                                 <tr>
                                     <th>Cód. SIGA</th>
-                                    <th>Comum Congregação</th>
+                                    <th>Casa de Oração / Localidade</th>
                                     <th>Tipo de Imóvel</th>
                                     <th>Cidade / UF</th>
                                     <th class="text-end" style="min-width: 150px;">Ações</th>
@@ -70,7 +70,7 @@
                                         </td>
                                         <td>
                                             @if($igreja->tipoImovel)
-                                                <span class="badge bg-light-info text-info">{{ $igreja->tipoImovel->nome }}</span>
+                                                <span class="badge bg-light-info text-primary">{{ $igreja->tipoImovel->nome }}</span>
                                             @else
                                                 <span class="text-muted">Não definido</span>
                                             @endif
