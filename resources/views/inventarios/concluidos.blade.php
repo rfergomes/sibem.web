@@ -108,7 +108,7 @@
                                             <span class="fw-bold">{{ $inv->igreja->nome ?? 'Não identificada' }}</span>
                                             <small class="text-muted d-block">{{ $inv->data ? date('d/m/Y H:i', strtotime($inv->data)) : 'N/A' }}@if(isset($inv->igreja->setor)) | Setor: {{ $inv->igreja->setor }} @endif</small>
                                         </td>
-                                        <td>{{ $inv->siga_ok ? '✓' : '✗' }}</td>
+                                        <td>{{ $inv->siga_ok ? '<span class="ti ti-check"></span>' : '<span class="ti ti-x"></span>' }}</td>
                                         <td>
                                             @if($inv->status === 'aberto')
                                                 <span class="badge bg-light-warning text-warning">Aberto</span>
