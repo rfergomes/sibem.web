@@ -61,9 +61,11 @@ class InventarioController extends Controller
 
                 if ($request->filled('setor')) {
                     $setor = $request->setor;
-                    $query->whereHas('igreja', function ($q) use ($setor) {
-                        $q->where('cod_setor', $setor);
-                    });
+                    $igrejaIds = Igreja::where('admlc_id', $activeLocalId)
+                        ->where('cod_setor', $setor)
+                        ->pluck('igreja_id')
+                        ->toArray();
+                    $query->whereIn('igreja_id', $igrejaIds);
                 }
 
                 if ($request->filled('igreja_id')) {
