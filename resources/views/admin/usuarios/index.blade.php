@@ -81,7 +81,7 @@
                                                 <small class="text-muted d-block">{{ $user->cidade }}</small>
                                             @endif
                                         </td>
-                                        <td class="text-end">
+                                        <td class="text-center">
                                             <div class="d-flex justify-content-end gap-1">
                                                 <a href="{{ route('admin.usuarios.show', $user->id) }}" class="btn btn-sm btn-icon btn-light-info" title="Visualizar Detalhes e Tokens">
                                                     <i class="ti ti-eye"></i>
