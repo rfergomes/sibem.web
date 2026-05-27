@@ -12,7 +12,7 @@
             </div>
             
             <div class="card-body">
-                <table class="table table-striped align-middle">
+                <table class="table table-sm table-striped align-middle">
                     <tbody>
                         <tr>
                             <td class="fw-bold text-muted" style="width: 35%;">ID Igreja (Cód. Legado):</td>
