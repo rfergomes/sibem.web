@@ -41,9 +41,9 @@
                             <thead class="table-light">
                                 <tr>
                                     <th>Cód. Setor</th>
-                                    <th>Setor</th>
-                                    <th>Administração Local</th>
-                                    <th>Regional</th>
+                                    <th>Descrição</th>
+                                    <th>Adm. Local</th>
+                                    <th>Adm. Regional</th>
                                     <th>Igrejas</th>
                                     <th class="text-end" style="min-width: 150px;">Ações</th>
                                 </tr>
@@ -51,10 +51,8 @@
                             <tbody>
                                 @foreach($setores as $setor)
                                     <tr>
-                                        <td>
-                                            <span class="fw-bold text-dark">{{ $setor->descricao }}</span>
-                                            <small class="text-muted d-block"><code>{{ $setor->cod_setor }}</code>{{ $setor->id_setor }}</small>
-                                        </td>
+                                        <td><span class="badge bg-light-info text-info fw-bold">{{ $setor->cod_setor }}</span></td>
+                                        <td><span class="fw-bold text-dark">{{ $setor->descricao }}</span></td>
                                         <td>{{ $setor->local->nome ?? 'N/A' }}</td>
                                         <td>{{ $setor->local->regional->adm_regional ?? 'N/A' }}</td>
                                         <td>
