@@ -94,8 +94,8 @@
                         <table class="table table-sm table-hover align-middle mb-0">
                             <thead class="table-light">
                                 <tr>
+                                    <th>Inventário Nº</th>
                                     <th>Comum</th>
-                                    <th>Data</th>
                                     <th>Status</th>
                                 </tr>
                             </thead>
@@ -103,11 +103,11 @@
                                 @foreach($inventarios as $inv)
                                     <tr>
                                         <td>
-                                            <span class="fw-bold">{{ $inv->igreja->nome ?? 'Não identificada' }}</span>
-                                            <small class="text-muted d-block"><code>{{ $inv->codigo_unico }}</code>{{ $inv->id_igreja }} @if(isset($inv->igreja->setor)) | Setor: {{ $inv->igreja->setor }} @endif</small>
+                                            <code>{{ $inv->codigo_unico }}</code>
                                         </td>
-                                        <td>
-                                            {{ $inv->data ? date('d/m/Y H:i', strtotime($inv->data)) : 'N/A' }}
+                                         <td>
+                                            <span class="fw-bold">{{ $inv->igreja->nome ?? 'Não identificada' }}</span>
+                                            <small class="text-muted d-block">{{ $inv->data ? date('d/m/Y H:i', strtotime($inv->data)) : 'N/A' }}@if(isset($inv->igreja->setor)) | Setor: {{ $inv->igreja->setor }} @endif</small>
                                         </td>
                                         <td>
                                             @if($inv->status === 'aberto')
