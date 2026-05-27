@@ -50,8 +50,7 @@
                             <tbody>
                                 @foreach($usuarios as $user)
                                     <tr>
-                                        <td>
-                                            <span class="fw-bold text-dark">{{ $user->name }}</span>
+                                        <td>      
                                             @php
                                                 $badgeClass = match($user->tipo) {
                                                     'admin_sistema' => 'bg-light-danger text-danger',
@@ -69,7 +68,8 @@
                                                     default => $user->tipo
                                                 };
                                             @endphp
-                                            <small class="d-block mt-1 badge align-items-le {{ $badgeClass }}">{{ $labelText }}</small>
+                                            <span class="d-block fw-bold text-dark">{{ $user->name }}</span>
+                                            <small class="badge align-items-le {{ $badgeClass }}">{{ $labelText }}</small>
                                         </td>
                                         <td>{{ $user->email }}</td>
                                         <td>{{ $user->telefone ?? 'Não informado' }}</td>
