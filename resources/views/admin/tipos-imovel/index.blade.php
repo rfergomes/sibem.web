@@ -51,7 +51,7 @@
                                 @foreach($tiposImovel as $tipo)
                                     <tr>
                                         <td>
-                                            <span class="fw-bold">{{ $tipo->id }}</span>
+                                            <span class="fw-bold badge bg-light-primary text-primary px-2">{{ $tipo->id }}</span>
                                         </td>
                                         <td>
                                             <span class="fw-bold text-dark">{{ $tipo->nome }}</span>

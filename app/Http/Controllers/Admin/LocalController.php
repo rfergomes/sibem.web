@@ -39,6 +39,10 @@ class LocalController extends Controller
             $query->where('admrg_id', $currentUser->regional_id);
         }
 
+        if ($currentUser->isAdminSistema() && $request->filled('admrg_id')) {
+            $query->where('admrg_id', $request->input('admrg_id'));
+        }
+
         if ($search) {
             $query->where(function ($q) use ($search) {
                 $q->where('adm_local', 'like', "%{$search}%")
@@ -48,8 +52,9 @@ class LocalController extends Controller
             });
         }
 
-        $locais = $query->paginate(15);
-        return view('admin.locais.index', compact('locais'));
+        $regionais = $currentUser->isAdminSistema() ? Regional::orderBy('adm_regional')->get() : collect();
+        $locais = $query->paginate(15)->withQueryString();
+        return view('admin.locais.index', compact('locais', 'regionais'));
     }
 
     public function create()

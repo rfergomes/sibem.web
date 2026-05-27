@@ -16,17 +16,29 @@
             </div>
             
             <div class="card-body">
-                <form action="{{ route('admin.igrejas.index') }}" method="GET" class="row g-3 mb-4">
-                    <div class="col-md-6 col-lg-4">
-                        <div class="input-group">
-                            <input type="text" name="search" class="form-control" placeholder="Buscar por comum, siga, cnpj, cidade..." value="{{ request('search') }}">
-                            <button class="btn btn-outline-secondary" type="submit">
-                                <i class="ti ti-search"></i> Filtrar
-                            </button>
-                            @if(request('search'))
-                                <a href="{{ route('admin.igrejas.index') }}" class="btn btn-outline-danger">Limpar</a>
-                            @endif
+                <form action="{{ route('admin.igrejas.index') }}" method="GET" class="row g-3 mb-4" id="filter-form">
+                    <div class="col-md-5 col-lg-4">
+                        <input type="text" name="search" class="form-control" placeholder="Buscar por comum, siga, cidade..." value="{{ request('search') }}">
+                    </div>
+                    @if(Auth::user()->isAdminSistema() || Auth::user()->isAdminRegional())
+                        <div class="col-md-4 col-lg-3">
+                            <select name="admlc_id" class="form-select no-choices" onchange="document.getElementById('filter-form').submit()">
+                                <option value="">-- Todas as Administrações --</option>
+                                @foreach($availableLocais as $localOpt)
+                                    <option value="{{ $localOpt->admlc_id }}" {{ request('admlc_id') == $localOpt->admlc_id ? 'selected' : '' }}>
+                                        {{ $localOpt->adm_local }}
+                                    </option>
+                                @endforeach
+                            </select>
                         </div>
+                    @endif
+                    <div class="col-md-3">
+                        <button class="btn btn-outline-secondary" type="submit">
+                            <i class="ti ti-search"></i> Filtrar
+                        </button>
+                        @if(request('search') || request('admlc_id'))
+                            <a href="{{ route('admin.igrejas.index') }}" class="btn btn-outline-danger">Limpar</a>
+                        @endif
                     </div>
                 </form>
 

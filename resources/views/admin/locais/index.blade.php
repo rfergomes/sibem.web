@@ -16,17 +16,29 @@
             </div>
             
             <div class="card-body">
-                <form action="{{ route('admin.locais.index') }}" method="GET" class="row g-3 mb-4">
-                    <div class="col-md-6 col-lg-4">
-                        <div class="input-group">
-                            <input type="text" name="search" class="form-control" placeholder="Buscar por local, razão social, CNPJ ou cidade..." value="{{ request('search') }}">
-                            <button class="btn btn-outline-secondary" type="submit">
-                                <i class="ti ti-search"></i> Filtrar
-                            </button>
-                            @if(request('search'))
-                                <a href="{{ route('admin.locais.index') }}" class="btn btn-outline-danger">Limpar</a>
-                            @endif
+                <form action="{{ route('admin.locais.index') }}" method="GET" class="row g-3 mb-4" id="filter-form">
+                    <div class="col-md-5 col-lg-4">
+                        <input type="text" name="search" class="form-control" placeholder="Buscar por local, razão social, CNPJ ou cidade..." value="{{ request('search') }}">
+                    </div>
+                    @if(Auth::user()->isAdminSistema())
+                        <div class="col-md-4 col-lg-3">
+                            <select name="admrg_id" class="form-select no-choices" onchange="document.getElementById('filter-form').submit()">
+                                <option value="">-- Todas as Regionais --</option>
+                                @foreach($regionais as $regOpt)
+                                    <option value="{{ $regOpt->admrg_id }}" {{ request('admrg_id') == $regOpt->admrg_id ? 'selected' : '' }}>
+                                        {{ $regOpt->adm_regional }}
+                                    </option>
+                                @endforeach
+                            </select>
                         </div>
+                    @endif
+                    <div class="col-md-3">
+                        <button class="btn btn-outline-secondary" type="submit">
+                            <i class="ti ti-search"></i> Filtrar
+                        </button>
+                        @if(request('search') || request('admrg_id'))
+                            <a href="{{ route('admin.locais.index') }}" class="btn btn-outline-danger">Limpar</a>
+                        @endif
                     </div>
                 </form>
 
@@ -52,7 +64,7 @@
                             <tbody>
                                 @foreach($locais as $local)
                                     <tr>
-                                        <td><span class="fw-bold">{{ $local->admlc_id }}</span></td>
+                                        <td><span class="fw-bold badge bg-light-primary text-primary px-2">{{ $local->admlc_id }}</span></td>
                                         <td>
                                             <span class="fw-bold text-dark">{{ $local->adm_local }}</span>
                                         </td>

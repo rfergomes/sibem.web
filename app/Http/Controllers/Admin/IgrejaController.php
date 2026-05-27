@@ -42,6 +42,7 @@ class IgrejaController extends Controller
     public function index(Request $request)
     {
         $this->checkAccess('view');
+        $user = Auth::user();
         $search = $request->input('search');
         $query = $this->getScopedQuery();
 
@@ -55,8 +56,14 @@ class IgrejaController extends Controller
             });
         }
 
-        $igrejas = $query->paginate(15);
-        return view('admin.igrejas.index', compact('igrejas'));
+        if ($request->filled('admlc_id')) {
+            $query->where('admlc_id', $request->input('admlc_id'));
+        }
+
+        $availableLocais = $user->getAvailableLocais();
+        $igrejas = $query->paginate(15)->withQueryString();
+
+        return view('admin.igrejas.index', compact('igrejas', 'availableLocais'));
     }
 
     public function create()

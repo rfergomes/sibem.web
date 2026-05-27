@@ -50,7 +50,7 @@
                                 @foreach($regionais as $reg)
                                     <tr>
                                         <td>
-                                            <span class="fw-bold">{{ $reg->admrg_id }}</span>
+                                            <span class="fw-bold badge bg-light-primary text-primary px-2">{{ $reg->admrg_id }}</span>
                                         </td>
                                         <td>
                                             <span class="fw-bold text-dark">{{ $reg->adm_regional }}</span>
