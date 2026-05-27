@@ -22,7 +22,7 @@
                     </div>
                     @if(Auth::user()->isAdminSistema())
                         <div class="col-md-4 col-lg-3">
-                            <select name="admrg_id" class="form-select no-choices" onchange="document.getElementById('filter-form').submit()">
+                            <select name="admrg_id" id="admrg_id_select" class="form-select">
                                 <option value="">-- Todas as Regionais --</option>
                                 @foreach($regionais as $regOpt)
                                     <option value="{{ $regOpt->admrg_id }}" {{ request('admrg_id') == $regOpt->admrg_id ? 'selected' : '' }}>
@@ -116,6 +116,15 @@
 
 @section('scripts')
 <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const regionalSelect = document.getElementById('admrg_id_select');
+        if (regionalSelect) {
+            regionalSelect.addEventListener('change', function() {
+                document.getElementById('filter-form').submit();
+            });
+        }
+    });
+
     document.querySelectorAll('.delete-local-form').forEach(form => {
         form.addEventListener('submit', function(e) {
             e.preventDefault();
