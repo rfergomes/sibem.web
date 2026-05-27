@@ -15,11 +15,12 @@
                 <table class="table table-sm table-striped align-middle">
                     <tbody>
                         <tr>
+                            <td class="fw-bold text-muted" style="width: 35%;">ID Igreja (Cód. Legado):</td>
+                            <td><span class="fw-bold text-dark">{{ $igreja->igreja_id }}</span></td>
+                        </tr>
+                        <tr>
                             <td class="fw-bold text-muted">Cód. SIGA:</td>
-                            <td>
-                                <span class="fw-bold text-primary">{{ $igreja->cod_siga }}</span>
-                                <small class="text-muted d-block"><code>{{ $igreja->igreja_id }}</code>{{ $igreja->igreja_id }} @if(isset($igreja->setor)) | Setor: {{ $igreja->setor }} @endif</small>
-                            </td>
+                            <td><span class="fw-bold text-primary">{{ $igreja->cod_siga }}</span>
                         </tr>
                         <tr>
                             <td class="fw-bold text-muted">Comum Congregação:</td>

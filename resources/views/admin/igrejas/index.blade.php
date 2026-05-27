@@ -41,7 +41,6 @@
                             <thead class="table-light">
                                 <tr>
                                     <th>Cód. SIGA</th>
-                                    <th>ID Igreja</th>
                                     <th>Comum Congregação</th>
                                     <th>Tipo de Imóvel</th>
                                     <th>Administração Local</th>
@@ -52,8 +51,10 @@
                             <tbody>
                                 @foreach($igrejas as $igreja)
                                     <tr>
-                                        <td><span class="badge bg-light-primary text-primary fw-bold" style="font-size: 0.9em;">{{ $igreja->cod_siga }}</span></td>
-                                        <td><code>{{ $igreja->igreja_id }}</code></td>
+                                        <td>
+                                            <span class="badge bg-light-primary text-primary fw-bold" style="font-size: 0.9em;">{{ $igreja->cod_siga }}</span>
+                                            <small class="text-muted d-block"><code>{{ $igreja->igreja_id }}</code>{{ $igreja->id_igreja }}</small>
+                                        </td>
                                         <td>
                                             <span class="fw-bold text-dark">{{ $igreja->igreja }}</span>
                                         </td>
