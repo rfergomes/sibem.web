@@ -67,8 +67,7 @@
                                         </td>
                                         <td>
                                             <span class="fw-bold text-dark">{{ $igreja->igreja }}
-                                                <span class="d-block mt-1 text-muted">Setor: @if($igreja->setor_id) {{$igreja->setor_id}} @else Não informado @endif</span>
-                                                
+                                                <span class="d-block mt-1 text-muted">Setor: @if($igreja->cod_setor) {{$igreja->cod_setor}} @else Não informado @endif</span>
                                             </span>
                                         </td>
                                         <td>
