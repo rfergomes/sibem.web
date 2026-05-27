@@ -405,13 +405,7 @@
                             <span class="ms-3 text-muted" style="font-size: 20px; font-weight: 300; line-height: 1;">Versão 4</span>
                         </div>
                         <div>
-                            <div class="ccb-stamp" style="border: 2px solid #555; padding: 1px; display: inline-block; border-radius: 4px; background: #fff;">
-                                <div style="border: 1px solid #555; padding: 4px 8px; text-align: center; font-family: 'Georgia', serif; font-weight: bold; color: #444; line-height: 1.1;">
-                                    <div style="font-size: 9px; letter-spacing: 0.5px;">CONGREGAÇÃO CRISTÃ</div>
-                                    <div style="font-size: 7px; margin: 1px 0;">NO</div>
-                                    <div style="font-size: 9px; letter-spacing: 1.5px;">BRASIL</div>
-                                </div>
-                            </div>
+                            <img src="{{ asset('assets/images/CCB_fundo_claro.png') }}" alt="CCB" style="max-height: 60px;">
                         </div>
                     </div>
                     
