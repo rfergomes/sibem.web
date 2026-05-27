@@ -136,7 +136,7 @@
                 <div class="card-body">
                     <div class="d-flex justify-content-between align-items-center">
                         <div>
-                            <h6 class="text-white-50 mb-1">Locais na Regional</h6>
+                            <h6 class="text-white-50 mb-1">Administrações</h6>
                             <h2 class="mb-0 text-white fw-bold">{{ $stats['locais'] }}</h2>
                         </div>
                         <div class="avatar bg-white-20 rounded-3 text-white p-2">
@@ -152,7 +152,7 @@
                 <div class="card-body">
                     <div class="d-flex justify-content-between align-items-center">
                         <div>
-                            <h6 class="text-white-50 mb-1">Total de Igrejas (CCB)</h6>
+                            <h6 class="text-white-50 mb-1">Localidades</h6>
                             <h2 class="mb-0 text-white fw-bold">{{ $stats['igrejas'] }}</h2>
                         </div>
                         <div class="avatar bg-white-20 rounded-3 text-white p-2">
