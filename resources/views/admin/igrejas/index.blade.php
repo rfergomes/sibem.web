@@ -70,7 +70,7 @@
                                         </td>
                                         <td>
                                             @if($igreja->tipoImovel)
-                                                <span class="badge bg-light-info text-primary">{{ $igreja->tipoImovel->nome }}</span>
+                                                <span class="badge bg-light-primary text-primary">{{ $igreja->tipoImovel->nome }}</span>
                                             @else
                                                 <span class="text-muted">Não definido</span>
                                             @endif
