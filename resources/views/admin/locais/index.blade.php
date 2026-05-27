@@ -75,9 +75,8 @@
                                             <span class="badge bg-light-info text-info fw-bold me-1" title="Igrejas">
                                                 {{ $local->igrejas_count }} <i class="ti ti-building-community"></i>
                                             </span>
-                                            <span class="badge bg-light-secondary text-secondary fw-bold" title="Setores">
-                                                {{ $local->setores_count }} <i class="ti ti-chart-bar"></i>
-                                            </span>
+                                            @if($local->setores_count > 0) <span class="badge bg-light-secondary text-secondary fw-bold" title="Setores">
+                                               {{ $local->setores_count }} <i class="ti ti-chart-bar"></i></span>@endif
                                         </td>
                                         <td class="text-end">
                                             <div class="d-flex justify-content-end gap-1">
