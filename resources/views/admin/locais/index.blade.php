@@ -72,7 +72,7 @@
                                             <small class="d-block text-muted">{{ $local->regional->adm_regional ?? 'N/A' }}</small>
                                         </td>
                                         <td>
-                                            <span class="badge bg-light-info text-info fw-bold me-1" title="Igrejas">
+                                            <span class="badge bg-light-primary text-primary fw-bold me-1" title="Igrejas">
                                                 {{ $local->igrejas_count }} <i class="ti ti-building-community"></i>
                                             </span>
                                             @if($local->setores_count > 0) <span class="badge bg-light-primary text-primary fw-bold" title="Setores">
