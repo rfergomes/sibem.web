@@ -52,9 +52,9 @@
                         <table class="table table-sm table-hover align-middle mb-0">
                             <thead class="table-light">
                                 <tr>
-                                    <th>ID Local</th>
+
                                     <th>Administração Local</th>
-                                    <th>CNPJ</th>
+
                                     <th>Cidade / UF</th>
                                     <th>Regional</th>
                                     <th>Igrejas / Setores</th>
@@ -64,11 +64,10 @@
                             <tbody>
                                 @foreach($locais as $local)
                                     <tr>
-                                        <td><span class="fw-bold badge bg-light-primary text-primary px-2">{{ $local->admlc_id }}</span></td>
                                         <td>
                                             <span class="fw-bold text-dark">{{ $local->adm_local }}</span>
+                                            <small class="text-muted d-block"><code>{{ $local->admlc_id }}</code> / {{ $local->cnpj }}</small>
                                         </td>
-                                        <td><code>{{ $local->cnpj }}</code></td>
                                         <td>{{ $local->cidade }} / <span class="badge bg-light-primary text-primary">{{ $local->uf }}</span></td>
                                         <td>{{ $local->regional->adm_regional ?? 'N/A' }}</td>
                                         <td>
