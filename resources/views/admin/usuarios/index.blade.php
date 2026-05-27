@@ -69,7 +69,7 @@
                                                     default => $user->tipo
                                                 };
                                             @endphp
-                                            <span class="badge mt-1 text-muted {{ $badgeClass }}">{{ $labelText }}</span>
+                                            <span class="badge ms-1 text-muted {{ $badgeClass }}">{{ $labelText }}</span>
                                         </td>
                                         <td>{{ $user->email }}</td>
                                         <td>{{ $user->telefone ?? 'Não informado' }}</td>
