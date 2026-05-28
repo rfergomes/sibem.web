@@ -40,6 +40,9 @@ Route::post('/contact', function (\Illuminate\Http\Request $request) {
     $email = $request->input('email');
     $subject = $request->input('subject');
     $userMessage = $request->input('message');
+    
+    $ip = $request->ip();
+    $date = now()->timezone('America/Sao_Paulo')->format('d/m/Y \à\s H:i');
 
     $bodyHtml = '
 <div style="font-family: \'Open Sans\', \'Helvetica Neue\', Helvetica, Arial, sans-serif; background-color: #f4f7fa; padding: 40px 20px; color: #333;">
@@ -69,15 +72,28 @@ Route::post('/contact', function (\Illuminate\Http\Request $request) {
                     ' . e($subject) . '
                 </div>
             </div>
-            <div style="margin-bottom: 10px;">
+            <div style="margin-bottom: 20px;">
                 <label style="display: block; font-size: 11px; font-weight: 700; text-transform: uppercase; color: #888; margin-bottom: 6px; letter-spacing: 0.5px;">Mensagem</label>
                 <div style="background: #f8f9fa; border-left: 4px solid #033D60; padding: 16px; border-radius: 4px; font-size: 14px; color: #222; line-height: 1.6;">
                     ' . nl2br(e($userMessage)) . '
                 </div>
             </div>
+            <div style="margin-bottom: 20px;">
+                <label style="display: block; font-size: 11px; font-weight: 700; text-transform: uppercase; color: #888; margin-bottom: 6px; letter-spacing: 0.5px;">IP de Origem</label>
+                <div style="background: #f8f9fa; border-left: 4px solid #033D60; padding: 12px 16px; border-radius: 4px; font-size: 14px; color: #222;">
+                    ' . e($ip) . '
+                </div>
+            </div>
+            <div style="margin-bottom: 10px;">
+                <label style="display: block; font-size: 11px; font-weight: 700; text-transform: uppercase; color: #888; margin-bottom: 6px; letter-spacing: 0.5px;">Recebido Em</label>
+                <div style="background: #f8f9fa; border-left: 4px solid #033D60; padding: 12px 16px; border-radius: 4px; font-size: 14px; color: #222;">
+                    ' . e($date) . '
+                </div>
+            </div>
         </div>
-        <div style="background-color: #fafafa; padding: 20px; text-align: center; font-size: 11px; color: #aaa; border-top: 1px solid #f0f0f0;">
-            Este é um e-mail automático enviado pelo sistema <strong>SIBEM Web</strong>.
+        <div style="background-color: #fafafa; padding: 25px 20px; text-align: center; font-size: 12px; color: #777; border-top: 1px solid #f0f0f0; line-height: 1.6;">
+            Este e-mail foi gerado automaticamente pelo <strong>SIBEM</strong>.<br>
+            Para responder, basta responder a este e-mail — o destinatário será <strong style="color: #033D60;">' . e($email) . '</strong>.
         </div>
     </div>
 </div>';
