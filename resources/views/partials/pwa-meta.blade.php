@@ -4,8 +4,13 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="SIBEM CCB">
-<link rel="apple-touch-icon" href="{{ asset('assets/images/icon-192x192.png') }}">
-<link rel="manifest" href="{{ asset('manifest.json') }}">
+<link rel="apple-touch-icon" sizes="180x180" href="{{ asset('assets/images/apple-touch-icon.png') }}?v=2">
+<link rel="manifest" href="{{ asset('manifest.json') }}?v=2">
+
+<!-- Favicon Tags with Cache Busters -->
+<link rel="icon" type="image/png" href="{{ asset('assets/images/favicon-96x96.png') }}?v=2" sizes="96x96" />
+<link rel="icon" type="image/svg+xml" href="{{ asset('assets/images/favicon.svg') }}?v=2" />
+<link rel="shortcut icon" href="{{ asset('favicon.ico') }}?v=2" />
 
 <!-- Primary SEO Meta Tags -->
 <meta name="description" content="@yield('meta_description', 'SIBEM CCB - Sistema para Inventário de Bens Móveis. Gerenciamento unificado e controle de acesso integrado.')">

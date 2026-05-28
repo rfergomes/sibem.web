@@ -1,3 +1,4 @@
+/* SIBEM Web - Service Worker */
 const CACHE_NAME = 'sibem-cache-v2';
 const OFFLINE_URL = '/offline.html';
 
@@ -67,7 +68,7 @@ self.addEventListener('fetch', (event) => {
                         });
                     }
                 }).catch(() => { /* Ignore background fetch failures */ });
-                
+
                 return cachedResponse;
             }
 
