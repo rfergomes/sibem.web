@@ -1,3 +1,6 @@
+@section('title', 'SIBEM')
+@section('meta_description', 'Sistema desenvolvido para demanda de inventários da Congregação Cristã no Brasil.')
+@section('meta_keywords', 'CCB, inventario, ativo, imobilizado, bens, moveis')
 <!DOCTYPE html>
 <html lang="pt-br">
 
@@ -5,12 +8,8 @@
     <meta charset="utf-8">
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
     <title>SIBEM - Sistema para Inventário de Bens Móveis</title>
-    <meta name="description" content="Sistema desenvolvido para demanda de inventários da Congregação Cristã no Brasil">
-    <meta name="keywords" content="CCB, inventario, ativo, imobilizado, bens, moveis">
-
-    <!-- Favicons -->
-    <link href="{{ asset('landing/assets/img/favicon.png') }}" rel="icon">
-    <link href="{{ asset('landing/assets/img/apple-touch-icon.png') }}" rel="apple-touch-icon">
+    
+    @include('partials.pwa-meta')
 
     <!-- Fonts -->
     <link href="https://fonts.googleapis.com" rel="preconnect">

@@ -73,7 +73,7 @@
         <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px;">
             <div style="display: flex; align-items: center;">
                 <div style="width: 40px; height: 40px; background: #033D60; border-radius: 8px; display: flex; align-items: center; justify-content: center; margin-right: 12px; flex-shrink: 0;">
-                    <img src="{{ asset('assets/images/favicon.svg') }}" style="width: 24px; height: 24px;" alt="Logo">
+                    <img src="{{ asset('assets/images/favicon.ico') }}" style="width: 24px; height: 24px;" alt="Logo">
                 </div>
                 <div style="text-align: left;">
                     <h5 style="margin: 0; font-size: 14px; font-weight: 700; color: #111;">Instalar SIBEM Web</h5>
