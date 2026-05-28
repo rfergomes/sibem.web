@@ -231,7 +231,7 @@
                 </div>
                 <div class="text-center d-flex flex-wrap justify-content-center gap-2" data-aos="zoom-out" data-aos-delay="100" style="margin-top: 20px;">
                     <a href="{{ asset('app/setup.exe') }}" class="btn-pwa"><i class="bi bi-download me-1"></i> Baixar SIBEM Desktop</a>
-                    <a href="{{ route('login') }}" class="btn-pwa"><i class="bi bi-pc-display-horizontal me-1"></i> SIBEM Web</a>
+                    <a href="{{ route('login') }}" class="btn-pwa"><i class="bi bi-pc-display-horizontal me-1"></i> Acessar SIBEM Web</a>
                 </div>
 
                 <div class="row gy-4 mt-5">
