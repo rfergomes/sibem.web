@@ -123,5 +123,76 @@
         layout_rtl_change('false');
         preset_change("preset-1");
     </script>
+
+    <!-- PWA Install Floating Banner -->
+    <div id="pwa-install-banner" style="display: none; position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); max-width: 450px; width: calc(100% - 40px); background: #ffffff; box-shadow: 0 10px 35px rgba(0,0,0,0.15); border-radius: 12px; padding: 18px; z-index: 9999; border: 1px solid rgba(3, 61, 96, 0.1); animation: slideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1);">
+        <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px;">
+            <div style="display: flex; align-items: center;">
+                <div style="width: 40px; height: 40px; background: #033D60; border-radius: 8px; display: flex; align-items: center; justify-content: center; margin-right: 12px; flex-shrink: 0;">
+                    <img src="{{ asset('assets/images/favicon.svg') }}" style="width: 24px; height: 24px;" alt="Logo">
+                </div>
+                <div style="text-align: left;">
+                    <h5 style="margin: 0; font-size: 14px; font-weight: 700; color: #111;">Instalar SIBEM Web</h5>
+                    <p style="margin: 0; font-size: 12px; color: #666;">Instale na sua tela inicial para acesso rápido.</p>
+                </div>
+            </div>
+            <button onclick="dismissInstallBanner()" style="background: none; border: none; cursor: pointer; color: #999; padding: 4px; display: flex; align-items: center; justify-content: center;" aria-label="Fechar">
+                <i class="ti ti-x" style="font-size: 18px;"></i>
+            </button>
+        </div>
+        <div style="display: flex; gap: 8px; justify-content: flex-end;">
+            <button onclick="dismissInstallBanner()" style="background: #f1f3f5; color: #495057; border: none; border-radius: 6px; padding: 8px 16px; font-size: 13px; font-weight: 600; cursor: pointer; transition: background 0.2s;">Agora Não</button>
+            <button onclick="triggerInstall()" style="background: #033D60; color: #ffffff; border: none; border-radius: 6px; padding: 8px 20px; font-size: 13px; font-weight: 600; cursor: pointer; box-shadow: 0 4px 10px rgba(3, 61, 96, 0.2); transition: background 0.2s;">Instalar</button>
+        </div>
+    </div>
+
+    <style>
+        @keyframes slideUp {
+            from {
+                transform: translate(-50%, 100px);
+                opacity: 0;
+            }
+            to {
+                transform: translate(-50%, 0);
+                opacity: 1;
+            }
+        }
+    </style>
+
+    <script>
+        let deferredPrompt;
+        const installBanner = document.getElementById('pwa-install-banner');
+
+        window.addEventListener('beforeinstallprompt', (e) => {
+            // Impedir que o Chrome mostre o prompt padrão automaticamente
+            e.preventDefault();
+            // Salvar o evento para ser disparado posteriormente
+            deferredPrompt = e;
+            // Mostrar o banner customizado de instalação
+            installBanner.style.display = 'block';
+        });
+
+        function triggerInstall() {
+            if (deferredPrompt) {
+                // Esconder o banner
+                installBanner.style.display = 'none';
+                // Disparar o prompt de instalação do navegador
+                deferredPrompt.prompt();
+                // Aguardar a resposta do usuário
+                deferredPrompt.userChoice.then((choiceResult) => {
+                    if (choiceResult.outcome === 'accepted') {
+                        console.log('[SIBEM] Usuário aceitou a instalação do PWA');
+                    } else {
+                        console.log('[SIBEM] Usuário recusou a instalação do PWA');
+                    }
+                    deferredPrompt = null;
+                });
+            }
+        }
+
+        function dismissInstallBanner() {
+            installBanner.style.display = 'none';
+        }
+    </script>
 </body>
 </html>
