@@ -1,28 +1,8 @@
-@section('title', 'Página Não Encontrada')
-@section('meta_description', 'A página solicitada não foi encontrada no SIBEM Web.')
-<!DOCTYPE html>
-<html lang="pt-br">
-<head>
-    <title>Página Não Encontrada | SIBEM Web</title>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=0,minimal-ui">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    
-    @include('partials.pwa-meta')
-    
-    <link rel="icon" href="{{ asset('assets/images/favicon.svg') }}?v=2" type="image/svg+xml">
-    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="{{ asset('assets/css/style.css') }}" id="main-style-link">
-</head>
-<body data-pc-preset="preset-1" data-pc-sidebar-theme="dark" data-pc-sidebar-caption="true" data-pc-direction="ltr" data-pc-theme="light">
-    <!-- [ Pre-loader ] start -->
-    <div class="loader-bg">
-        <div class="pc-loader">
-            <div class="loader-fill"></div>
-        </div>
-    </div>
-    <!-- [ Pre-loader ] End -->
+@extends('layouts.error')
 
+@section('title', 'Página Não Encontrada')
+
+@section('content')
     <div class="auth-main v1">
         <div class="auth-wrapper">
             <div class="auth-form text-center">
@@ -37,14 +17,4 @@
             </div>
         </div>
     </div>
-
-    <script src="{{ asset('assets/js/plugins/popper.min.js') }}"></script>
-    <script src="{{ asset('assets/js/plugins/bootstrap.min.js') }}"></script>
-    <script src="{{ asset('assets/js/plugins/feather.min.js') }}"></script>
-    <script src="{{ asset('assets/js/pcoded.js') }}"></script>
-    <script>
-        layout_change('light');
-        preset_change("preset-1");
-    </script>
-</body>
-</html>
+@endsection
