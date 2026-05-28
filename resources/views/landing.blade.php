@@ -196,7 +196,7 @@
 
             <nav id="navmenu" class="navmenu">
                 <ul>
-                    <li><a href="#home" class="active">Home<br></a></li>
+                    <li style="color: var(--primary-color);">Home</li>
                     <li><a href="#sobre">Sobre</a></li>
                     <li><a href="#stats">Números</a></li>
                     <li><a href="#about-alt">Vídeo</a></li>
@@ -239,8 +239,7 @@
                         <div class="icon-box">
                             <div class="icon"><i class="bi bi-upc-scan"></i></div>
                             <h4 class="title"><a href="">Scanner Óptico</a></h4>
-                            <p class="description">Através do scanner, a conferência do ativo imobilizado se torna
-                                rápido e prático.
+                            <p class="description">Utilize o scanner para leitura do código de barras e agilize o inventário.
                             </p>
                         </div>
                     </div><!--End Icon Box -->
@@ -249,9 +248,7 @@
                         <div class="icon-box">
                             <div class="icon"><i class="bi bi-phone"></i></div>
                             <h4 class="title"><a href="">Smartphone</a></h4>
-                            <p class="description">Utilize seu celular para coleta de dados e importe os dados coletados
-                                diretamente
-                                no sistema.</p>
+                            <p class="description">O sistema permite a coleta de dados via smartphone, otimizando o processo de inventário.</p>
                         </div>
                     </div><!--End Icon Box -->
 
@@ -259,7 +256,7 @@
                         <div class="icon-box">
                             <div class="icon"><i class="bi bi-exclamation-triangle"></i></div>
                             <h4 class="title"><a href="">Pendências</a></h4>
-                            <p class="description">Trate as pendências a fim de manter os dados do SIGA atualizado</p>
+                            <p class="description">Gerencie e resolva pendências de forma eficiente para garantir a integridade dos dados do patrimônio.</p>
                         </div>
                     </div><!--End Icon Box -->
 
@@ -267,7 +264,7 @@
                         <div class="icon-box">
                             <div class="icon"><i class="bi bi-file-pdf"></i></div>
                             <h4 class="title"><a href="">Relatórios</a></h4>
-                            <p class="description">Gere relatórios para para futuras auditorias</p>
+                            <p class="description">Gere relatórios detalhados para auditorias e gest&atilde;o eficiente do patrim&iacute;nio.</p>
                         </div>
                     </div><!--End Icon Box -->
 
@@ -282,7 +279,7 @@
             <!-- Section Title -->
             <div class="container section-title" data-aos="fade-up">
                 <h2>Sobre<br></h2>
-                <p>Sistema de Inventários - Ativo Imobilizado</p>
+                <p>Sistema para Inventário de Bens Móveis - SIBEM CCB&copy;</p>
             </div><!-- End Section Title -->
 
             <div class="container">
@@ -291,30 +288,26 @@
 
                     <div class="col content" data-aos="fade-up" data-aos-delay="100">
                         <p>
-                            Este software, SIBEM CCB - Sistema para Inventário de Bens Móveis, foi desenvolvido com
-                            dedicação e zelo
-                            para atender exclusivamente às necessidades da Congregação Cristã no Brasil, com o objetivo
-                            de
-                            proporcionar organização e gestão eficiente de seus bens móveis, sempre guiados pelos
-                            princípios cristãos
-                            de ordem e responsabilidade.</p>
+                            O <strong>SIBEM CCB – Sistema para Inventário de Bens Móveis</strong> – foi desenvolvido com zelo e dedicação
+                            para atender de forma exclusiva às necessidades da Congregação Cristã no Brasil. Nosso objetivo é
+                            proporcionar maior organização e eficiência na gestão do patrimônio mobiliário, sempre fundamentados
+                            nos princípios cristãos de ordem, zelo e responsabilidade.</p>
 
-                        <p>A versão 4 do SIBEM CCB reflete o esforço coletivo de irmãos que se dedicaram a este
-                            propósito com amor e
-                            compromisso.</p>
+                        <p>A versão 4 do SIBEM CCB reflete o amadurecimento deste projeto e o esforço coletivo de irmãos
+                            que se dedicaram voluntariamente a este propósito com amor, comunhão e compromisso.</p>
 
-                        <p>Agradecemos a Deus por nos conceder sabedoria, força e inspiração para concluir este projeto.
-                            Nosso
-                            reconhecimento especial vai aos irmãos que contribuíram intelectualmente e tecnicamente,
-                            cuja colaboração
-                            foi fundamental para o sucesso desta versão.</p>
+                        <p>Agradecemos primeiramente a Deus por nos conceder a sabedoria, a força e a inspiração necessárias para
+                            a realização deste trabalho. Expressamos também nosso sincero reconhecimento aos irmãos que colaboraram
+                            técnica e intelectualmente, cujo empenho foi fundamental para o sucesso e desenvolvimento desta nova versão.</p>
 
-                        <p>Que este trabalho seja uma ferramenta eficaz na administração dos bens da irmandade, sempre
-                            para a glória
-                            do Senhor.</p>
+                        <p>Que esta ferramenta continue a ser um instrumento eficaz na administração dos bens da irmandade,
+                            cooperando com a boa ordem e conservação do patrimônio, sempre para a honra e glória do Senhor.</p>
 
-                        <p>"Tudo quanto fizerdes, fazei-o de todo o coração, como ao Senhor, e não aos homens."
-                            (Colossenses 3:23)</p>
+                        <p class="fst-italic text-muted">
+                            "Tudo quanto fizerdes, fazei-o de todo o coração, como ao Senhor, e não aos homens."
+                            <br>
+                            <span style="font-size: 13px; font-weight: 500;">— Colossenses 3:23</span>
+                        </p>
 
                         <p>Vossos irmãos em Cristo,</p>
 
@@ -326,7 +319,7 @@
                             <li><i class="bi bi-check2-circle"></i> <span>Emanoel Oliveira</span></li>
                         </ul>
                     </div>
-                    <p>CCB - Administração - Patrimônio - Ativo Imobilizado</p>
+                    <p class="text-center">CCB - Administração - Campinas/SP - Setor de Patrimônio</p>
                 </div>
             </div>
 
@@ -389,32 +382,19 @@
                         <a href="https://www.youtube.com/watch?v=twSOX5SxHDA" class="glightbox pulsating-play-btn"></a>
                     </div>
                     <div class="col-lg-6 content" data-aos="fade-up" data-aos-delay="200">
-                        <h3>Vídeo demonstrativo do sistema de inventários.</h3>
+                        <h3>Conheça o SIBEM em Ação</h3>
                         <p class="fst-italic">
-                            Este vídeo apresentará o sistema, bem como suas funcionalidades, módulos e relatórios
-                            disponíveis.
+                            Assista ao vídeo demonstrativo ao lado para conhecer a interface do sistema, bem como a dinâmica de seus principais módulos e relatórios:
                         </p>
                         <ul>
-                            <li><i class="bi bi-check2-all"></i> <span>DASHBOARD - Apresenta as estatísticas dos
-                                    inventários
-                                    realizados.</span>
-                            </li>
-                            <li><i class="bi bi-check2-all"></i> <span>INVENTÁRIO - Realização efetiva do
-                                    inventário</span></li>
-                            <li><i class="bi bi-check2-all"></i> <span>CADASTROS - Apresenta a relação de Igrejas,
-                                    Setores, Bens
-                                    Móveis, etc...</span></li>
-                            <li><i class="bi bi-check2-all"></i> <span>CONFIGURAÇÕES - Configurações gerais do sistema,
-                                    como credenciais do
-                                    banco online, permissões e parâmetros.</span></li>
-                            <li><i class="bi bi-check2-all"></i> <span>SINCRONIZAR - Replicação dos dados com banco de
-                                    dados em
-                                    núvem, disponibilizando as informações à todos os usuários.</span></li>
+                            <li><i class="bi bi-check2-all"></i> <span><strong>PAINEL DE CONTROLE (DASHBOARD)</strong>: Visualização de gráficos estatísticos e indicadores em tempo real sobre a situação de cada inventário e o progresso dos lançamentos.</span></li>
+                            <li><i class="bi bi-check2-all"></i> <span><strong>MÓDULO DE INVENTÁRIO</strong>: Área dedicada à realização prática do inventário físico (in loco), com suporte à leitura de códigos de barras via scanner óptico ou celular e apontamento de divergências.</span></li>
+                            <li><i class="bi bi-check2-all"></i> <span><strong>CADASTROS ESTRUTURADOS</strong>: Gerenciamento unificado de Casas de Oração, Administrações Regionais/Locais, setores físicos, usuários autorizados e catálogo de bens móveis.</span></li>
+                            <li><i class="bi bi-check2-all"></i> <span><strong>CONFIGURAÇÕES E SEGURANÇA</strong>: Controle de permissões de acesso por perfil de usuário, parametrizações gerais do sistema e definição do banco de dados operacional.</span></li>
+                            <li><i class="bi bi-check2-all"></i> <span><strong>SINCRONIZAÇÃO INTELIGENTE</strong>: Tecnologia de replicação de dados em nuvem que permite o trabalho offline (mesmo sem internet na igreja) e posterior consolidação no servidor central.</span></li>
                         </ul>
                         <p>
-                            O sistema está em constante evolução, com novas funcionalidades e melhorias sendo
-                            implementadas
-                            periodicamente.
+                            O SIBEM está em constante evolução, recebendo novas funcionalidades e otimizações periodicamente para melhor atender às necessidades da irmandade.
                         </p>
                     </div>
                 </div>
@@ -456,55 +436,49 @@
                         <div class="faq-container">
 
                             <div class="faq-item faq-active">
-                                <h3>Abrange todo território nacional?</h3>
+                                <h3>O sistema atende a todo o território nacional?</h3>
                                 <div class="faq-content">
-                                    <p>Sim. O sistema está preparado para atender a nível nacional.</p>
+                                    <p>Sim. O SIBEM foi projetado para se adaptar com facilidade à estrutura e às particularidades de qualquer regional, setor ou localidade dentro do território nacional.</p>
                                 </div>
                                 <i class="faq-toggle bi bi-chevron-right"></i>
                             </div><!-- End Faq item-->
 
                             <div class="faq-item">
-                                <h3>Os dados estão online?</h3>
+                                <h3>Como os dados são armazenados?</h3>
                                 <div class="faq-content">
-                                    <p>Os dados são gravador em um banco de dados local, no computador/desktop e poserá
-                                        ser sincronizado
-                                        na núvem, disponibilizando as informações com os demais usuários.</p>
+                                    <p>Os dados do inventário são registrados inicialmente em um banco de dados local no computador de trabalho. Posteriormente, eles podem ser sincronizados com um servidor em nuvem seguro, disponibilizando e unificando as informações para os demais usuários autorizados da administração.</p>
                                 </div>
                                 <i class="faq-toggle bi bi-chevron-right"></i>
                             </div><!-- End Faq item-->
 
                             <div class="faq-item">
-                                <h3>Trabalha somente online?</h3>
+                                <h3>O sistema funciona sem acesso à Internet?</h3>
                                 <div class="faq-content">
-                                    <p>Não. Nem todas as casas de oração possuem acesso a internet, por isso o sistema
-                                        trabalha com
-                                        replicação de dados (sincronização)</p>
+                                    <p>Sim. Sabendo que nem todas as casas de oração contam com conexão ativa à internet, o SIBEM foi desenvolvido para operar perfeitamente de forma offline. O usuário realiza a coleta e os lançamentos localmente e faz a sincronização dos dados assim que houver rede disponível.</p>
                                 </div>
                                 <i class="faq-toggle bi bi-chevron-right"></i>
                             </div><!-- End Faq item-->
 
                             <div class="faq-item">
-                                <h3>Posso trabalhar com mais de uma administração?</h3>
+                                <h3>É possível gerenciar mais de uma administração no mesmo sistema?</h3>
                                 <div class="faq-content">
-                                    <p>Sim, é possível. O sistema é multi-administrações.</p>
+                                    <p>Sim. O SIBEM conta com suporte multi-administração nativo, permitindo controlar diferentes regionais, setores e locais de forma independente e organizada dentro do mesmo ambiente.</p>
                                 </div>
                                 <i class="faq-toggle bi bi-chevron-right"></i>
                             </div><!-- End Faq item-->
 
                             <div class="faq-item">
-                                <h3>Qual valor da mensalidade e/ou implantação?</h3>
+                                <h3>Qual é o custo de implantação, licença ou mensalidade?</h3>
                                 <div class="faq-content">
-                                    <p>A licença do sistema é gratuito, sem mensalidades, sem custo de manutenção.
-                                        Necessário apenas um
-                                        banco de dados online com custo de hospedagem diretamente com provedor.</p>
+                                    <p>O SIBEM é um software totalmente gratuito, livre de taxas de adesão, mensalidades ou custos de licenciamento. O único custo eventual fica a cargo da hospedagem do banco de dados em nuvem (caso a administração opte pela sincronização online), que é contratada e paga diretamente ao provedor escolhido.</p>
                                 </div>
                                 <i class="faq-toggle bi bi-chevron-right"></i>
                             </div><!-- End Faq item-->
 
                             <div class="faq-item">
-                                <h3>Tem atualizações?</h3>
+                                <h3>O software recebe atualizações de novos recursos?</h3>
                                 <div class="faq-content">
-                                    <p>Sim. Sistema atualizado periodicamente.</p>
+                                    <p>Sim. O sistema passa por evoluções contínuas. Ao ser iniciado, o SIBEM verifica e instala atualizações automaticamente sempre que uma nova versão com melhorias ou correções for publicada na nuvem.</p>
                                 </div>
                                 <i class="faq-toggle bi bi-chevron-right"></i>
                             </div><!-- End Faq item-->
