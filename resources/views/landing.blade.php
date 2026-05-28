@@ -29,6 +29,99 @@
     <link href="{{ asset('landing/assets/css/main.css') }}" rel="stylesheet">
 
     <style>
+        /* Glassmorphism Header */
+        .header {
+            background: rgba(255, 255, 255, 0.85) !important;
+            backdrop-filter: blur(12px) !important;
+            -webkit-backdrop-filter: blur(12px) !important;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+            transition: all 0.3s ease;
+        }
+
+        /* Feature Cards Hover Interactions */
+        .hero .icon-box {
+            transition: all 0.35s cubic-bezier(0.25, 0.8, 0.25, 1) !important;
+            border: 1px solid rgba(0, 0, 0, 0.04) !important;
+            background: #ffffff !important;
+            border-radius: 10px !important;
+        }
+
+        .hero .icon-box:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 15px 35px rgba(3, 61, 96, 0.12) !important;
+            border-color: #033D60 !important;
+        }
+
+        /* Stats Widgets */
+        #stats .stats-item {
+            background: #ffffff;
+            padding: 35px 25px;
+            border-radius: 12px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.03);
+            border-top: 4px solid #033D60;
+            transition: all 0.35s cubic-bezier(0.25, 0.8, 0.25, 1);
+            border-left: 1px solid rgba(0,0,0,0.02);
+            border-right: 1px solid rgba(0,0,0,0.02);
+            border-bottom: 1px solid rgba(0,0,0,0.02);
+        }
+
+        #stats .stats-item:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 30px rgba(3, 61, 96, 0.1);
+        }
+
+        #stats .stats-item .purecounter {
+            font-size: 36px;
+            font-weight: 700;
+            color: #033D60;
+            display: block;
+            margin-bottom: 8px;
+        }
+
+        #stats .stats-item p {
+            margin: 0;
+            font-size: 14px;
+            font-weight: 600;
+            color: #666;
+        }
+
+        /* Version Frame Wrapper */
+        .version-frame-wrapper {
+            background: #ffffff;
+            border-radius: 12px;
+            padding: 10px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.06);
+            border: 1px solid rgba(0, 0, 0, 0.05);
+        }
+
+        /* PWA Button Styling in Hero */
+        .btn-pwa {
+            font-family: var(--heading-font);
+            font-weight: 600;
+            font-size: 15px;
+            letter-spacing: 0.5px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 12px 30px;
+            border-radius: 50px;
+            transition: all 0.3s ease;
+            margin: 10px;
+            border: 2px solid #033D60;
+            background: transparent;
+            color: #033D60;
+            text-decoration: none;
+            gap: 8px;
+        }
+
+        .btn-pwa:hover {
+            background: #033D60;
+            color: #ffffff !important;
+            box-shadow: 0 8px 20px rgba(3, 61, 96, 0.25);
+            transform: translateY(-1px);
+        }
+
+        /* General style utilities */
         .mapouter {
             position: relative;
             text-align: right;
@@ -111,7 +204,7 @@
                     <li><a href="#faq">Dúvidas</a></li>
                     <li><a href="#contact">Contato</a></li>
                     <li><a href="{{ asset('landing/html/Manual_SIBEM.html') }}" target="_blank">Documentação</a></li>
-                    <li><a href="{{ route('login') }}" class="fw-bold text-primary">Acesse o Sistema</a></li>
+                    <li><a href="{{ route('login') }}" class="fw-bold text-primary"><i class="bi bi-box-arrow-in-right"></i> Login</a></li>
                 </ul>
                 <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
             </nav>
@@ -136,8 +229,9 @@
                         <p>Uso exclusivo da Congregação Cristã no Brasil&copy;</p>
                     </div>
                 </div>
-                <div class="text-center" data-aos="zoom-out" data-aos-delay="100">
-                    <a href="{{ asset('app/setup.exe') }}" class="btn-get-started">Download V4.0.0.28</a>
+                <div class="text-center d-flex flex-wrap justify-content-center gap-2" data-aos="zoom-out" data-aos-delay="100" style="margin-top: 20px;">
+                    <a href="{{ asset('app/setup.exe') }}" class="btn-get-started"><i class="bi bi-download me-1"></i> Download V4.0.0.28</a>
+                    <a href="{{ route('login') }}" class="btn-pwa"><i class="bi bi-phone-vibrate me-1"></i> Acessar Web / Instalar PWA</a>
                 </div>
 
                 <div class="row gy-4 mt-5">
@@ -233,11 +327,7 @@
                         </ul>
                     </div>
                     <p>CCB - Administração - Patrimônio - Ativo Imobilizado</p>
-
-
-
                 </div>
-
             </div>
 
         </section><!-- /About Section -->
@@ -251,6 +341,7 @@
 
                     <div class="col-lg-3 col-md-6">
                         <div class="stats-item text-center w-100 h-100">
+                            <i class="bi bi-people" style="font-size: 32px; color: #033D60; margin-bottom: 10px; display: block;"></i>
                             <span data-purecounter-start="0" data-purecounter-end="{{ $users }}"
                                 data-purecounter-duration="1" class="purecounter"></span>
                             <p>Usuários</p>
@@ -259,6 +350,7 @@
 
                     <div class="col-lg-3 col-md-6">
                         <div class="stats-item text-center w-100 h-100">
+                            <i class="bi bi-map" style="font-size: 32px; color: #033D60; margin-bottom: 10px; display: block;"></i>
                             <span data-purecounter-start="0" data-purecounter-end="{{ $regionais }}"
                                 data-purecounter-duration="1" class="purecounter"></span>
                             <p>Administrações Regionais</p>
@@ -267,6 +359,7 @@
 
                     <div class="col-lg-3 col-md-6">
                         <div class="stats-item text-center w-100 h-100">
+                            <i class="bi bi-building" style="font-size: 32px; color: #033D60; margin-bottom: 10px; display: block;"></i>
                             <span data-purecounter-start="0" data-purecounter-end="{{ $locais }}"
                                 data-purecounter-duration="1" class="purecounter"></span>
                             <p>Administrações Locais</p>
@@ -275,6 +368,7 @@
 
                     <div class="col-lg-3 col-md-6">
                         <div class="stats-item text-center w-100 h-100">
+                            <i class="bi bi-house-door" style="font-size: 32px; color: #033D60; margin-bottom: 10px; display: block;"></i>
                             <span data-purecounter-start="0" data-purecounter-end="{{ $igrejas }}"
                                 data-purecounter-duration="1" class="purecounter"></span>
                             <p>Casas de Oração</p>
@@ -333,12 +427,14 @@
                 <p>Uma vez instalado, o sistema busca por atualizações automaticamente</p>
             </div><!-- End Section Title -->
             <div class="container" data-aos="fade-up" data-aos-delay="100">
-                <iframe id="tabelaVersao" src="{{ asset('app/home.html') }}" width="100%" height="600" frameborder="0"
-                    title="Tabela de versões" style="border:none; overflow:hidden;">
-                    <p>Não foi possível carregar o conteúdo. Acesse diretamente
-                        <a href="{{ asset('app/home.html') }}" target="_blank" rel="noopener">app/home.html</a>.
-                    </p>
-                </iframe>
+                <div class="version-frame-wrapper">
+                    <iframe id="tabelaVersao" src="{{ asset('app/home.html') }}" width="100%" height="600" frameborder="0"
+                        title="Tabela de versões" style="border:none; overflow:hidden; border-radius: 8px;">
+                        <p>Não foi possível carregar o conteúdo. Acesse diretamente
+                            <a href="{{ asset('app/home.html') }}" target="_blank" rel="noopener">app/home.html</a>.
+                        </p>
+                    </iframe>
+                </div>
             </div>
         </section>
 
