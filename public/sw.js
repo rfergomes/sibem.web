@@ -1,4 +1,4 @@
-const CACHE_NAME = 'sibem-cache-v1';
+const CACHE_NAME = 'sibem-cache-v2';
 const OFFLINE_URL = '/offline.html';
 
 const ASSETS_TO_CACHE = [
@@ -6,7 +6,7 @@ const ASSETS_TO_CACHE = [
     '/assets/images/favicon.svg',
     '/assets/images/icon-192x192.png',
     '/assets/images/icon-512x512.png',
-    '/assets/images/sibem_logo_claro.png',
+    '/assets/images/logo_white.png',
     '/assets/css/style.css',
     '/assets/css/style-preset.css',
     '/assets/css/ccb-theme.css'
