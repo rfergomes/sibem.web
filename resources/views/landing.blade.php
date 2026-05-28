@@ -408,10 +408,10 @@
             </div><!-- End Section Title -->
             <div class="container" data-aos="fade-up" data-aos-delay="100">
                 <div class="version-frame-wrapper">
-                    <iframe id="tabelaVersao" src="{{ asset('app/home.html') }}" width="100%" height="600" frameborder="0"
+                    <iframe id="tabelaVersao" src="{{ asset('app/home.htm') }}" width="100%" height="600" frameborder="0"
                         title="Tabela de versões" style="border:none; overflow:hidden; border-radius: 8px;">
                         <p>Não foi possível carregar o conteúdo. Acesse diretamente
-                            <a href="{{ asset('app/home.html') }}" target="_blank" rel="noopener">app/home.html</a>.
+                            <a href="{{ asset('app/home.htm') }}" target="_blank" rel="noopener">app/home.htm</a>.
                         </p>
                     </iframe>
                 </div>
