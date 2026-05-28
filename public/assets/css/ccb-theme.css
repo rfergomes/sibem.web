@@ -334,8 +334,34 @@ html, body {
     max-width: 100% !important;
 }
 
-/* Garantir que as tabelas quebrem as palavras longas em vez de expandir a largura da página */
-table.table td, table.table th {
-    white-space: normal !important;
-    word-break: break-word !important;
+/* Ajustes de responsividade específicos para smartphones (até 576px) */
+@media (max-width: 576px) {
+    /* Diminuir o tamanho do seletor de tenant (localidade) no cabeçalho */
+    #tenant-selector-form select.form-select {
+        max-width: 150px !important;
+        font-size: 11px !important;
+        padding: 4px 18px 4px 6px !important;
+        height: auto !important;
+        min-height: auto !important;
+    }
+
+    #tenant-selector-form .input-group-text {
+        padding: 4px 6px !important;
+        font-size: 11px !important;
+    }
+
+    /* Reduzir margens e paddings no cabeçalho superior */
+    .pc-header .header-wrapper {
+        padding: 0 8px !important;
+    }
+
+    .pc-header .pc-h-item {
+        margin-right: 6px !important;
+    }
+
+    /* Assegurar que as células de tabelas não quebrem letra por letra e rolem horizontalmente */
+    table.table td, table.table th {
+        white-space: nowrap !important;
+        word-break: normal !important;
+    }
 }

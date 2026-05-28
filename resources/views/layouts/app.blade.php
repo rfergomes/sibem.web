@@ -29,7 +29,7 @@
     @yield('styles')
 </head>
 
-<body data-pc-preset="preset-10" data-pc-sidebar-theme="dark" data-pc-sidebar-caption="true" data-pc-direction="ltr" data-pc-theme="light" data-pc-header-theme="dark" style="overflow: hidden; padding-right: 15px;">
+<body data-pc-preset="preset-10" data-pc-sidebar-theme="dark" data-pc-sidebar-caption="true" data-pc-direction="ltr" data-pc-theme="light" data-pc-header-theme="dark">
     
     <!-- Preloader -->
     <div class="loader-bg">
