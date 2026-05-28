@@ -6,6 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimal-ui">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     
+    @include('partials.pwa-meta')
+    
     <!-- Favicon -->
     <link rel="icon" href="{{ asset('assets/images/favicon.svg') }}" type="image/x-icon">
     
@@ -43,7 +45,7 @@
         <div class="navbar-wrapper" style="position: relative; height: 100%;">
             <div class="m-header">
                 <a href="{{ route('dashboard') }}" class="b-brand text-primary">
-                    <img src="{{ asset('assets/images/sibem_logo_claro.png') }}" alt="logo" class="logo-lg" style="max-height: 58px;">
+                    <img src="{{ asset('assets/images/logo_white.png') }}" alt="logo" class="logo-lg" style="max-height: 58px;">
                 </a>
             </div>
             

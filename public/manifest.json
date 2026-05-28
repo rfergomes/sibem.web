@@ -1,0 +1,31 @@
+{
+  "name": "SIBEM CCB - Inventário de Bens Móveis",
+  "short_name": "SIBEM CCB",
+  "description": "Sistema para Inventário de Bens Móveis da Congregação Cristã no Brasil",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#033D60",
+  "theme_color": "#033D60",
+  "orientation": "portrait-primary",
+  "scope": "/",
+  "icons": [
+    {
+      "src": "/assets/images/icon-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/assets/images/icon-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/assets/images/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "maskable"
+    }
+  ]
+}

@@ -1,3 +1,5 @@
+@section('title', 'Login')
+@section('meta_description', 'Acesse o SIBEM Web - Sistema para Inventário de Bens Móveis da Congregação Cristã no Brasil.')
 <!DOCTYPE html>
 <html lang="pt-br">
 <!-- [Head] start -->
@@ -7,7 +9,8 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=0,minimal-ui">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="description" content="SIBEM Web - Login">
+    
+    @include('partials.pwa-meta')
     
     <!-- [Favicon] icon -->
     <link rel="icon" href="{{ asset('assets/images/favicon.svg') }}" type="image/x-icon">

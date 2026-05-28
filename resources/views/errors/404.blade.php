@@ -1,3 +1,5 @@
+@section('title', 'Página Não Encontrada')
+@section('meta_description', 'A página solicitada não foi encontrada no SIBEM Web.')
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
@@ -5,6 +7,9 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=0,minimal-ui">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    
+    @include('partials.pwa-meta')
+    
     <link rel="icon" href="{{ asset('assets/images/favicon.svg') }}" type="image/x-icon">
     <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{{ asset('assets/css/style.css') }}" id="main-style-link">
@@ -35,6 +40,7 @@
 
     <script src="{{ asset('assets/js/plugins/popper.min.js') }}"></script>
     <script src="{{ asset('assets/js/plugins/bootstrap.min.js') }}"></script>
+    <script src="{{ asset('assets/js/plugins/feather.min.js') }}"></script>
     <script src="{{ asset('assets/js/pcoded.js') }}"></script>
     <script>
         layout_change('light');

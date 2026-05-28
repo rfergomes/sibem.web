@@ -1,8 +1,12 @@
+@section('title', 'Boas-vindas')
+@section('meta_description', 'Boas-vindas ao SIBEM Web - Sistema para Inventário de Bens Móveis da Congregação Cristã no Brasil.')
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
+        
+        @include('partials.pwa-meta')
 
         <title>{{ config('app.name', 'Laravel') }}</title>
 

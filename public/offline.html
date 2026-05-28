@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sem Conexão | SIBEM Web</title>
+    
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Inline styles for instant loading offline -->
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        
+        body {
+            font-family: 'Open Sans', sans-serif;
+            background-color: #f4f7fa;
+            color: #333;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .offline-container {
+            max-width: 500px;
+            width: 100%;
+            background: #ffffff;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+            overflow: hidden;
+            text-align: center;
+            border: 1px solid rgba(0, 0, 0, 0.03);
+            transition: transform 0.3s ease;
+        }
+
+        .offline-container:hover {
+            transform: translateY(-2px);
+        }
+
+        .header-bg {
+            background-color: #033D60;
+            padding: 40px 20px;
+            color: #ffffff;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .logo-img {
+            max-height: 50px;
+            margin-bottom: 20px;
+        }
+
+        .icon-wrapper {
+            width: 80px;
+            height: 80px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-top: 10px;
+            animation: pulse 2s infinite ease-in-out;
+        }
+
+        .icon-wrapper svg {
+            width: 42px;
+            height: 42px;
+            fill: none;
+            stroke: #ffffff;
+            stroke-width: 2;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+        }
+
+        .content {
+            padding: 40px 30px;
+        }
+
+        h1 {
+            font-size: 22px;
+            font-weight: 700;
+            color: #111;
+            margin-bottom: 15px;
+        }
+
+        p {
+            font-size: 15px;
+            color: #666;
+            line-height: 1.6;
+            margin-bottom: 30px;
+        }
+
+        .btn-retry {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            background-color: #033D60;
+            color: #ffffff;
+            border: none;
+            padding: 12px 30px;
+            font-size: 15px;
+            font-weight: 600;
+            border-radius: 6px;
+            cursor: pointer;
+            text-decoration: none;
+            transition: all 0.2s ease;
+            box-shadow: 0 4px 12px rgba(3, 61, 96, 0.2);
+            width: 100%;
+        }
+
+        .btn-retry:hover {
+            background-color: #022a43;
+            box-shadow: 0 6px 16px rgba(3, 61, 96, 0.3);
+            transform: translateY(-1px);
+        }
+
+        .btn-retry:active {
+            transform: translateY(0);
+        }
+
+        .btn-retry svg {
+            margin-right: 8px;
+            width: 18px;
+            height: 18px;
+            stroke: #ffffff;
+            stroke-width: 2;
+            fill: none;
+        }
+
+        .footer {
+            background-color: #fafafa;
+            padding: 15px;
+            font-size: 12px;
+            color: #888;
+            border-top: 1px solid #f0f0f0;
+        }
+
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+                box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.2);
+            }
+            70% {
+                transform: scale(1.05);
+                box-shadow: 0 0 0 10px rgba(255, 255, 255, 0);
+            }
+            100% {
+                transform: scale(1);
+                box-shadow: 0 0 0 0 rgba(255, 255, 255, 0);
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="offline-container">
+        <div class="header-bg">
+            <img src="/assets/images/sibem_logo_claro.png" alt="SIBEM" class="logo-img" onerror="this.style.display='none'">
+            <div class="icon-wrapper">
+                <svg viewBox="0 0 24 24">
+                    <line x1="1" y1="1" x2="23" y2="23"></line>
+                    <path d="M16.72 11.06A10.94 10.94 0 0 1 19 12.55"></path>
+                    <path d="M5 12.55a10.94 10.94 0 0 1 5.17-2.39"></path>
+                    <path d="M10.71 5.05A16 16 0 0 1 22.58 9"></path>
+                    <path d="M1.42 9a15.91 15.91 0 0 1 4.7-2.88"></path>
+                    <path d="M8.53 16.11a6 6 0 0 1 6.95 0"></path>
+                    <line x1="12" y1="20" x2="12.01" y2="20"></line>
+                </svg>
+            </div>
+        </div>
+        
+        <div class="content">
+            <h1>Sem Conexão com a Internet</h1>
+            <p>Você está offline no momento. O SIBEM Web necessita de uma conexão ativa com a rede para sincronizar dados, realizar inventários ou gerenciar acessos.</p>
+            <button onclick="retryConnection()" class="btn-retry">
+                <svg viewBox="0 0 24 24">
+                    <path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"></path>
+                </svg>
+                Tentar Novamente
+            </button>
+        </div>
+        
+        <div class="footer">
+            SIBEM CCB &bull; Sistema para Inventário de Bens Móveis
+        </div>
+    </div>
+
+    <script>
+        function retryConnection() {
+            const btn = document.querySelector('.btn-retry');
+            btn.innerHTML = 'Verificando...';
+            btn.disabled = true;
+            
+            // Check if online
+            if (navigator.onLine) {
+                window.location.reload();
+            } else {
+                setTimeout(() => {
+                    btn.innerHTML = `
+                        <svg viewBox="0 0 24 24">
+                            <path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"></path>
+                        </svg>
+                        Tentar Novamente
+                    `;
+                    btn.disabled = false;
+                    
+                    // Trigger a brief alert/notice using vanilla alert since we might not have sweetalert cached
+                    const notification = document.createElement('div');
+                    notification.textContent = 'Ainda sem conexão. Por favor, verifique seus dados ou Wi-Fi.';
+                    notification.style.position = 'fixed';
+                    notification.style.bottom = '20px';
+                    notification.style.left = '50%';
+                    notification.style.transform = 'translateX(-50%)';
+                    notification.style.background = '#e05c5c';
+                    notification.style.color = '#fff';
+                    notification.style.padding = '10px 20px';
+                    notification.style.borderRadius = '5px';
+                    notification.style.fontSize = '14px';
+                    notification.style.boxShadow = '0 4px 10px rgba(0,0,0,0.15)';
+                    notification.style.zIndex = '1000';
+                    document.body.appendChild(notification);
+                    setTimeout(() => notification.remove(), 3000);
+                }, 1000);
+            }
+        }
+        
+        // Listen to online event to reload automatically if connection is restored
+        window.addEventListener('online', function() {
+            window.location.reload();
+        });
+    </script>
+</body>
+</html>

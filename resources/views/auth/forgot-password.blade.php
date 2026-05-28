@@ -1,3 +1,5 @@
+@section('title', 'Recuperar Senha')
+@section('meta_description', 'Recupere seu acesso ao SIBEM Web - Sistema para Inventário de Bens Móveis.')
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
@@ -5,6 +7,8 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=0,minimal-ui">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    
+    @include('partials.pwa-meta')
     <link rel="icon" href="{{ asset('assets/images/favicon.svg') }}" type="image/x-icon">
     <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{{ asset('assets/fonts/tabler-icons.min.css') }}">
