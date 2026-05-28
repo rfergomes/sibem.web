@@ -647,6 +647,36 @@
     <!-- Main JS File -->
     <script src="{{ asset('landing/assets/js/main.js') }}"></script>
 
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const iframe = document.getElementById('tabelaVersao');
+            if (iframe) {
+                const adjustIframeLinks = () => {
+                    try {
+                        const iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
+                        if (iframeDoc) {
+                            const links = iframeDoc.getElementsByTagName('a');
+                            for (let i = 0; i < links.length; i++) {
+                                const link = links[i];
+                                if (link.href && link.href.includes('#faq')) {
+                                    link.setAttribute('target', '_parent');
+                                }
+                            }
+                        }
+                    } catch (e) {
+                        console.warn("Não foi possível ajustar links dentro do iframe:", e);
+                    }
+                };
+
+                // Executa caso o iframe já tenha carregado
+                adjustIframeLinks();
+
+                // Executa no evento de load do iframe
+                iframe.addEventListener('load', adjustIframeLinks);
+            }
+        });
+    </script>
+
 </body>
 
 </html>
