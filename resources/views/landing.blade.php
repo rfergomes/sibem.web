@@ -225,13 +225,13 @@
                 <div class="row justify-content-center" data-aos="zoom-out">
                     <div class="col-xl-7 col-lg-9 text-center">
                         <h1>Sistema para Inventário de Bens Móveis</h1>
-                        <h4><span class="fw-bold muted">Ativo Imobilizado</span></h4>
+                        <h4><span class="fw-bold muted">(Ativo Imobilizado)</span></h4>
                         <p>Uso exclusivo da Congregação Cristã no Brasil&copy;</p>
                     </div>
                 </div>
                 <div class="text-center d-flex flex-wrap justify-content-center gap-2" data-aos="zoom-out" data-aos-delay="100" style="margin-top: 20px;">
-                    <a href="{{ asset('app/setup.exe') }}" class="btn-pwa"><i class="bi bi-download me-1"></i> Download V4.0.0.28</a>
-                    <a href="{{ route('login') }}" class="btn-pwa"><i class="bi bi-phone-vibrate me-1"></i> Acessar Web / Instalar PWA</a>
+                    <a href="{{ asset('app/setup.exe') }}" class="btn-pwa"><i class="bi bi-download me-1"></i> Baixar SIBEM Desktop</a>
+                    <a href="{{ route('login') }}" class="btn-pwa"><i class="bi bi-pc-display-horizontal me-1"></i> SIBEM Web</a>
                 </div>
 
                 <div class="row gy-4 mt-5">
