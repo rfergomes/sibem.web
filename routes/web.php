@@ -35,7 +35,7 @@ Route::get('/', function () {
 // Public Contact Form Submission
 Route::post('/contact', function (\Illuminate\Http\Request $request) {
     logger()->info("Contato recebido: " . json_encode($request->all()));
-    return response()->json(['success' => true, 'message' => 'Mensagem enviada com sucesso!']);
+    return 'OK';
 })->name('contact.store');
 
 // Public Guest Auth Routes
