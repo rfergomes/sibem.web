@@ -204,7 +204,7 @@
                     <li><a href="#faq">Dúvidas</a></li>
                     <li><a href="#contact">Contato</a></li>
                     <li><a href="{{ asset('landing/html/Manual_SIBEM.html') }}" target="_blank">Documentação</a></li>
-                    <li><a href="{{ route('login') }}" class="fw-bold text-primary"><i class="bi bi-box-arrow-in-right"></i> Login</a></li>
+                    <li><a href="{{ route('login') }}" class="fw-bold text-primary">Login</a></li>
                 </ul>
                 <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
             </nav>
@@ -230,7 +230,7 @@
                     </div>
                 </div>
                 <div class="text-center d-flex flex-wrap justify-content-center gap-2" data-aos="zoom-out" data-aos-delay="100" style="margin-top: 20px;">
-                    <a href="{{ asset('app/setup.exe') }}" class="btn-get-started"><i class="bi bi-download me-1"></i> Download V4.0.0.28</a>
+                    <a href="{{ asset('app/setup.exe') }}" class="btn-pwa"><i class="bi bi-download me-1"></i> Download V4.0.0.28</a>
                     <a href="{{ route('login') }}" class="btn-pwa"><i class="bi bi-phone-vibrate me-1"></i> Acessar Web / Instalar PWA</a>
                 </div>
 
