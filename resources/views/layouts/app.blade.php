@@ -9,7 +9,7 @@
     @include('partials.pwa-meta')
     
     <!-- Favicon -->
-    <link rel="icon" href="{{ asset('assets/images/favicon.svg') }}" type="image/x-icon">
+    <link rel="icon" href="{{ asset('assets/images/favicon.svg') }}?v=2" type="image/svg+xml">
     
     <!-- Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
