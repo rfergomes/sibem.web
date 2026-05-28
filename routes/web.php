@@ -41,15 +41,49 @@ Route::post('/contact', function (\Illuminate\Http\Request $request) {
     $subject = $request->input('subject');
     $userMessage = $request->input('message');
 
-    $body = "Nova mensagem recebida pelo formulário de contato do SIBEM Web:\n\n"
-          . "Nome: {$name}\n"
-          . "E-mail: {$email}\n"
-          . "Assunto: {$subject}\n\n"
-          . "Mensagem:\n"
-          . "{$userMessage}";
+    $bodyHtml = '
+<div style="font-family: \'Open Sans\', \'Helvetica Neue\', Helvetica, Arial, sans-serif; background-color: #f4f7fa; padding: 40px 20px; color: #333;">
+    <div style="max-width: 600px; margin: 0 auto; background: #ffffff; border-radius: 12px; box-shadow: 0 8px 30px rgba(0, 0, 0, 0.05); overflow: hidden; border: 1px solid rgba(0,0,0,0.03);">
+        <div style="background-color: #033D60; padding: 30px 20px; text-align: center; color: #ffffff;">
+            <h2 style="margin: 0 0 8px 0; font-size: 24px; font-weight: 700; text-align: center;">
+                📬 Nova Mensagem de Contato
+            </h2>
+            <p style="margin: 0; font-size: 14px; color: rgba(255, 255, 255, 0.8);">Recebida pelo formulário da landing page SIBEM</p>
+        </div>
+        <div style="padding: 30px 25px;">
+            <div style="margin-bottom: 20px;">
+                <label style="display: block; font-size: 11px; font-weight: 700; text-transform: uppercase; color: #888; margin-bottom: 6px; letter-spacing: 0.5px;">Nome</label>
+                <div style="background: #f8f9fa; border-left: 4px solid #033D60; padding: 12px 16px; border-radius: 4px; font-size: 14px; color: #222;">
+                    ' . e($name) . '
+                </div>
+            </div>
+            <div style="margin-bottom: 20px;">
+                <label style="display: block; font-size: 11px; font-weight: 700; text-transform: uppercase; color: #888; margin-bottom: 6px; letter-spacing: 0.5px;">E-mail</label>
+                <div style="background: #f8f9fa; border-left: 4px solid #033D60; padding: 12px 16px; border-radius: 4px; font-size: 14px; color: #222;">
+                    ' . e($email) . '
+                </div>
+            </div>
+            <div style="margin-bottom: 20px;">
+                <label style="display: block; font-size: 11px; font-weight: 700; text-transform: uppercase; color: #888; margin-bottom: 6px; letter-spacing: 0.5px;">Assunto</label>
+                <div style="background: #f8f9fa; border-left: 4px solid #033D60; padding: 12px 16px; border-radius: 4px; font-size: 14px; color: #222;">
+                    ' . e($subject) . '
+                </div>
+            </div>
+            <div style="margin-bottom: 10px;">
+                <label style="display: block; font-size: 11px; font-weight: 700; text-transform: uppercase; color: #888; margin-bottom: 6px; letter-spacing: 0.5px;">Mensagem</label>
+                <div style="background: #f8f9fa; border-left: 4px solid #033D60; padding: 16px; border-radius: 4px; font-size: 14px; color: #222; line-height: 1.6;">
+                    ' . nl2br(e($userMessage)) . '
+                </div>
+            </div>
+        </div>
+        <div style="background-color: #fafafa; padding: 20px; text-align: center; font-size: 11px; color: #aaa; border-top: 1px solid #f0f0f0;">
+            Este é um e-mail automático enviado pelo sistema <strong>SIBEM Web</strong>.
+        </div>
+    </div>
+</div>';
 
     try {
-        \Illuminate\Support\Facades\Mail::raw($body, function ($message) use ($subject, $email, $name) {
+        \Illuminate\Support\Facades\Mail::html($bodyHtml, function ($message) use ($subject, $email, $name) {
             $message->to('contato@sibem.top')
                     ->subject("Contato SIBEM: " . $subject)
                     ->replyTo($email, $name);
