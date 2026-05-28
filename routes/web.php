@@ -35,6 +35,29 @@ Route::get('/', function () {
 // Public Contact Form Submission
 Route::post('/contact', function (\Illuminate\Http\Request $request) {
     logger()->info("Contato recebido: " . json_encode($request->all()));
+    
+    $name = $request->input('name');
+    $email = $request->input('email');
+    $subject = $request->input('subject');
+    $userMessage = $request->input('message');
+
+    $body = "Nova mensagem recebida pelo formulário de contato do SIBEM Web:\n\n"
+          . "Nome: {$name}\n"
+          . "E-mail: {$email}\n"
+          . "Assunto: {$subject}\n\n"
+          . "Mensagem:\n"
+          . "{$userMessage}";
+
+    try {
+        \Illuminate\Support\Facades\Mail::raw($body, function ($message) use ($subject, $email, $name) {
+            $message->to('contato@sibem.top')
+                    ->subject("Contato SIBEM: " . $subject)
+                    ->replyTo($email, $name);
+        });
+    } catch (\Exception $e) {
+        logger()->error("Erro ao enviar e-mail de contato: " . $e->getMessage());
+    }
+
     return 'OK';
 })->name('contact.store');
 
