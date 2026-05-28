@@ -9,3 +9,8 @@
 /.github export-ignore
 CHANGELOG.md export-ignore
 .styleci.yml export-ignore
+
+# ClickOnce Deployment Files
+*.manifest binary
+*.application binary
+*.deploy binary
