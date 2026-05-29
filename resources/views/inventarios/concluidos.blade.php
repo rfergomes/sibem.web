@@ -103,8 +103,9 @@
                                 @foreach($inventarios as $inv)
                                     <tr>
                                          <td>
-                                            <span class="fw-bold">{{ $inv->igreja->nome ?? 'Não identificada' }}</span>
-                                            <small class="text-muted d-block"><code class="code">{{ $inv->codigo_unico }}</code> - {{ $inv->data ? date('d/m/Y H:i', strtotime($inv->data)) : 'N/A' }}@if(isset($inv->igreja->setor)) | Setor: {{ $inv->igreja->setor }} @endif</small>
+                                            <span class="fw-bold">{{ $inv->igreja->nome ?? 'Não identificada' }}</span> -
+                                            <code class="code">{{ $inv->codigo_unico }}</code> 
+                                             <small class="text-muted d-block"> {{ $inv->data ? date('d/m/Y H:i', strtotime($inv->data)) : 'N/A' }}@if(isset($inv->igreja->setor)) | Setor: {{ $inv->igreja->setor }} @endif</small>
                                         </td>
                                         <td>
                                             @if($inv->siga_ok) 
@@ -143,7 +144,7 @@
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
     document.addEventListener("DOMContentLoaded", function() {
-        const ctx = document.getElementById('monthlyChart').getContext('3d');
+        const ctx = document.getElementById('monthlyChart').getContext('2d');
         
         // Dynamic labels and values passed from the Laravel controller
         const labels = {!! json_encode($chartLabels) !!};
