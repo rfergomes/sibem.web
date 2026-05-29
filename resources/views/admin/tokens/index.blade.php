@@ -56,11 +56,10 @@
                                         </td>
                                         <td>{{ $token->local->nome ?? 'Sem Localidade' }}</td>
                                         <td>
-                                            <code>{{ $token->dispositivo }}</code>
+                                            <span class="d-block mt-1"><i class="ti ti-device-desktop me-1"></i>{{ $token->dispositivo }}</code>
                                         </td>
                                         <td>
                                             <code>{{ $token->token }}</code>
-                                            <code>{{ $token->dispositivo }}</code>
                                         </td>
                                         <td>
                                             <small>{{ $token->created_at ? $token->created_at->format('d/m/Y H:i') : 'N/A' }}</small>
