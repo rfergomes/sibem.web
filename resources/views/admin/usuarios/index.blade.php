@@ -67,16 +67,16 @@
                                                 };
                                             @endphp
                                             <span class="d-block fw-bold text-dark">{{ $user->name }}</span>
-                                            <span class="text-muted">{{ $user->igreja ?? 'N/A' }} | {{ $user->cidade ?? 'N/A' }}</span>
+                                            <small class="text-muted">{{ $user->igreja ?? 'N/A' }} | {{ $user->cidade ?? 'N/A' }}</small>
                                             
                                         </td>
                                         <td>
                                             <span class="d-block">{{ $user->email }}</span>
-                                            <span class="text-muted">{{ $user->telefone ?? 'Não informado' }}</span>
+                                            <small class="text-muted">{{ $user->telefone ?? 'Não informado' }}</small>
                                         </td>
                                         <td>
-                                            <span class="d-block fw-bold">{{ $user->local->nome ?? 'N/A' }}</span>
-                                            <small class="badge align-items-le {{ $badgeClass }}">{{ $labelText }}</small>
+                                            <span class="d-block fw-bold">{{ $user->local->nome ?? 'Nenhum' }}</span>
+                                            <span class="d-block mt-1 badge align-items-center {{ $badgeClass }}">{{ $labelText }}</span>
                                         </td>
                                         <td class="align-items-center">
                                             
