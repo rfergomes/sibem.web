@@ -53,7 +53,7 @@
                                         <td>
                                             <span class="fw-bold text-dark">{{ $dep->dependencia_id }} - {{ $dep->descricao }}</span>
                                             <small class="d-block text-muted">
-                                                {{ $dep->criado_por->name }} em {{ $dep->created_at->format('d/m/Y H:i') }}
+                                                Cadastrado em: {{ $dep->created_at->format('d/m/Y H:i') }}
                                             </small>
                                         </td>
                                         <td class="text-center">
