@@ -25,7 +25,10 @@ class InventarioController extends Controller
         $igrejas = [];
         $inventarios = collect();
         $chartValues = array_fill(0, 12, 0);
-        $selectedYear = $request->input('ano', date('Y'));
+        $selectedYear = $request->input('ano');
+        if (!$request->has('ano')) {
+            $selectedYear = date('Y');
+        }
 
         if ($local) {
             try {
@@ -57,8 +60,12 @@ class InventarioController extends Controller
                 $query = Inventario::with('igreja')->orderBy('data', 'desc');
 
                 // Apply filters
-                if ($request->filled('ano')) {
-                    $query->whereRaw('YEAR(data) = ?', [$request->ano]);
+                if ($request->has('ano')) {
+                    if ($request->filled('ano')) {
+                        $query->whereRaw('YEAR(data) = ?', [$request->ano]);
+                    }
+                } else {
+                    $query->whereRaw('YEAR(data) = ?', [$selectedYear]);
                 }
 
                 if ($request->filled('setor')) {
@@ -78,7 +85,7 @@ class InventarioController extends Controller
                 $inventarios = $query->paginate(15)->withQueryString();
 
                 // Chart Data (consolidated monthly completed inventories for selected/default year)
-                $selectedYear = $request->input('ano', $anos->first() ?? date('Y'));
+                // Using selectedYear set above
                 
                 $chartDataRaw = \Illuminate\Support\Facades\DB::connection('tenant')
                     ->table('inventarios_v2')
