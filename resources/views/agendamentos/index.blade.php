@@ -188,17 +188,37 @@
                 @csrf
                 <div class="modal-body">
                     <div class="row g-3">
-                        <div class="col-md-12">
-                            <label for="igreja_id" class="form-label fw-bold">Casa de Oração / Localidade (Igreja)</label>
-                            <select name="igreja_id" id="igreja_id" class="form-select no-choices" required>
-                                <option value="" disabled selected>-- Selecione a Localidade --</option>
-                                @foreach($igrejas as $ig)
-                                    <option value="{{ $ig->id }}">
-                                        {{ $ig->igreja }} (SIGA: {{ $ig->cod_siga }}) [{{ $ig->local->adm_local ?? '' }}]
-                                    </option>
-                                @endforeach
-                            </select>
-                        </div>
+                        @if(Auth::user()->isAdminSistema() || Auth::user()->isAdminRegional())
+                            <div class="col-md-12">
+                                <label for="modal_admlc_id" class="form-label fw-bold">Administração Local</label>
+                                <select id="modal_admlc_id" class="form-select no-choices" required>
+                                    <option value="" disabled selected>-- Selecione a Administração Local --</option>
+                                    @foreach($locais as $localOpt)
+                                        <option value="{{ $localOpt->admlc_id }}">
+                                            {{ $localOpt->adm_local }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <div class="col-md-12">
+                                <label for="igreja_id" class="form-label fw-bold">Casa de Oração / Localidade (Igreja)</label>
+                                <select name="igreja_id" id="igreja_id" class="form-select no-choices" required disabled>
+                                    <option value="" disabled selected>-- Selecione primeiro a Administração --</option>
+                                </select>
+                            </div>
+                        @else
+                            <div class="col-md-12">
+                                <label for="igreja_id" class="form-label fw-bold">Casa de Oração / Localidade (Igreja)</label>
+                                <select name="igreja_id" id="igreja_id" class="form-select no-choices" required>
+                                    <option value="" disabled selected>-- Selecione a Localidade --</option>
+                                    @foreach($igrejas as $ig)
+                                        <option value="{{ $ig->id }}">
+                                            {{ $ig->igreja }} (SIGA: {{ $ig->cod_siga }})
+                                        </option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        @endif
                         <div class="col-md-6">
                             <label for="responsavel_nome" class="form-label fw-bold">Responsável pela Casa de Oração</label>
                             <input type="text" name="responsavel_nome" id="responsavel_nome" class="form-control" required placeholder="Nome do Ancião, Diácono ou Administrador">
@@ -722,6 +742,38 @@
                     });
                 });
             }
+        }
+
+        // Dynamic loading of churches in Novo Agendamento modal for system/regional admins
+        var modalAdmlc = document.getElementById('modal_admlc_id');
+        var selectIgreja = document.getElementById('igreja_id');
+        if (modalAdmlc && selectIgreja) {
+            modalAdmlc.addEventListener('change', function() {
+                var admlcId = this.value;
+                selectIgreja.disabled = true;
+                selectIgreja.innerHTML = '<option value="" disabled selected>Carregando localidades...</option>';
+                
+                fetch(`/agendamentos/igrejas-por-local/${admlcId}`)
+                    .then(response => {
+                        if (!response.ok) throw new Error('Network response was not ok');
+                        return response.json();
+                    })
+                    .then(data => {
+                        selectIgreja.innerHTML = '<option value="" disabled selected>-- Selecione a Localidade --</option>';
+                        if (data.length === 0) {
+                            selectIgreja.innerHTML = '<option value="" disabled>Nenhuma localidade cadastrada</option>';
+                        } else {
+                            data.forEach(ig => {
+                                selectIgreja.innerHTML += `<option value="${ig.id}">${ig.igreja} (SIGA: ${ig.cod_siga})</option>`;
+                            });
+                            selectIgreja.disabled = false;
+                        }
+                    })
+                    .catch(err => {
+                        console.error('Error fetching churches:', err);
+                        selectIgreja.innerHTML = '<option value="" disabled>Erro ao carregar. Tente novamente.</option>';
+                    });
+            });
         }
     });
 </script>

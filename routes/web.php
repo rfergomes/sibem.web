@@ -138,6 +138,7 @@ Route::middleware(['auth', 'tenant'])->group(function () {
 
     // Agendamentos de Inventários
     Route::resource('agendamentos', AgendamentoController::class)->names('agendamentos');
+    Route::get('agendamentos/igrejas-por-local/{admlc_id}', [AgendamentoController::class, 'getIgrejasPorLocal'])->name('agendamentos.igrejas_por_local');
     Route::put('agendamentos/{id}/reagendar', [AgendamentoController::class, 'reagendar'])->name('agendamentos.reagendar');
     Route::put('agendamentos/{id}/cancelar', [AgendamentoController::class, 'cancelar'])->name('agendamentos.cancelar');
 

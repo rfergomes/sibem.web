@@ -142,13 +142,8 @@ class AgendamentoController extends Controller
         $locais = $user->getAvailableLocais();
 
         // Fetch churches scoped to user's permissions for the creation modal
-        if ($user->isAdminSistema()) {
-            $igrejas = Igreja::orderBy('igreja')->get();
-        } elseif ($user->isAdminRegional()) {
-            $regionalId = $user->regional_id;
-            $igrejas = Igreja::whereHas('local', function ($q) use ($regionalId) {
-                $q->where('admrg_id', $regionalId);
-            })->orderBy('igreja')->get();
+        if ($user->isAdminSistema() || $user->isAdminRegional()) {
+            $igrejas = collect();
         } else {
             $igrejas = Igreja::where('admlc_id', $activeLocalId)->orderBy('igreja')->get();
         }
@@ -276,5 +271,34 @@ class AgendamentoController extends Controller
         $agendamento->delete();
 
         return redirect()->route('agendamentos.index')->with('success', 'Agendamento excluído com sucesso.');
+    }
+
+    /**
+     * Get churches by administration local ID for AJAX populating.
+     */
+    public function getIgrejasPorLocal($admlcId)
+    {
+        $user = Auth::user();
+        
+        // Scope security check
+        if (!$user->isAdminSistema()) {
+            if ($user->isAdminRegional()) {
+                $local = Local::find($admlcId);
+                if (!$local || $local->admrg_id != $user->regional_id) {
+                    return response()->json([], 403);
+                }
+            } else {
+                $activeLocalId = session()->get('active_admlc_id') ?? $user->admlc_id;
+                if ($admlcId != $activeLocalId) {
+                    return response()->json([], 403);
+                }
+            }
+        }
+
+        $igrejas = Igreja::where('admlc_id', $admlcId)
+            ->orderBy('igreja')
+            ->get(['id', 'igreja', 'cod_siga']);
+
+        return response()->json($igrejas);
     }
 }
