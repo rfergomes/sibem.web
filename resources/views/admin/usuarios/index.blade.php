@@ -67,7 +67,8 @@
                                                 };
                                             @endphp
                                             <span class="d-block fw-bold text-dark">{{ $user->name }}</span>
-                                            <small class="badge align-items-le {{ $badgeClass }}">{{ $labelText }}</small>
+                                            <span class="text-muted">{{ $user->igreja ?? 'N/A' }} | {{ $user->cidade ?? 'N/A' }}</span>
+                                            
                                         </td>
                                         <td>
                                             <span class="d-block">{{ $user->email }}</span>
@@ -75,9 +76,9 @@
                                         </td>
                                         <td>
                                             <span class="d-block fw-bold">{{ $user->local->nome ?? 'N/A' }}</span>
-                                            <span class="text-muted">{{ $user->igreja ?? 'N/A' }} | {{ $user->cidade ?? 'N/A' }}</span>
                                         </td>
                                         <td class="align-items-center">
+                                            <small class="badge align-items-le {{ $badgeClass }}">{{ $labelText }}</small>
                                             <div class="d-flex justify-content-center gap-1">
                                                 <a href="{{ route('admin.usuarios.show', $user->id) }}" class="btn btn-sm btn-icon btn-light-info" title="Visualizar Detalhes e Tokens">
                                                     <i class="ti ti-eye"></i>
