@@ -67,12 +67,12 @@
                                                 };
                                             @endphp
                                             <span class="d-block fw-bold text-dark">{{ $user->name }}</span>
-                                            <small class="text-muted"><i class="ti ti-building me-1"></i>{{ $user->igreja ?? 'N/A' }} | {{ $user->cidade ?? 'N/A' }}</small>
+                                            <small class="text-muted"><i class="ti ti-map-pin me-1"></i>{{ $user->igreja ?? 'N/A' }} | {{ $user->cidade ?? 'N/A' }}</small>
                                             
                                         </td>
                                         <td>
                                             <span class="d-block"><i class="ti ti-mail me-1"></i>{{ $user->email }}</span>
-                                            <small class="text-muted"><i class="ti ti-phone me-1"></i>{{ $user->telefone ?? 'Não informado' }}</small>
+                                            <small class="text-muted"><i class="ti ti-brand-whatsapp me-1"></i>{{ $user->telefone ?? 'Não informado' }}</small>
                                         </td>
                                         <td>
                                             <span class="d-block fw-bold">{{ $user->local->nome ?? 'Nenhum' }}</span>
