@@ -103,15 +103,14 @@
                                 @foreach($inventarios as $inv)
                                     <tr>
                                          <td>
-                                            <span class="fw-bold">{{ $inv->igreja->nome ?? 'Não identificada' }}</span> -
-                                            <code class="code">{{ $inv->codigo_unico }}</code> 
-                                            <span class="text-muted d-block"> {{ $inv->data ? date('d/m/Y H:i', strtotime($inv->data)) : 'N/A' }}@if(isset($inv->igreja->setor)) | Setor: {{ $inv->igreja->setor }} @endif</span></code>
+                                            <span class="fw-bold">{{ $inv->igreja->nome ?? 'Não identificada' }}</span>
+                                            <small class="d-block text-muted"><code>{{ $inv->codigo_unico }}</code> - {{ $inv->data ? date('d/m/Y H:i', strtotime($inv->data)) : 'N/A' }}@if(isset($inv->igreja->setor)) | Setor: {{ $inv->igreja->setor }} @endif</small>
                                         </td>
                                         <td>
                                             @if($inv->siga_ok) 
-                                                <span class="badge bg-light-success text-success" title="Atualizado"><i class="ti ti-check me-1"></i> Atualizado</span>
+                                                <span class="badge bg-light-success text-success" title="Siga atualizado"><i class="ti ti-check me-1"></i> Atualizado</span>
                                             @else 
-                                                <span class="badge bg-light-danger text-danger" title="Pendente"><i class="ti ti-x me-1"></i> Pendente</span>
+                                                <span class="badge bg-light-danger text-danger" title="Siga pendente"><i class="ti ti-x me-1"></i> Pendente</span>
                                             @endif
                                         </td>
                                         <td>
