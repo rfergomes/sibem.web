@@ -39,8 +39,7 @@
                             <thead class="table-light">
                                 <tr>
                                     <th>Nome</th>
-                                    <th>E-mail</th>
-                                    <th>Telefone</th>
+                                    <th>Contatos</th>
                                     <th>Administração Local</th>
                                     <th>Comum / Cidade</th>
                                     <th class="text-end" style="min-width: 150px;">Ações</th>
@@ -70,15 +69,17 @@
                                             <span class="d-block fw-bold text-dark">{{ $user->name }}</span>
                                             <small class="badge align-items-le {{ $badgeClass }}">{{ $labelText }}</small>
                                         </td>
-                                        <td>{{ $user->email }}</td>
-                                        <td>{{ $user->telefone ?? 'Não informado' }}</td>
                                         <td>
-                                            {{ $user->local->nome ?? 'Nenhum' }}
+                                            <span class="d-block">{{ $user->email }}</span>
+                                            <span class="text-muted">{{ $user->telefone ?? 'Não informado' }}</span>
                                         </td>
                                         <td>
-                                            {{ $user->igreja ?? 'N/A' }}
+                                            <span class="d-block fw-bold">{{ $user->local->nome ?? 'Nenhum' }}</span>
+                                            @if($user->igreja)
+                                                <small class="d-block">{{ $user->igreja }}</small>
+                                            @endif
                                             @if($user->cidade)
-                                                <small class="text-muted d-block">{{ $user->cidade }}</small>
+                                                <small class="d-block">{{ $user->cidade }}</small>
                                             @endif
                                         </td>
                                         <td class="align-items-center">
