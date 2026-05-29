@@ -52,11 +52,11 @@
                                             <span class="badge bg-light-primary text-primary">{{ $reg->uf }}</span>
                                             <small class="d-block text-muted">Criada em: {{ $reg->created_at ? $reg->created_at->format('d/m/Y H:i') : 'N/A' }}</small>
                                         </td>
-                                        <td class="align-middle">
+                                        <td class="text-center">
                                             <span class="badge fw-bold bg-light-primary text-primary">{{ $reg->locais_count }}</span>
                                         </td>
-                                        <td class="text-end align-middle">
-                                            <div class="d-flex justify-content-end gap-1">
+                                        <td class="text-center">
+                                            <div class="d-flex justify-content-center gap-1">
                                                 <a href="{{ route('admin.regionais.show', $reg->id) }}" class="btn btn-sm btn-icon btn-light-info" title="Ver Administrações Locais">
                                                     <i class="ti ti-eye"></i>
                                                 </a>
