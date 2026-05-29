@@ -14,6 +14,7 @@ use App\Http\Controllers\Admin\SetorController;
 use App\Http\Controllers\Admin\DependenciaController;
 use App\Http\Controllers\Admin\IgrejaController;
 use App\Http\Controllers\Admin\TipoImovelController;
+use App\Http\Controllers\ProfileController;
 
 // Public Landing Page
 Route::get('/', function () {
@@ -129,6 +130,10 @@ Route::middleware(['auth', 'tenant'])->group(function () {
 
     // Dashboard
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+
+    // Perfil do Usuário
+    Route::get('/perfil', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::put('/perfil', [ProfileController::class, 'update'])->name('profile.update');
 
     // Dynamic Tenant Chaveamento (Selection)
     Route::post('/tenant/select', [TenantSelectionController::class, 'select'])->name('tenant.select');

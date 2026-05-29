@@ -212,18 +212,34 @@
                     </li>
 
                     <!-- User Profile Dropdown -->
-                    <li class="dropdown pc-h-item header-userc:\Users\Rodrigo.Lima\Downloads\sibem_logo_novo.png-profile">
+                    <li class="dropdown pc-h-item header-user-profile">
                         <a class="pc-head-link dropdown-toggle arrow-none me-0" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="false" aria-expanded="false">
-                            <div class="avatar bg-primary text-white rounded-circle d-flex align-items-center justify-content-center" style="width: 38px; height: 38px; font-weight: 600;">
-                                {{ substr(Auth::user()->nome, 0, 2) }}
-                            </div>
+                            @if(Auth::user()->foto)
+                                <img src="{{ asset('storage/' . Auth::user()->foto) }}" alt="user-image" class="rounded-circle" style="width: 38px; height: 38px; object-fit: cover;">
+                            @else
+                                <div class="avatar bg-primary text-white rounded-circle d-flex align-items-center justify-content-center" style="width: 38px; height: 38px; font-weight: 600;">
+                                    {{ substr(Auth::user()->nome, 0, 2) }}
+                                </div>
+                            @endif
                         </a>
                         <div class="dropdown-menu dropdown-menu-end pc-h-dropdown">
                             <div class="dropdown-header">
                                 <h5 class="text-overflow mb-0">Olá, {{ Auth::user()->nome }}</h5>
-                                <small class="text-muted">{{ ucfirst(str_replace('_', ' ', Auth::user()->perfil)) }}</small>
+                                <small class="text-muted">
+                                    {{ match(Auth::user()->perfil) {
+                                        'admin_sistema' => 'Super Admin',
+                                        'admin_regional' => 'Admin Regional',
+                                        'admin_local' => 'Admin Local',
+                                        'operador' => 'Operador',
+                                        'auditor' => 'Auditor',
+                                        default => ucfirst(str_replace('_', ' ', Auth::user()->perfil))
+                                    } }}
+                                </small>
                             </div>
                             <hr class="m-0">
+                            <a href="{{ route('profile.edit') }}" class="dropdown-item">
+                                <i class="ti ti-user"></i><span>Meu Perfil</span>
+                            </a>
                             <a href="{{ route('logout') }}" class="dropdown-item text-danger" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
                                 <i class="ti ti-power"></i><span>Sair</span>
                             </a>

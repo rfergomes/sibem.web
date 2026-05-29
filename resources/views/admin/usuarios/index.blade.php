@@ -40,8 +40,7 @@
                                 <tr>
                                     <th>Nome</th>
                                     <th>Contatos</th>
-                                    <th>Administração Local</th>
-                                    <th>Comum / Cidade</th>
+                                    <th>Administração</th>
                                     <th class="text-end" style="min-width: 150px;">Ações</th>
                                 </tr>
                             </thead>
