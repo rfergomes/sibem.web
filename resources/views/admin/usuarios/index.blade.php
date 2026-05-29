@@ -72,7 +72,7 @@
                                         </td>
                                         <td>
                                             <span class="d-block"><i class="ti ti-mail me-1"></i>{{ $user->email }}</span>
-                                            <small class="text-muted"><i class="ti ti-brand-whatsapp me-1"></i>{{ $user->telefone ?? 'Não informado' }}</small>
+                                            <span class="d-block mt-1 text-muted"><i class="ti ti-brand-whatsapp me-1"></i>{{ $user->telefone ?? 'Não informado' }}</span>
                                         </td>
                                         <td>
                                             <span class="d-block fw-bold">{{ $user->local->nome ?? 'Nenhum' }}</span>
