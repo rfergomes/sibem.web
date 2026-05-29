@@ -202,7 +202,7 @@
             <div class="card border-0 shadow-sm">
                 <div class="card-header bg-transparent border-0 d-flex align-items-center justify-content-between pt-4 px-4">
                     <h5 class="mb-0 text-dark"><i class="ti ti-calendar-event me-2 text-primary"></i>Próximos Inventários Agendados</h5>
-                    <a href="{{ route('agendamentos.index') }}" class="btn btn-sm btn-outline-primary d-flex align-items-center">
+                    <a href="{{ route('agendamentos.index') }}" class="btn btn-sm btn-outline-info d-flex align-items-center">
                         <i class="ti ti-calendar me-1"></i>Ver Cronograma Completo
                     </a>
                 </div>
@@ -512,7 +512,7 @@
             <div class="card border-0 shadow-sm">
                 <div class="card-header bg-transparent border-0 d-flex align-items-center justify-content-between pt-4 px-4">
                     <h5 class="mb-0 text-dark"><i class="ti ti-calendar-event me-2 text-primary"></i>Próximos Inventários Agendados</h5>
-                    <a href="{{ route('agendamentos.index') }}" class="btn btn-sm btn-outline-primary d-flex align-items-center">
+                    <a href="{{ route('agendamentos.index') }}" class="btn btn-sm btn-outline-info d-flex align-items-center">
                         <i class="ti ti-calendar me-1"></i>Ver Cronograma Completo
                     </a>
                 </div>
