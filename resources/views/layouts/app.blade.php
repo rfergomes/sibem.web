@@ -114,6 +114,13 @@
                                     <span class="pc-mtext">Adm. Regionais</span>
                                 </a>
                             </li>
+                            
+                            <li class="pc-item">
+                                <a href="/run-migrations-sys" class="pc-link text-warning" target="_blank">
+                                    <span class="pc-micon"><i class="ti ti-database-import text-warning"></i></span>
+                                    <span class="pc-mtext">Rodar Migrações (BD)</span>
+                                </a>
+                            </li>
                         @endif
 
                         <li class="pc-item {{ Request::routeIs('admin.locais.*') ? 'active' : '' }}">
