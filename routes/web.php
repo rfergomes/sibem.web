@@ -156,6 +156,10 @@ Route::middleware(['auth', 'tenant'])->group(function () {
         Route::post('/solicitacoes/{id}/reject', [TokenRequestController::class, 'reject'])->name('token-requests.reject');
 
         // CRUDs
+        Route::post('servidores/{id}/test-connection', [App\Http\Controllers\Admin\ServidorController::class, 'testConnection'])->name('servidores.test-connection');
+        Route::post('servidores/{id}/provision', [App\Http\Controllers\Admin\ServidorController::class, 'provision'])->name('servidores.provision');
+        Route::resource('servidores', App\Http\Controllers\Admin\ServidorController::class)->names('servidores');
+
         Route::resource('usuarios', UserController::class)->names('usuarios');
         Route::post('usuarios/{usuario}/tokens/gerar', [UserController::class, 'generateToken'])->name('usuarios.tokens.gerar');
         

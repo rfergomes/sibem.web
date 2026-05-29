@@ -114,6 +114,13 @@
                                     <span class="pc-mtext">Adm. Regionais</span>
                                 </a>
                             </li>
+
+                            <li class="pc-item {{ Request::routeIs('admin.servidores.*') ? 'active' : '' }}">
+                                <a href="{{ route('admin.servidores.index') }}" class="pc-link">
+                                    <span class="pc-micon"><i class="ti ti-server"></i></span>
+                                    <span class="pc-mtext">Servidores (Bancos)</span>
+                                </a>
+                            </li>
                             
                             <li class="pc-item">
                                 <a href="/run-migrations-sys" class="pc-link text-warning" target="_blank">

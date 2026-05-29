@@ -58,4 +58,9 @@ class Local extends Model
     {
         return $this->hasMany(Setor::class, 'admlc_id', 'admlc_id');
     }
+
+    public function servidor()
+    {
+        return $this->hasOne(Servidor::class, 'admlc_id', 'admlc_id');
+    }
 }
