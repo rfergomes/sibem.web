@@ -167,6 +167,16 @@ Route::middleware(['auth', 'tenant'])->group(function () {
         Route::resource('igrejas', IgrejaController::class)->names('igrejas');
         Route::resource('tipos-imovel', TipoImovelController::class)->names('tipos-imovel');
     });
+
+    // Rota temporária para executar migrações no servidor cPanel
+    Route::get('/run-migrations-sys', function() {
+        try {
+            \Illuminate\Support\Facades\Artisan::call('migrate', ['--force' => true]);
+            return 'Migrações executadas com sucesso!<br><pre>' . \Illuminate\Support\Facades\Artisan::output() . '</pre>';
+        } catch (\Exception $e) {
+            return 'Erro ao executar migrações: ' . $e->getMessage();
+        }
+    });
 });
 
 // Public route for distributing the desktop installer (ClickOnce / VS 2022)
