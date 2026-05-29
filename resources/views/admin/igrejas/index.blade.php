@@ -76,10 +76,10 @@
                                         </td>
                                         <td>
                                             <span class="fw-bold text-dark">{{ $igreja->igreja }}</span>
-                                            <small class="d-block text-muted"><span class="rounded p-1 mt-1">{{ $igreja->tipoImovel->nome ?? 'N/D' }} | Setor {{ $igreja->cod_setor ?? 'N/A'}} </span></small>
+                                            <small class="d-block text-muted fw-bold text-dark"><span class="rounded p-1 mt-1">{{ $igreja->tipoImovel->nome ?? 'N/D' }} | Setor {{ $igreja->cod_setor ?? 'N/A'}} </span></small>
                                         </td>
                                         <td>{{ $igreja->cidade ?? 'N/A' }} / {{ $igreja->uf ?? 'N/A' }}
-                                            <small class="d-block text-muted">{{ $igreja->local->adm_local ?? 'N/A' }}</small>
+                                            <small class="d-block text-muted fw-bold text-dark">{{ $igreja->local->adm_local ?? 'N/A' }}</small>
                                         </td>
                                         <td class="text-center">
                                             <div class="d-flex justify-content-center gap-1">
