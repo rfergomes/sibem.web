@@ -56,10 +56,11 @@
                                         </td>
                                         <td>{{ $token->local->nome ?? 'Sem Localidade' }}</td>
                                         <td>
-                                            <span class="d-block mt-1"><i class="ti ti-device-desktop me-1"></i>{{ $token->dispositivo }}</code>
+                                            <span class="d-block mt-1"><i class="ti ti-device-desktop me-1"></i>{{ $token->dispositivo }}</span>
                                         </td>
                                         <td>
-                                            <code>{{ $token->token }}</code>
+                                            <code class="d-block mt-1"><i class="ti ti-key me-1"></i>{{ $token->token }}</code>
+                                            <span class="d-block mt-1"><i class="ti ti-device-desktop me-1"></i>{{ $token->dispositivo }}</span>
                                         </td>
                                         <td>
                                             <small>{{ $token->created_at ? $token->created_at->format('d/m/Y H:i') : 'N/A' }}</small>
