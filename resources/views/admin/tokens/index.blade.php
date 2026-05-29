@@ -52,7 +52,7 @@
                                     <tr>
                                         <td>
                                             <span class="fw-bold text-dark">{{ $token->user->name ?? 'N/A' }}</span>
-                                            <small class="text-muted d-block">{{ $token->user->email ?? '' }}</small>
+                                            <small class="text-muted d-block"><i class="ti ti-mail me-1"></i> {{ $token->user->email ?? '' }}</small>
                                         </td>
                                         <td>{{ $token->local->nome ?? 'Sem Localidade' }}</td>
                                         <td>
@@ -69,7 +69,7 @@
                                                 <form action="{{ route('admin.tokens.send-email', $token->id) }}" method="POST" class="d-inline-block">
                                                     @csrf
                                                     <button type="submit" class="btn btn-sm btn-light-primary" title="Enviar por E-mail">
-                                                        <i class="ti ti-mail me-1"></i> E-mail
+                                                        <i class="ti ti-mail"></i>
                                                     </button>
                                                 </form>
                                             @endif
@@ -85,7 +85,7 @@
                                                 @endphp
                                                 @if(strlen($telefoneLimpo) > 0)
                                                     <a href="https://wa.me/{{ $telefoneLimpo }}?text={{ $msgUrl }}" target="_blank" class="btn btn-sm btn-light-success" title="Enviar por WhatsApp">
-                                                        <i class="fab fa-whatsapp me-1"></i> WhatsApp
+                                                        <i class="fab fa-whatsapp"></i>
                                                     </a>
                                                 @endif
                                             @endif
@@ -94,7 +94,7 @@
                                                 @csrf
                                                 @method('DELETE')
                                                 <button type="submit" class="btn btn-sm btn-light-danger" title="Revogar Token">
-                                                    <i class="ti ti-power me-1"></i> Revogar
+                                                    <i class="ti ti-power"></i>
                                                 </button>
                                             </form>
                                         </td>
