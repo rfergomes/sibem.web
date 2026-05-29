@@ -53,7 +53,7 @@
                                             <small class="d-block text-muted">Criada em: {{ $reg->created_at ? $reg->created_at->format('d/m/Y H:i') : 'N/A' }}</small>
                                         </td>
                                         <td>
-                                            <span class="badge bg-light-info text-info d-flex align-items-center justify-content-center">{{ $reg->locais_count }}</span>
+                                            <span class="badge bg-light-primary text-primary fw-bold text-center">{{ $reg->locais_count }}</span>
                                         </td>
                                         <td class="text-end">
                                             <div class="d-flex justify-content-end gap-1">
