@@ -53,7 +53,7 @@
                                             <small class="d-block text-muted"><i class="ti ti-info-calendar"></i>&nbsp;{{ $tipo->created_at ? $tipo->created_at->format('d/m/Y H:i') : 'N/A' }}</small>
                                         </td>
                                         <td>
-                                            <span class="badge bg-light-info text-info fw-bold">{{ $tipo->igrejas_count }}</span>
+                                            <span class="badge bg-light-primary text-dark fw-bold">{{ $tipo->igrejas_count }}</span>
                                         </td>
                                         <td class="text-center">
                                             <div class="d-flex justify-content-center gap-1">
