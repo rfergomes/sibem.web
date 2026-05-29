@@ -55,7 +55,7 @@
                                     <th>Administração Local</th>
                                     <th>Cidade / UF</th>
                                     <th>Igrejas / Setores</th>
-                                    <th class="text-end" style="min-width: 150px;">Ações</th>
+                                    <th class="text-center" style="min-width: 150px;">Ações</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -76,8 +76,8 @@
                                             @if($local->setores_count > 0) <span class="badge bg-light-primary text-primary fw-bold" title="Setores">
                                                {{ $local->setores_count }} <i class="ti ti-chart-bar"></i></span>@endif
                                         </td>
-                                        <td class="text-end">
-                                            <div class="d-flex justify-content-end gap-1">
+                                        <td class="text-center">
+                                            <div class="d-flex justify-content-center gap-1">
                                                 <a href="{{ route('admin.locais.show', $local->admlc_id) }}" class="btn btn-sm btn-icon btn-light-info" title="Ver Detalhes">
                                                     <i class="ti ti-eye"></i>
                                                 </a>
