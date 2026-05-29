@@ -16,7 +16,7 @@
                 <form action="{{ route('inventarios.concluidos') }}" method="GET" class="row g-3 align-items-end">
                     <div class="col-md-3">
                         <label for="ano" class="form-label fw-600">Ano</label>
-                        <select name="ano" id="ano" class="form-select" onchange="this.form.submit()">
+                        <select name="ano" id="ano" class="form-select no-choices" onchange="this.form.submit()">
                             <option value="">Todos os anos</option>
                             @foreach($anos as $anoOption)
                                 <option value="{{ $anoOption }}" {{ request('ano', $selectedYear) == $anoOption ? 'selected' : '' }}>
@@ -28,7 +28,7 @@
 
                     <div class="col-md-3">
                         <label for="setor" class="form-label fw-600">Setor</label>
-                        <select name="setor" id="setor" class="form-select" onchange="this.form.submit()">
+                        <select name="setor" id="setor" class="form-select no-choices" onchange="this.form.submit()">
                             <option value="">Todos os setores</option>
                             @foreach($setores as $setorOption)
                                 <option value="{{ $setorOption }}" {{ request('setor') == $setorOption ? 'selected' : '' }}>
@@ -40,7 +40,7 @@
 
                     <div class="col-md-4">
                         <label for="igreja_id" class="form-label fw-600">Localidade</label>
-                        <select name="igreja_id" id="igreja_id" class="form-select" onchange="this.form.submit()">
+                        <select name="igreja_id" id="igreja_id" class="form-select no-choices" onchange="this.form.submit()">
                             <option value="">Todas as localidades</option>
                             @foreach($igrejas as $igrejaOption)
                                 <option value="{{ $igrejaOption->codigo_ccb }}" {{ request('igreja_id') == $igrejaOption->codigo_ccb ? 'selected' : '' }}>

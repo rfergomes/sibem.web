@@ -40,26 +40,27 @@
                         <table class="table table-hover align-middle mb-0">
                             <thead class="table-light">
                                 <tr>
-                                    <th>Cód. Setor</th>
-                                    <th>Descrição</th>
-                                    <th>Adm. Local</th>
-                                    <th>Adm. Regional</th>
-                                    <th>Igrejas</th>
+                                    <th>Setor</th>
+                                    <th>Administrações</th>
+                                    <th>Localidades</th>
                                     <th class="text-end" style="min-width: 150px;">Ações</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 @foreach($setores as $setor)
                                     <tr>
-                                        <td><span class="fw-bold badge bg-light-primary text-primary px-2">{{ $setor->cod_setor }}</span></td>
-                                        <td><span class="fw-bold text-dark">{{ $setor->descricao }}</span></td>
-                                        <td>{{ $setor->local->nome ?? 'N/A' }}</td>
+                                        <td><span class="fw-bold text-dark">{{ $setor->cod_setor }} - {{ $setor->descricao }}</span></td>
+                                        <td>
+                                            @foreach ($setor->localidades as $localidade)
+                                                <span class="badge bg-light-primary text-primary fw-bold">{{ $localidade->nome }}</span>
+                                            @endforeach
+                                        </td>
                                         <td>{{ $setor->local->regional->adm_regional ?? 'N/A' }}</td>
                                         <td>
                                             <span class="badge bg-light-info text-info fw-bold">{{ $setor->igrejas_count }}</span>
                                         </td>
-                                        <td class="text-end">
-                                            <div class="d-flex justify-content-end gap-1">
+                                        <td class="text-center">
+                                            <div class="d-flex justify-content-center gap-1">
                                                 <a href="{{ route('admin.setores.show', $setor->id) }}" class="btn btn-sm btn-icon btn-light-info" title="Ver Detalhes">
                                                     <i class="ti ti-eye"></i>
                                                 </a>

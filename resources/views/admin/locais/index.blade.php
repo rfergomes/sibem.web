@@ -22,7 +22,7 @@
                     </div>
                     @if(Auth::user()->isAdminSistema())
                         <div class="col-md-4 col-lg-3">
-                            <select name="admrg_id" id="admrg_id_select" class="form-select">
+                            <select name="admrg_id" id="admrg_id_select" class="form-select no-choices">
                                 <option value="">-- Todas as Regionais --</option>
                                 @foreach($regionais as $regOpt)
                                     <option value="{{ $regOpt->admrg_id }}" {{ request('admrg_id') == $regOpt->admrg_id ? 'selected' : '' }}>
