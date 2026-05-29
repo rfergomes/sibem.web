@@ -53,7 +53,9 @@
                                             <span class="fw-bold badge bg-light-primary text-primary px-2">{{ $reg->admrg_id }}</span>
                                         </td>
                                         <td>
-                                            <span class="fw-bold text-dark">{{ $reg->adm_regional }}</span>
+                                            <span class="fw-bold text-dark">{{ $reg->adm_regional }}
+                                                <span class="badge bg-light-primary text-primary px-2">{{ $reg->uf }}</span>
+                                            </span>
                                         </td>
                                         <td><span class="badge bg-light-primary text-primary">{{ $reg->uf }}</span></td>
                                         <td>
