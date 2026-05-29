@@ -18,7 +18,7 @@
             <div class="card-body">
                 <form action="{{ route('admin.locais.index') }}" method="GET" class="row g-3 mb-4" id="filter-form">
                     <div class="col-md-5 col-lg-4">
-                        <input type="text" name="search" class="form-control" placeholder="Buscar por local, razão social, CNPJ ou cidade..." value="{{ request('search') }}">
+                        <input type="text" name="search" class="form-control" placeholder="Buscar por local, razão social, CNPJ ou cidade..." value="{{ request('search') }}" onchange="this.form.submit()">
                     </div>
                     @if(Auth::user()->isAdminSistema())
                         <div class="col-md-4 col-lg-3">

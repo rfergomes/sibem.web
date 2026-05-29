@@ -18,7 +18,7 @@
                 <form action="{{ route('admin.tokens.index') }}" method="GET" class="row g-3 mb-4">
                     <div class="col-12">
                         <div class="input-group">
-                            <input type="text" name="search" class="form-control" placeholder="Buscar por token, máquina, usuário ou e-mail..." value="{{ request('search') }}">
+                            <input type="text" name="search" class="form-control" placeholder="Buscar por token, máquina, usuário ou e-mail..." value="{{ request('search') }}" onchange="this.form.submit()">
                             <button class="btn btn-outline-secondary" type="submit">
                                 <i class="ti ti-search"></i> Filtrar
                             </button>
