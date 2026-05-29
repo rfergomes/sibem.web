@@ -168,7 +168,7 @@
                 <div class="card-body">
                     <div class="d-flex justify-content-between align-items-center">
                         <div>
-                            <h6 class="text-white-50 mb-1">Inventários Concluídos ({{ $selectedYear }})</h6>
+                            <h6 class="text-white-50 mb-1">Realizados ({{ $selectedYear }})</h6>
                             <h2 class="mb-0 text-white fw-bold">{{ $stats['inventarios_concluidos'] }}</h2>
                         </div>
                         <div class="avatar bg-white-20 rounded-3 text-white p-2">
@@ -184,7 +184,7 @@
                 <div class="card-body">
                     <div class="d-flex justify-content-between align-items-center">
                         <div>
-                            <h6 class="text-white-50 mb-1">Inventários em Aberto ({{ $selectedYear }})</h6>
+                            <h6 class="text-white-50 mb-1">Pendentes ({{ $selectedYear }})</h6>
                             <h2 class="mb-0 text-white fw-bold">{{ $stats['inventarios_abertos'] }}</h2>
                         </div>
                         <div class="avatar bg-white-20 rounded-3 text-white p-2">
@@ -242,15 +242,15 @@
                         </span>
                         <div class="row">
                             <div class="col-4 border-end">
-                                <small class="text-muted d-block style-small">Igrejas</small>
+                                <small class="text-muted d-block style-small">Localidades</small>
                                 <span class="fw-bold text-dark fs-5">{{ $stats['igrejas'] }}</span>
                             </div>
                             <div class="col-4 border-end">
-                                <small class="text-muted d-block style-small">Feitos</small>
+                                <small class="text-muted d-block style-small">Realizados</small>
                                 <span class="fw-bold text-success fs-5">{{ $stats['inventarios_concluidos'] }}</span>
                             </div>
                             <div class="col-4">
-                                <small class="text-muted d-block style-small">Restam</small>
+                                <small class="text-muted d-block style-small">Restantes</small>
                                 <span class="fw-bold text-warning fs-5">{{ $stats['inventarios_abertos'] }}</span>
                             </div>
                         </div>
@@ -271,7 +271,7 @@
                             <thead class="table-light">
                                 <tr>
                                     <th>Administração Local</th>
-                                    <th class="text-center">Igrejas</th>
+                                    <th class="text-center">Localidades</th>
                                     <th class="text-center">Inventários</th>
                                     <th>Progresso Geral</th>
                                     <th class="text-center">Banco</th>
@@ -359,7 +359,7 @@
                     <div class="card-body">
                         <div class="d-flex justify-content-between align-items-center">
                             <div>
-                                <h6 class="text-white-50 mb-1">Locais (Tenants)</h6>
+                                <h6 class="text-white-50 mb-1">Administrações)</h6>
                                 <h2 class="mb-0 text-white fw-bold">{{ $stats['locais'] }}</h2>
                             </div>
                             <div class="avatar bg-white-20 rounded-3 text-white p-2">
@@ -376,7 +376,7 @@
                     <div class="card-body">
                         <div class="d-flex justify-content-between align-items-center">
                             <div>
-                                <h6 class="text-white-50 mb-1">Igrejas Associadas</h6>
+                                <h6 class="text-white-50 mb-1">Localidades</h6>
                                 <h2 class="mb-0 text-white fw-bold">{{ $stats['igrejas'] }}</h2>
                             </div>
                             <div class="avatar bg-white-20 rounded-3 text-white p-2">
@@ -409,7 +409,7 @@
                 <div class="card-body">
                     <div class="d-flex justify-content-between align-items-center">
                         <div>
-                            <h6 class="text-white-50 mb-1">Inventários Concluídos ({{ $selectedYear }})</h6>
+                            <h6 class="text-white-50 mb-1">Realizados ({{ $selectedYear }})</h6>
                             <h2 class="mb-0 text-white fw-bold">{{ $stats['inventarios_concluidos'] }}</h2>
                         </div>
                         <div class="avatar bg-white-20 rounded-3 text-white p-2">
@@ -425,7 +425,7 @@
                 <div class="card-body">
                     <div class="d-flex justify-content-between align-items-center">
                         <div>
-                            <h6 class="text-white-50 mb-1">Inventários em Aberto ({{ $selectedYear }})</h6>
+                            <h6 class="text-white-50 mb-1">Pendentes ({{ $selectedYear }})</h6>
                             <h2 class="mb-0 text-white fw-bold">{{ $stats['inventarios_abertos'] }}</h2>
                         </div>
                         <div class="avatar bg-white-20 rounded-3 text-white p-2">
@@ -451,9 +451,9 @@
                                 <thead class="table-light">
                                     <tr>
                                         <th>Cód. / Setor</th>
-                                        <th class="text-center">Igrejas no Setor</th>
-                                        <th class="text-center">Inventários Concluídos</th>
-                                        <th class="text-center">Inventários Pendentes</th>
+                                        <th class="text-center">Localidades</th>
+                                        <th class="text-center">Realizados</th>
+                                        <th class="text-center">Pendentes</th>
                                         <th>Progresso</th>
                                     </tr>
                                 </thead>
@@ -561,15 +561,15 @@
                             </span>
                             <div class="row">
                                 <div class="col-4 border-end">
-                                    <small class="text-muted d-block style-small">Igrejas</small>
+                                    <small class="text-muted d-block style-small">Localidades</small>
                                     <span class="fw-bold text-dark fs-5">{{ $stats['igrejas'] }}</span>
                                 </div>
                                 <div class="col-4 border-end">
-                                    <small class="text-muted d-block style-small">Feitos</small>
+                                    <small class="text-muted d-block style-small">Realizados</small>
                                     <span class="fw-bold text-success fs-5">{{ $stats['inventarios_concluidos'] }}</span>
                                 </div>
                                 <div class="col-4">
-                                    <small class="text-muted d-block style-small">Restam</small>
+                                    <small class="text-muted d-block style-small">Restantes</small>
                                     <span class="fw-bold text-warning fs-5">{{ $stats['inventarios_abertos'] }}</span>
                                 </div>
                             </div>
@@ -581,12 +581,12 @@
                 <div class="card border-0 shadow-sm bg-light-secondary">
                     <div class="card-body p-4 d-flex flex-column justify-content-between">
                         <div>
-                            <h5 class="text-dark mb-3"><i class="ti ti-info-circle me-2 text-primary"></i>Dica do Painel</h5>
-                            <p class="text-muted mb-3" style="line-height: 1.5;">
-                                A tabela ao lado reflete o progresso do inventário dos templos de cada setor no ano selecionado.
+                            <h5 class="text-dark mb-2"><i class="ti ti-info-circle me-2 text-primary"></i>Dica do Painel</h5>
+                            <p class="text-muted mb-0" style="line-height: 1.5;">
+                                A tabela reflete o progresso do inventário dos templos de cada setor no ano selecionado.
                             </p>
                             <p class="text-muted mb-0" style="line-height: 1.5;">
-                                Para lançar novos inventários, visualizar relatórios ou baixar PDFs conclusivos, utilize o menu lateral navegando até <strong>Inventários</strong>.
+                                Para lançar novos inventários, visualizar relatórios ou baixar PDFs conclusivos, utilize a versão desktop do sistema, disponível no portal <a href="https://sibem.top/app" target="_blank">sibem.top/app</a>.
                             </p>
                         </div>
                         <div class="mt-4 pt-3 border-top border-light-dark">

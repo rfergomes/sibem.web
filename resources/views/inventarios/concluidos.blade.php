@@ -39,9 +39,9 @@
                     </div>
 
                     <div class="col-md-4">
-                        <label for="igreja_id" class="form-label fw-600">Comum Congregação</label>
+                        <label for="igreja_id" class="form-label fw-600">Localidade</label>
                         <select name="igreja_id" id="igreja_id" class="form-select">
-                            <option value="">Todas as comuns</option>
+                            <option value="">Todas as localidades</option>
                             @foreach($igrejas as $igrejaOption)
                                 <option value="{{ $igrejaOption->codigo_ccb }}" {{ request('igreja_id') == $igrejaOption->codigo_ccb ? 'selected' : '' }}>
                                     {{ $igrejaOption->codigo_ccb }} - {{ $igrejaOption->nome }}
@@ -94,7 +94,6 @@
                         <table class="table table-sm table-hover align-middle mb-0">
                             <thead class="table-light">
                                 <tr>
-                                    <th>Inventário Nº</th>
                                     <th>Localidade</th>
                                     <th>SIGA</th>
                                     <th>Status</th>
@@ -103,10 +102,9 @@
                             <tbody>
                                 @foreach($inventarios as $inv)
                                     <tr>
-                                        <td><span class="fw-bold">{{ $inv->codigo_unico }}</span></td>
                                          <td>
                                             <span class="fw-bold">{{ $inv->igreja->nome ?? 'Não identificada' }}</span>
-                                            <small class="text-muted d-block">{{ $inv->data ? date('d/m/Y H:i', strtotime($inv->data)) : 'N/A' }}@if(isset($inv->igreja->setor)) | Setor: {{ $inv->igreja->setor }} @endif</small>
+                                            <small class="text-muted d-block"><code class="code">{{ $inv->codigo_unico }}</code> - {{ $inv->data ? date('d/m/Y H:i', strtotime($inv->data)) : 'N/A' }}@if(isset($inv->igreja->setor)) | Setor: {{ $inv->igreja->setor }} @endif</small>
                                         </td>
                                         <td>
                                             @if($inv->siga_ok) 
@@ -145,7 +143,7 @@
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
     document.addEventListener("DOMContentLoaded", function() {
-        const ctx = document.getElementById('monthlyChart').getContext('2d');
+        const ctx = document.getElementById('monthlyChart').getContext('3d');
         
         // Dynamic labels and values passed from the Laravel controller
         const labels = {!! json_encode($chartLabels) !!};
