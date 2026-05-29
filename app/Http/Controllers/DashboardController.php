@@ -11,6 +11,7 @@ use App\Models\User;
 use App\Models\Inventario;
 use App\Models\Setor;
 use App\Models\TokenV2;
+use App\Models\Agendamento;
 
 class DashboardController extends Controller
 {
@@ -25,7 +26,7 @@ class DashboardController extends Controller
             $today = date('Y-m-d');
             $sevenDaysLater = date('Y-m-d', strtotime('+7 days'));
 
-            $upcomingQuery = \App\Models\Agendamento::with('igreja')
+            $upcomingQuery = Agendamento::with('igreja')
                 ->whereIn('status', ['Confirmado', 'Reagendado', 'Pendente'])
                 ->whereBetween('data', [$today, $sevenDaysLater]);
 
@@ -79,6 +80,32 @@ class DashboardController extends Controller
         } elseif ($user->isAdminRegional()) {
             $selectedRegionalId = $user->regional_id;
         }
+
+        // Fetch upcoming schedules (next 5) for dashboard card display
+        $today = date('Y-m-d');
+        $proximosAgendamentosQuery = Agendamento::with(['igreja', 'local'])
+            ->whereIn('status', ['Confirmado', 'Reagendado', 'Pendente'])
+            ->where('data', '>=', $today);
+
+        if ($selectedRegionalId) {
+            $proximosAgendamentosQuery->whereHas('local', function($q) use ($selectedRegionalId) {
+                $q->where('admrg_id', $selectedRegionalId);
+            });
+        } elseif (!$user->isAdminSistema()) {
+            if ($user->isAdminRegional()) {
+                $regionalId = $user->regional_id;
+                $proximosAgendamentosQuery->whereHas('local', function($q) use ($regionalId) {
+                    $q->where('admrg_id', $regionalId);
+                });
+            } else {
+                $proximosAgendamentosQuery->where('admlc_id', $activeLocalId);
+            }
+        }
+
+        $proximosAgendamentos = $proximosAgendamentosQuery->orderBy('data', 'asc')
+            ->orderBy('horario', 'asc')
+            ->limit(5)
+            ->get();
 
         // --- REGIONAL DASHBOARD MODE ---
         if ($selectedRegionalId) {
@@ -173,7 +200,8 @@ class DashboardController extends Controller
                 'selectedYear',
                 'anosDisponiveis',
                 'selectedRegionalId',
-                'availableRegionais'
+                'availableRegionais',
+                'proximosAgendamentos'
             ));
         }
 
@@ -263,7 +291,8 @@ class DashboardController extends Controller
             'selectedYear',
             'anosDisponiveis',
             'selectedRegionalId',
-            'availableRegionais'
+            'availableRegionais',
+            'proximosAgendamentos'
         ));
     }
 }

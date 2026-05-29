@@ -196,6 +196,75 @@
         </div>
     </div>
 
+    <!-- Upcoming Schedules Card for Regional -->
+    <div class="row">
+        <div class="col-12 mb-4">
+            <div class="card border-0 shadow-sm">
+                <div class="card-header bg-transparent border-0 d-flex align-items-center justify-content-between pt-4 px-4">
+                    <h5 class="mb-0 text-dark"><i class="ti ti-calendar-event me-2 text-primary"></i>Próximos Inventários Agendados</h5>
+                    <a href="{{ route('agendamentos.index') }}" class="btn btn-sm btn-outline-primary d-flex align-items-center">
+                        <i class="ti ti-calendar me-1"></i>Ver Cronograma Completo
+                    </a>
+                </div>
+                <div class="card-body p-0">
+                    @if($proximosAgendamentos->isEmpty())
+                        <div class="text-center py-4">
+                            <i class="ti ti-calendar-off text-muted" style="font-size: 36px;"></i>
+                            <p class="text-muted mt-2 mb-0">Nenhum agendamento futuro registrado.</p>
+                        </div>
+                    @else
+                        <div class="table-responsive">
+                            <table class="table table-hover align-middle mb-0">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th>Igreja / Localidade</th>
+                                        <th>Administração Local</th>
+                                        <th>Data / Horário</th>
+                                        <th>Inventariante</th>
+                                        <th>Responsável Local / Contato</th>
+                                        <th class="text-center">Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach($proximosAgendamentos as $ag)
+                                        <tr>
+                                            <td>
+                                                <span class="fw-bold text-dark">{{ $ag->igreja ? $ag->igreja->igreja : 'Não identificada' }}</span>
+                                            </td>
+                                            <td>{{ $ag->local->adm_local ?? 'N/A' }}</td>
+                                            <td>
+                                                <span class="fw-bold"><i class="ti ti-calendar"></i> {{ date('d/m/Y', strtotime($ag->data)) }}</span>
+                                                <small class="d-block text-muted"><i class="ti ti-clock"></i> {{ substr($ag->horario, 0, 5) }}h</small>
+                                            </td>
+                                            <td>{{ $ag->responsavel_nome }}</td>
+                                            <td>
+                                                {{ $ag->acompanhante_nome ?? '-' }}
+                                                @if($ag->responsavel_telefone)
+                                                    <small class="d-block text-muted"><i class="ti ti-phone"></i> {{ $ag->responsavel_telefone }}</small>
+                                                @endif
+                                            </td>
+                                            <td class="text-center">
+                                                @if($ag->status === 'Confirmado')
+                                                    <span class="badge bg-success">Confirmado</span>
+                                                @elseif($ag->status === 'Reagendado')
+                                                    <span class="badge bg-primary">Reagendado</span>
+                                                @elseif($ag->status === 'Pendente')
+                                                    <span class="badge bg-warning text-dark">Pendente</span>
+                                                @else
+                                                    <span class="badge bg-secondary">{{ $ag->status }}</span>
+                                                @endif
+                                            </td>
+                                        </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
+                        </div>
+                    @endif
+                </div>
+            </div>
+        </div>
+    </div>
+
     <div class="row">
         <!-- Visual Comparison Chart -->
         <div class="col-xxl-8 col-xl-12 mb-4">
@@ -432,6 +501,75 @@
                             <i class="ti ti-clipboard-list" style="font-size: 28px;"></i>
                         </div>
                     </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Upcoming Schedules Card for Local -->
+    <div class="row">
+        <div class="col-12 mb-4">
+            <div class="card border-0 shadow-sm">
+                <div class="card-header bg-transparent border-0 d-flex align-items-center justify-content-between pt-4 px-4">
+                    <h5 class="mb-0 text-dark"><i class="ti ti-calendar-event me-2 text-primary"></i>Próximos Inventários Agendados</h5>
+                    <a href="{{ route('agendamentos.index') }}" class="btn btn-sm btn-outline-primary d-flex align-items-center">
+                        <i class="ti ti-calendar me-1"></i>Ver Cronograma Completo
+                    </a>
+                </div>
+                <div class="card-body p-0">
+                    @if($proximosAgendamentos->isEmpty())
+                        <div class="text-center py-4">
+                            <i class="ti ti-calendar-off text-muted" style="font-size: 36px;"></i>
+                            <p class="text-muted mt-2 mb-0">Nenhum agendamento futuro registrado.</p>
+                        </div>
+                    @else
+                        <div class="table-responsive">
+                            <table class="table table-hover align-middle mb-0">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th>Igreja / Localidade</th>
+                                        <th>Setor</th>
+                                        <th>Data / Horário</th>
+                                        <th>Inventariante</th>
+                                        <th>Responsável Local / Contato</th>
+                                        <th class="text-center">Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach($proximosAgendamentos as $ag)
+                                        <tr>
+                                            <td>
+                                                <span class="fw-bold text-dark">{{ $ag->igreja ? $ag->igreja->igreja : 'Não identificada' }}</span>
+                                            </td>
+                                            <td>{{ $ag->igreja && $ag->igreja->cod_setor ? 'Setor ' . $ag->igreja->cod_setor : 'N/A' }}</td>
+                                            <td>
+                                                <span class="fw-bold"><i class="ti ti-calendar"></i> {{ date('d/m/Y', strtotime($ag->data)) }}</span>
+                                                <small class="d-block text-muted"><i class="ti ti-clock"></i> {{ substr($ag->horario, 0, 5) }}h</small>
+                                            </td>
+                                            <td>{{ $ag->responsavel_nome }}</td>
+                                            <td>
+                                                {{ $ag->acompanhante_nome ?? '-' }}
+                                                @if($ag->responsavel_telefone)
+                                                    <small class="d-block text-muted"><i class="ti ti-phone"></i> {{ $ag->responsavel_telefone }}</small>
+                                                @endif
+                                            </td>
+                                            <td class="text-center">
+                                                @if($ag->status === 'Confirmado')
+                                                    <span class="badge bg-success">Confirmado</span>
+                                                @elseif($ag->status === 'Reagendado')
+                                                    <span class="badge bg-primary">Reagendado</span>
+                                                @elseif($ag->status === 'Pendente')
+                                                    <span class="badge bg-warning text-dark">Pendente</span>
+                                                @else
+                                                    <span class="badge bg-secondary">{{ $ag->status }}</span>
+                                                @endif
+                                            </td>
+                                        </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
+                        </div>
+                    @endif
                 </div>
             </div>
         </div>
