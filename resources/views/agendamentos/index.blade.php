@@ -421,7 +421,6 @@
 
 @section('scripts')
 <!-- FullCalendar styles and scripts -->
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.15/index.min.css">
 <style>
     .fc-header-toolbar {
         padding: 0.5rem;
@@ -466,7 +465,7 @@
 
 <!-- FullCalendar CDN -->
 <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.15/index.global.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.15/locales-all.global.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@fullcalendar/core@6.1.15/locales-all.global.min.js"></script>
 
 <script>
     document.addEventListener('DOMContentLoaded', function() {
