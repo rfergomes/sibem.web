@@ -40,24 +40,24 @@
                         <table class="table table-hover align-middle mb-0">
                             <thead class="table-light">
                                 <tr>
-                                    <th style="width: 20%;">ID Dependência</th>
-                                    <th>Descrição da Dependência</th>
-                                    <th>Cadastrada em</th>
-                                    <th class="text-end" style="min-width: 150px;">Ações</th>
+                                    <th>Dependência</th>
+                                    <th class="text-center" style="min-width: 150px;">Ações</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 @foreach($dependencias as $dep)
                                     <tr>
                                         <td>
-                                            <span class="fw-bold">{{ $dep->dependencia_id }}</span>
+                                            <span class="fw-bold"></span>
                                         </td>
                                         <td>
-                                            <span class="fw-bold text-dark">{{ $dep->descricao }}</span>
+                                            <span class="fw-bold text-dark">{{ $dep->dependencia_id }} - {{ $dep->descricao }}</span>
+                                            <small class="d-block text-muted">
+                                                {{ $dep->criado_por->name }} em {{ $dep->created_at->format('d/m/Y H:i') }}
+                                            </small>
                                         </td>
-                                        <td><small>{{ $dep->created_at ? $dep->created_at->format('d/m/Y H:i') : 'N/A' }}</small></td>
-                                        <td class="text-end">
-                                            <div class="d-flex justify-content-end gap-1">
+                                        <td class="text-center">
+                                            <div class="d-flex justify-content-center gap-1">
                                                 <a href="{{ route('admin.dependencias.show', $dep->id) }}" class="btn btn-sm btn-icon btn-light-info" title="Ver Detalhes">
                                                     <i class="ti ti-eye"></i>
                                                 </a>
