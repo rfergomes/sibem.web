@@ -105,7 +105,7 @@
                                          <td>
                                             <span class="fw-bold">{{ $inv->igreja->nome ?? 'Não identificada' }}</span> -
                                             <code class="code">{{ $inv->codigo_unico }}</code> 
-                                             <small class="text-muted d-block"> {{ $inv->data ? date('d/m/Y H:i', strtotime($inv->data)) : 'N/A' }}@if(isset($inv->igreja->setor)) | Setor: {{ $inv->igreja->setor }} @endif</small>
+                                            <span class="text-muted d-block"> {{ $inv->data ? date('d/m/Y H:i', strtotime($inv->data)) : 'N/A' }}@if(isset($inv->igreja->setor)) | Setor: {{ $inv->igreja->setor }} @endif</span></code>
                                         </td>
                                         <td>
                                             @if($inv->siga_ok) 
