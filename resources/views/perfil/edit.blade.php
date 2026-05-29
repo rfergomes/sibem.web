@@ -84,21 +84,21 @@
                         @foreach($tokens as $token)
                             <div class="list-group-item p-3">
                                 <div class="d-flex align-items-center justify-content-between mb-1">
-                                    <span class="fw-bold text-dark text-truncate" style="max-width: 70%;" title="{{ $token->dispositivo }}">
-                                        <i class="ti ti-device-laptop me-1 text-muted"></i>{{ $token->dispositivo }}
+                                    <span class="fw-bold text-dark text-truncate" style="max-width: 70%;" title="{{ $token->local->nome ?? 'Sem Administração' }}">
+                                        <i class="ti ti-building me-1"></i>{{ $token->local->nome ?? 'Sem Administração' }}
                                     </span>
                                     <span class="badge bg-light-success text-success">Ativo</span>
                                 </div>
                                 <div class="d-flex align-items-center justify-content-between mb-2 bg-light p-1 px-2 rounded" style="border: 1px dashed #dee2e6;">
                                     <div class="text-muted small text-truncate me-2" style="font-family: monospace; font-size: 11px;" title="{{ $token->token }}">
-                                        {{ $token->token }}
+                                        <i class="ti ti-device-laptop me-1 text-muted"></i>{{ $token->token }}
                                     </div>
                                     <button type="button" class="btn btn-sm btn-icon btn-link text-primary p-0 m-0 d-flex align-items-center justify-content-center" style="width: 22px; height: 22px; border: none; background: none;" onclick="copyToken('{{ $token->token }}', this)" title="Copiar Token">
                                         <i class="ti ti-copy" style="font-size: 16px;"></i>
                                     </button>
                                 </div>
                                 <div class="text-muted small">
-                                    <i class="ti ti-building me-1"></i>{{ $token->local->nome ?? 'Administração Padrão' }}
+                                    <i class="ti ti-building me-1"></i>{{ $token->dispositivo }}
                                 </div>
                             </div>
                         @endforeach
