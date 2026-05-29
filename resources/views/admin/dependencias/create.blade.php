@@ -34,7 +34,7 @@
                         <a href="{{ route('admin.dependencias.index') }}" class="btn btn-light-secondary">
                             <i class="ti ti-arrow-left me-1"></i> Voltar
                         </a>
-                        <button type="submit" class="btn btn-success">
+                        <button type="submit" class="btn btn-outline-info">
                             <i class="ti ti-device-floppy me-1"></i> Salvar Dependência
                         </button>
                     </div>

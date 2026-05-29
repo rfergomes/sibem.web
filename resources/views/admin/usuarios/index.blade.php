@@ -8,7 +8,7 @@
         <div class="card">
             <div class="card-header bg-dark d-flex align-items-center justify-content-between">
                 <h4 class="mb-0 text-white"><i class="ti ti-users me-2"></i>Usuários do Sistema</h4>
-                <a href="{{ route('admin.usuarios.create') }}" class="btn btn-primary btn-sm d-flex align-items-center">
+                <a href="{{ route('admin.usuarios.create') }}" class="btn btn-outline-info btn-sm d-flex align-items-center">
                     <i class="ti ti-plus me-1"></i> Novo Usuário
                 </a>
             </div>

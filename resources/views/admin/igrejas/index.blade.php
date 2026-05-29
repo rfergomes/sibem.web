@@ -9,7 +9,7 @@
             <div class="card-header bg-dark d-flex align-items-center justify-content-between">
                 <h4 class="mb-0 text-white"><i class="ti ti-building-community me-2"></i>Igrejas Cadastradas (CCB)</h4>
                 @if(Auth::user()->isAdminSistema() || Auth::user()->isAdminRegional() || Auth::user()->isAdminLocal())
-                    <a href="{{ route('admin.igrejas.create') }}" class="btn btn-primary btn-sm d-flex align-items-center">
+                    <a href="{{ route('admin.igrejas.create') }}" class="btn btn-outline-info btn-sm d-flex align-items-center">
                         <i class="ti ti-plus me-1"></i> Nova Igreja
                     </a>
                 @endif

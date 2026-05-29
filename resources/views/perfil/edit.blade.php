@@ -207,7 +207,7 @@
                 <a href="{{ route('dashboard') }}" class="btn btn-light-secondary">
                     <i class="ti ti-arrow-left me-1"></i> Voltar ao Dashboard
                 </a>
-                <button type="submit" class="btn btn-success px-4">
+                <button type="submit" class="btn btn-outline-info px-4">
                     <i class="ti ti-device-floppy me-1"></i> Salvar Alterações
                 </button>
             </div>
