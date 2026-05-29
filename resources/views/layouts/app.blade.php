@@ -215,7 +215,7 @@
                     <li class="dropdown pc-h-item header-user-profile">
                         <a class="pc-head-link dropdown-toggle arrow-none me-0" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="false" aria-expanded="false">
                             @if(Auth::user()->foto)
-                                <img src="{{ asset('storage/' . Auth::user()->foto) }}" alt="user-image" class="rounded-circle" style="width: 38px; height: 38px; object-fit: cover;">
+                                <img src="{{ asset('storage/' . Auth::user()->foto) }}?v={{ time() }}" alt="user-image" class="rounded-circle" style="width: 38px; height: 38px; object-fit: cover;">
                             @else
                                 <div class="avatar bg-primary text-white rounded-circle d-flex align-items-center justify-content-center" style="width: 38px; height: 38px; font-weight: 600;">
                                     {{ substr(Auth::user()->nome, 0, 2) }}

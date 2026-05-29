@@ -30,6 +30,8 @@ class ProfileController extends Controller
             'name' => 'required|string|max:200',
             'email' => 'required|email|max:100|unique:mysql_sys.users_v2,email,' . $user->id,
             'telefone' => 'nullable|string|max:30',
+            'igreja' => 'nullable|string|max:200',
+            'cidade' => 'nullable|string|max:200',
             'password' => 'nullable|string|min:6|confirmed',
             'foto' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ], [
@@ -48,6 +50,8 @@ class ProfileController extends Controller
         $user->name = $request->name;
         $user->email = $request->email;
         $user->telefone = $request->telefone;
+        $user->igreja = $request->igreja;
+        $user->cidade = $request->cidade;
 
         // Update password if filled
         if ($request->filled('password')) {

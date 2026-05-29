@@ -12,7 +12,7 @@
                 <div class="mb-4 position-relative d-inline-block">
                     <div id="avatar-container" class="rounded-circle overflow-hidden d-flex align-items-center justify-content-center mx-auto" style="width: 120px; height: 120px; border: 4px solid #fff; box-shadow: 0 4px 15px rgba(0,0,0,0.1); background-color: #033D60;">
                         @if($user->foto)
-                            <img id="avatar-preview" src="{{ asset('storage/' . $user->foto) }}" alt="Foto do perfil" style="width: 100%; height: 100%; object-fit: cover;">
+                            <img id="avatar-preview" src="{{ asset('storage/' . $user->foto) }}?v={{ time() }}" alt="Foto do perfil" style="width: 100%; height: 100%; object-fit: cover;">
                         @else
                             <img id="avatar-preview" src="" alt="Foto do perfil" class="d-none" style="width: 100%; height: 100%; object-fit: cover;">
                             <div id="avatar-initials" class="text-white fw-bold fs-2">
@@ -49,13 +49,18 @@
                                 <td class="px-4 py-3 fw-bold text-muted" style="width: 45%;">Localidade</td>
                                 <td class="px-4 py-3 text-dark fw-bold">{{ $user->local->nome ?? 'Nenhum' }}</td>
                             </tr>
-                            <tr class="border-bottom">
-                                <td class="px-4 py-3 fw-bold text-muted">Comum Congregação</td>
-                                <td class="px-4 py-3 text-dark">{{ $user->igreja ?? 'N/A' }}</td>
-                            </tr>
                             <tr>
-                                <td class="px-4 py-3 fw-bold text-muted">Cidade</td>
-                                <td class="px-4 py-3 text-dark">{{ $user->cidade ?? 'N/A' }}</td>
+                                <td class="px-4 py-3 fw-bold text-muted">Perfil</td>
+                                <td class="px-4 py-3 text-dark fw-bold">
+                                    {{ match($user->tipo) {
+                                        'admin_sistema' => 'Super Admin',
+                                        'admin_regional' => 'Admin Regional',
+                                        'admin_local' => 'Admin Local',
+                                        'operador' => 'Operador',
+                                        'auditor' => 'Auditor',
+                                        default => $user->tipo
+                                    } }}
+                                </td>
                             </tr>
                         </tbody>
                     </table>
@@ -97,6 +102,22 @@
                             <label class="form-label fw-bold">Telefone</label>
                             <input type="text" name="telefone" class="form-control @error('telefone') is-invalid @enderror" value="{{ old('telefone', $user->telefone) }}" placeholder="(99) 99999-9999">
                             @error('telefone')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
+                        </div>
+
+                        <div class="col-md-6">
+                            <label class="form-label fw-bold">Comum Congregação</label>
+                            <input type="text" name="igreja" class="form-control @error('igreja') is-invalid @enderror" value="{{ old('igreja', $user->igreja) }}" placeholder="Ex: Jd Nova América">
+                            @error('igreja')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
+                        </div>
+
+                        <div class="col-md-6">
+                            <label class="form-label fw-bold">Cidade</label>
+                            <input type="text" name="cidade" class="form-control @error('cidade') is-invalid @enderror" value="{{ old('cidade', $user->cidade) }}" placeholder="Ex: Campinas">
+                            @error('cidade')
                                 <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
                         </div>
