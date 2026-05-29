@@ -52,8 +52,8 @@
                                             <span class="badge bg-light-primary text-primary">{{ $reg->uf }}</span>
                                             <small class="d-block text-muted">Criada em: {{ $reg->created_at ? $reg->created_at->format('d/m/Y H:i') : 'N/A' }}</small>
                                         </td>
-                                        <td class="align-middle">
-                                            <span class="badge bg-light-primary text-primary align-items-center justify-content-center">{{ $reg->locais_count }}</span>
+                                        <td class="align-middle text-center">
+                                            <span class="badge bg-light-primary text-primary">{{ $reg->locais_count }}</span>
                                         </td>
                                         <td class="text-end align-middle">
                                             <div class="d-flex justify-content-end gap-1">
