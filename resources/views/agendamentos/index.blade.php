@@ -761,25 +761,21 @@
                             `📞 *Telefone:* ${data.telefone || 'Não informado'}\n\n` +
 
                             `📌 *Situação:* ${data.status}\n` +
-                            `🖊️ _Registrado por: ${data.operador}_\n\n` +
-
-                            
-                            `Contamos com a colaboração de todos para que o inventário seja realizado em ordem e com tranquilidade.\n\n` +
-
-                            `📖 “E tudo quanto fizerdes, fazei-o de todo o coração, como ao Senhor.”\n` +
-                            `_Colossenses 3:23_\n\n` +
-
-                            `✨ Deus abençoe grandemente a todos!`;
+                            `🖊️ _Registrado por: ${data.operador}_\n\n`;
                           
                 if (data.status === 'Cancelado' && data.motivo) {
-                    msg += `\n*Motivo do Cancelamento:* ${data.motivo}\n`;
+                    msg += `❌ *Motivo do Cancelamento:* ${data.motivo}\n\n`;
                 }
                 
                 if (data.observacao) {
-                    msg += `\n*Observações:*\n${data.observacao}\n`;
+                    msg += `📝 *Observações:*\n${data.observacao}\n\n`;
                 }
                 
-                msg += `\n---\n*SIBEM Web* - _Sistema de Inventário de Bens Móveis_`;
+                msg += `Contamos com a colaboração de todos para que o inventário seja realizado em ordem e com tranquilidade.\n\n` +
+                            `📖 “E tudo quanto fizerdes, fazei-o de todo o coração, como ao Senhor.”\n` +
+                            `_Colossenses 3:23_\n\n` +
+                            `✨ Deus abençoe grandemente a todos!\n\n` +
+                            `---\n*SIBEM Web* - _Sistema de Inventário de Bens Móveis_`;
 
                 navigator.clipboard.writeText(msg).then(() => {
                     Swal.fire({
