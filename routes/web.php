@@ -15,6 +15,7 @@ use App\Http\Controllers\Admin\DependenciaController;
 use App\Http\Controllers\Admin\IgrejaController;
 use App\Http\Controllers\Admin\TipoImovelController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\AgendamentoController;
 
 // Public Landing Page
 Route::get('/', function () {
@@ -134,6 +135,11 @@ Route::middleware(['auth', 'tenant'])->group(function () {
     // Perfil do Usuário
     Route::get('/perfil', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::put('/perfil', [ProfileController::class, 'update'])->name('profile.update');
+
+    // Agendamentos de Inventários
+    Route::resource('agendamentos', AgendamentoController::class)->names('agendamentos');
+    Route::put('agendamentos/{id}/reagendar', [AgendamentoController::class, 'reagendar'])->name('agendamentos.reagendar');
+    Route::put('agendamentos/{id}/cancelar', [AgendamentoController::class, 'cancelar'])->name('agendamentos.cancelar');
 
     // Dynamic Tenant Chaveamento (Selection)
     Route::post('/tenant/select', [TenantSelectionController::class, 'select'])->name('tenant.select');

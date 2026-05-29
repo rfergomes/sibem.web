@@ -20,6 +20,43 @@ class DashboardController extends Controller
         $activeLocalId = session()->get('active_admlc_id') ?? $user->local_id;
         $activeLocal = Local::with('regional')->find($activeLocalId);
 
+        // Fetch upcoming schedules (next 7 days) to notify the user once per session
+        if (!session()->has('agendamentos_notificados')) {
+            $today = date('Y-m-d');
+            $sevenDaysLater = date('Y-m-d', strtotime('+7 days'));
+
+            $upcomingQuery = \App\Models\Agendamento::with('igreja')
+                ->whereIn('status', ['Confirmado', 'Reagendado', 'Pendente'])
+                ->whereBetween('data', [$today, $sevenDaysLater]);
+
+            if ($user->isAdminSistema()) {
+                // system admin sees all
+            } elseif ($user->isAdminRegional()) {
+                $regionalId = $user->regional_id;
+                $upcomingQuery->whereHas('local', function($q) use ($regionalId) {
+                    $q->where('admrg_id', $regionalId);
+                });
+            } else {
+                $upcomingQuery->where('admlc_id', $activeLocalId);
+            }
+
+            $upcomingList = $upcomingQuery->orderBy('data', 'asc')->orderBy('horario', 'asc')->get()
+                ->map(function($a) {
+                    return [
+                        'igreja' => $a->igreja ? $a->igreja->igreja : 'Não identificada',
+                        'data' => date('d/m/Y', strtotime($a->data)),
+                        'horario' => substr($a->horario, 0, 5),
+                        'responsavel' => $a->responsavel_nome,
+                        'status' => $a->status
+                    ];
+                })->toArray();
+            
+            if (!empty($upcomingList)) {
+                session()->put('upcoming_schedules', $upcomingList);
+            }
+            session()->put('agendamentos_notificados', true);
+        }
+
         $selectedYear = $request->input('ano', date('Y'));
         $anosDisponiveis = collect(range(date('Y') - 3, date('Y') + 1))->reverse()->values();
 

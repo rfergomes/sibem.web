@@ -780,4 +780,43 @@
         });
     </script>
 @endif
+
+@if(session()->has('upcoming_schedules') && !empty(session('upcoming_schedules')))
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            var schedules = @json(session('upcoming_schedules'));
+            var html = '<div class="table-responsive text-start" style="font-size: 0.85rem; max-height: 250px; overflow-y: auto;">' +
+                       '<table class="table table-sm table-hover align-middle">' +
+                       '<thead class="table-light"><tr><th>Localidade</th><th>Data/Hora</th><th>Responsável</th></tr></thead>' +
+                       '<tbody>';
+            
+            schedules.forEach(function(s) {
+                var badge = 'bg-warning text-dark';
+                if (s.status === 'Confirmado') badge = 'bg-success text-white';
+                else if (s.status === 'Reagendado') badge = 'bg-primary text-white';
+
+                html += '<tr>' +
+                        '<td><strong>' + s.igreja + '</strong></td>' +
+                        '<td>' + s.data + ' às ' + s.horario + 'h</td>' +
+                        '<td>' + s.responsavel + ' <span class="badge ' + badge + '">' + s.status + '</span></td>' +
+                        '</tr>';
+            });
+            
+            html += '</tbody></table></div>';
+
+            Swal.fire({
+                title: '📅 Próximos Inventários Agendados',
+                html: html,
+                icon: 'info',
+                width: '650px',
+                confirmButtonColor: '#033D60',
+                confirmButtonText: 'Entendido, Deus abençoe',
+                footer: '<a href="{{ route("agendamentos.index") }}" class="fw-bold text-primary">Acessar Cronograma de Visitas</a>'
+            });
+        });
+    </script>
+    @php
+        session()->forget('upcoming_schedules');
+    @endphp
+@endif
 @endsection

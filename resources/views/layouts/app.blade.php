@@ -66,6 +66,13 @@
                         </a>
                     </li>
 
+                    <li class="pc-item {{ Request::routeIs('agendamentos.*') ? 'active' : '' }}">
+                        <a href="{{ route('agendamentos.index') }}" class="pc-link">
+                            <span class="pc-micon"><i class="ti ti-calendar-event"></i></span>
+                            <span class="pc-mtext">Cronograma de Visitas</span>
+                        </a>
+                    </li>
+
                     @if(Auth::user()->isAdminSistema() || Auth::user()->isAdminRegional() || Auth::user()->isAdminLocal())
                         <li class="pc-item pc-caption">
                             <label>Administração de Acesso</label>
