@@ -74,13 +74,8 @@
                                             <span class="text-muted">{{ $user->telefone ?? 'Não informado' }}</span>
                                         </td>
                                         <td>
-                                            <span class="d-block fw-bold">{{ $user->local->nome ?? 'Nenhum' }}</span>
-                                            @if($user->igreja)
-                                                <small class="d-block">{{ $user->igreja }}</small>
-                                            @endif
-                                            @if($user->cidade)
-                                                <small class="d-block">{{ $user->cidade }}</small>
-                                            @endif
+                                            <span class="d-block fw-bold">{{ $user->local->nome ?? 'N/A' }}</span>
+                                            <span class="text-muted">{{ $user->igreja ?? 'N/A' }} | {{ $user->cidade ?? 'N/A' }}</span>
                                         </td>
                                         <td class="align-items-center">
                                             <div class="d-flex justify-content-center gap-1">
