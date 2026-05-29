@@ -40,28 +40,23 @@
                         <table class="table table-sm table-hover align-middle mb-0">
                             <thead class="table-light">
                                 <tr>
-                                    <th style="width: 15%;">ID</th>
                                     <th>Nome / Descrição do Tipo</th>
                                     <th>Igrejas</th>
-                                    <th>Cadastrado em</th>
-                                    <th class="text-end" style="min-width: 150px;">Ações</th>
+                                    <th class="text-center" style="min-width: 150px;">Ações</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 @foreach($tiposImovel as $tipo)
                                     <tr>
                                         <td>
-                                            <span class="fw-bold badge bg-light-primary text-primary px-2">{{ $tipo->id }}</span>
-                                        </td>
-                                        <td>
                                             <span class="fw-bold text-dark">{{ $tipo->nome }}</span>
+                                            <small class="d-block text-muted"><i class="ti ti-info-calendar"></i>&nbsp;{{ $tipo->created_at ? $tipo->created_at->format('d/m/Y H:i') : 'N/A' }}</small>
                                         </td>
                                         <td>
                                             <span class="badge bg-light-info text-info fw-bold">{{ $tipo->igrejas_count }}</span>
                                         </td>
-                                        <td><small>{{ $tipo->created_at ? $tipo->created_at->format('d/m/Y H:i') : 'N/A' }}</small></td>
-                                        <td class="text-end">
-                                            <div class="d-flex justify-content-end gap-1">
+                                        <td class="text-center">
+                                            <div class="d-flex justify-content-center gap-1">
                                                 <a href="{{ route('admin.tipos-imovel.show', $tipo->id) }}" class="btn btn-sm btn-icon btn-light-info" title="Ver Detalhes e Igrejas">
                                                     <i class="ti ti-eye"></i>
                                                 </a>
