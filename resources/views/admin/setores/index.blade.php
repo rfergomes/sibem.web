@@ -49,17 +49,17 @@
                             <tbody>
                                 @foreach($setores as $setor)
                                     <tr>
-                                        <td><span class="fw-bold text-dark">{{ $setor->cod_setor }} - {{ $setor->descricao }}</span></td>
+                                        <td><span class="fw-bold text-dark" style="min-width: 150px;">{{ $setor->cod_setor }} - {{ $setor->descricao }}</span></td>
                                         <td>
                                             @if ($setor->local)
                                                 {{ $setor->local->nome }}<br>
-                                                <span class="badge bg-light-info text-info fw-bold">{{ $setor->local->regional->adm_regional ?? 'N/A' }}</span>
+                                                <span class="badge bg-light-primary text-primary fw-bold">{{ $setor->local->regional->adm_regional ?? 'N/A' }}</span>
                                             @else
                                                 N/A
                                             @endif
                                         </td>
                                         <td>
-                                            <span class="badge bg-light-info text-info fw-bold">{{ $setor->igrejas_count }}</span>
+                                            <span class="badge bg-light-primary text-primary fw-bold">{{ $setor->igrejas_count }}</span>
                                         </td>
                                         <td class="text-center">
                                             <div class="d-flex justify-content-center gap-1">
