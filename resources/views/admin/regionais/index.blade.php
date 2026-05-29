@@ -40,7 +40,6 @@
                                 <tr>
                                     <th>ID Regional</th>
                                     <th>Administração Regional</th>
-                                    <th>UF</th>
                                     <th>Locais Vinculados</th>
                                     <th>Cadastrada em</th>
                                     <th class="text-end" style="min-width: 150px;">Ações</th>
@@ -53,11 +52,11 @@
                                             <span class="fw-bold badge bg-light-primary text-primary px-2">{{ $reg->admrg_id }}</span>
                                         </td>
                                         <td>
-                                            <span class="fw-bold text-dark">{{ $reg->adm_regional }}
-                                                <span class="badge bg-light-primary text-primary px-2">{{ $reg->uf }}</span>
+                                            <span class="fw-bold badge bg-light-primary text-primary px-2">{{ $reg->admrg_id }}</span>
+                                            <span class="fw-bold text-dark"> - {{ $reg->adm_regional }}
+                                                <span class="badge bg-light-primary text-primary px-2"> - {{ $reg->uf }}</span>
                                             </span>
                                         </td>
-                                        <td><span class="badge bg-light-primary text-primary">{{ $reg->uf }}</span></td>
                                         <td>
                                             <span class="badge bg-light-info text-info fw-bold">{{ $reg->locais_count }}</span>
                                         </td>
