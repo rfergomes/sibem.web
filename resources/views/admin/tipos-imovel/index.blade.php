@@ -41,7 +41,7 @@
                             <thead class="table-light">
                                 <tr>
                                     <th>Nome / Descrição do Tipo</th>
-                                    <th>Igrejas</th>
+                                    <th class="text-center">Igrejas</th>
                                     <th class="text-center" style="min-width: 150px;">Ações</th>
                                 </tr>
                             </thead>
@@ -50,9 +50,9 @@
                                     <tr>
                                         <td>
                                             <span class="fw-bold text-dark">{{ $tipo->id }} - {{ $tipo->nome }}</span>
-                                            <small class="d-block text-muted"><i class="ti ti-info-calendar"></i>&nbsp;{{ $tipo->created_at ? $tipo->created_at->format('d/m/Y H:i') : 'N/A' }}</small>
+                                            <small class="d-block text-muted"><i class="ti ti-calendar"></i>&nbsp;Cadastrado em: {{ $tipo->created_at ? $tipo->created_at->format('d/m/Y H:i') : 'N/A' }}</small>
                                         </td>
-                                        <td>
+                                        <td class="text-center">
                                             <span class="badge bg-light-primary text-dark fw-bold">{{ $tipo->igrejas_count }}</span>
                                         </td>
                                         <td class="text-center">
