@@ -39,7 +39,7 @@
                             <thead class="table-light">
                                 <tr>
                                     <th>Administração Regional</th>
-                                    <th>Localidades</th>
+                                    <th class="text-center">Localidades</th>
                                     <th class="text-end" style="min-width: 150px;">Ações</th>
                                 </tr>
                             </thead>
@@ -52,7 +52,7 @@
                                             <span class="badge bg-light-primary text-primary">{{ $reg->uf }}</span>
                                             <small class="d-block text-muted">Criada em: {{ $reg->created_at ? $reg->created_at->format('d/m/Y H:i') : 'N/A' }}</small>
                                         </td>
-                                        <td class="text-center">
+                                        <td class="align-middle">
                                             <span class="badge fw-bold bg-light-primary text-primary">{{ $reg->locais_count }}</span>
                                         </td>
                                         <td class="text-end align-middle">
