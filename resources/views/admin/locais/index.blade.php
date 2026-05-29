@@ -54,8 +54,8 @@
                                 <tr>
                                     <th>Administração Local</th>
                                     <th>Cidade / UF</th>
-                                    <th>Igrejas / Setores</th>
-                                    <th class="text-center" style="min-width: 150px;">Ações</th>
+                                    <th class="text-center">Igrejas / Setores</th>
+                                    <th class="text-center">Ações</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -69,7 +69,7 @@
                                             <span class="d-block fw-bold">{{ $local->cidade }}/{{ $local->uf }}</span>
                                             <small class="d-block text-muted">{{ $local->regional->adm_regional ?? 'N/A' }}</small>
                                         </td>
-                                        <td>
+                                        <td class="text-center">
                                             <span class="badge bg-light-primary text-primary fw-bold me-1" title="Igrejas">
                                                 {{ $local->igrejas_count }} <i class="ti ti-building-community"></i>
                                             </span>
