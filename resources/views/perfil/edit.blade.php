@@ -46,7 +46,7 @@
                     <table class="table mb-0 table-borderless">
                         <tbody>
                             <tr class="border-bottom">
-                                <td class="px-4 py-3 fw-bold text-muted" style="width: 45%;">Localidade</td>
+                                <td class="px-4 py-3 fw-bold text-muted" style="width: 45%;">Administração:</td>
                                 <td class="px-4 py-3 text-dark fw-bold">{{ $user->local->nome ?? 'Nenhum' }}</td>
                             </tr>
                             <tr>
@@ -65,6 +65,45 @@
                         </tbody>
                     </table>
                 </div>
+            </div>
+        </div>
+
+        <!-- Card de Tokens Ativos -->
+        <div class="card mb-4">
+            <div class="card-header bg-light">
+                <h5 class="mb-0 text-dark fw-bold"><i class="ti ti-key me-2"></i>Tokens Ativos (Desktop)</h5>
+            </div>
+            <div class="card-body p-0">
+                @if($tokens->isEmpty())
+                    <div class="text-center p-4">
+                        <i class="ti ti-key text-muted" style="font-size: 24px;"></i>
+                        <p class="text-muted small mt-2 mb-0">Nenhum token desktop ativo.</p>
+                    </div>
+                @else
+                    <div class="list-group list-group-flush">
+                        @foreach($tokens as $token)
+                            <div class="list-group-item p-3">
+                                <div class="d-flex align-items-center justify-content-between mb-1">
+                                    <span class="fw-bold text-dark text-truncate" style="max-width: 70%;" title="{{ $token->dispositivo }}">
+                                        <i class="ti ti-device-laptop me-1 text-muted"></i>{{ $token->dispositivo }}
+                                    </span>
+                                    <span class="badge bg-light-success text-success">Ativo</span>
+                                </div>
+                                <div class="d-flex align-items-center justify-content-between mb-2 bg-light p-1 px-2 rounded" style="border: 1px dashed #dee2e6;">
+                                    <div class="text-muted small text-truncate me-2" style="font-family: monospace; font-size: 11px;" title="{{ $token->token }}">
+                                        {{ $token->token }}
+                                    </div>
+                                    <button type="button" class="btn btn-sm btn-icon btn-link text-primary p-0 m-0 d-flex align-items-center justify-content-center" style="width: 22px; height: 22px; border: none; background: none;" onclick="copyToken('{{ $token->token }}', this)" title="Copiar Token">
+                                        <i class="ti ti-copy" style="font-size: 16px;"></i>
+                                    </button>
+                                </div>
+                                <div class="text-muted small">
+                                    <i class="ti ti-building me-1"></i>{{ $token->local->nome ?? 'Administração Padrão' }}
+                                </div>
+                            </div>
+                        @endforeach
+                    </div>
+                @endif
             </div>
         </div>
     </div>
@@ -205,5 +244,33 @@
             reader.readAsDataURL(file);
         }
     });
+
+    // Função para Copiar o Token para a Área de Transferência
+    function copyToken(text, button) {
+        navigator.clipboard.writeText(text).then(function() {
+            // Modifica o ícone temporariamente
+            const icon = button.querySelector('i');
+            icon.className = 'ti ti-check text-success';
+            
+            // Exibe mensagem rápida tipo Toast
+            const Toast = Swal.mixin({
+                toast: true,
+                position: 'top-end',
+                showConfirmButton: false,
+                timer: 2000,
+                timerProgressBar: false
+            });
+            Toast.fire({
+                icon: 'success',
+                title: 'Token copiado com sucesso!'
+            });
+
+            setTimeout(function() {
+                icon.className = 'ti ti-copy';
+            }, 2000);
+        }, function(err) {
+            console.error('Erro ao copiar token: ', err);
+        });
+    }
 </script>
 @endsection

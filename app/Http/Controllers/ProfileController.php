@@ -16,7 +16,13 @@ class ProfileController extends Controller
     public function edit()
     {
         $user = Auth::user();
-        return view('perfil.edit', compact('user'));
+        $tokens = \App\Models\TokenV2::with('local')
+            ->where('user_id', $user->id)
+            ->where('ativo', 1)
+            ->orderBy('created_at', 'desc')
+            ->get();
+
+        return view('perfil.edit', compact('user', 'tokens'));
     }
 
     /**
