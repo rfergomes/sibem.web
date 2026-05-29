@@ -41,8 +41,8 @@
                             <thead class="table-light">
                                 <tr>
                                     <th>Setor</th>
-                                    <th>Administrações</th>
-                                    <th>Localidades</th>
+                                    <th class="text-center">Administrações</th>
+                                    <th class="text-center">Localidades</th>
                                     <th class="text-center" style="min-width: 150px;">Ações</th>
                                 </tr>
                             </thead>
@@ -50,7 +50,7 @@
                                 @foreach($setores as $setor)
                                     <tr>
                                         <td><span class="fw-bold text-dark" style="min-width: 150px;">{{ $setor->cod_setor }} - {{ $setor->descricao }}</span></td>
-                                        <td>
+                                        <td class="text-center">
                                             @if ($setor->local)
                                                 {{ $setor->local->nome }}<br>
                                                 <span class="badge bg-light-primary text-primary fw-bold">{{ $setor->local->regional->adm_regional ?? 'N/A' }}</span>
@@ -58,7 +58,7 @@
                                                 N/A
                                             @endif
                                         </td>
-                                        <td>
+                                        <td class="text-center">
                                             <span class="badge bg-light-primary text-primary fw-bold">{{ $setor->igrejas_count }}</span>
                                         </td>
                                         <td class="text-center">
