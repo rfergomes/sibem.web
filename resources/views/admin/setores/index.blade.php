@@ -51,11 +51,13 @@
                                     <tr>
                                         <td><span class="fw-bold text-dark">{{ $setor->cod_setor }} - {{ $setor->descricao }}</span></td>
                                         <td>
-                                            @foreach ($setor->localidades as $localidade)
-                                                <span class="badge bg-light-primary text-primary fw-bold">{{ $localidade->nome }}</span>
-                                            @endforeach
+                                            @if ($setor->local)
+                                                {{ $setor->local->nome }}<br>
+                                                <span class="badge bg-light-info text-info fw-bold">{{ $setor->local->regional->adm_regional ?? 'N/A' }}</span>
+                                            @else
+                                                N/A
+                                            @endif
                                         </td>
-                                        <td>{{ $setor->local->regional->adm_regional ?? 'N/A' }}</td>
                                         <td>
                                             <span class="badge bg-light-info text-info fw-bold">{{ $setor->igrejas_count }}</span>
                                         </td>
