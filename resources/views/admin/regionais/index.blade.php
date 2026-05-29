@@ -40,7 +40,6 @@
                                 <tr>
                                     <th>Administração Regional</th>
                                     <th>Localidades</th>
-                                    <th>Cadastrada em</th>
                                     <th class="text-end" style="min-width: 150px;">Ações</th>
                                 </tr>
                             </thead>
@@ -48,10 +47,10 @@
                                 @foreach($regionais as $reg)
                                     <tr>
                                         <td>                                           
-                                            <span class="fw-bold badge bg-light-primary text-primary px-2">{{ $reg->admrg_id }} - </span>
+                                            <span class="fw-bold text-primary px-2">{{ $reg->admrg_id }} - </span>
                                             <span class="fw-bold text-dark">{{ $reg->adm_regional }}</span>
                                             <span class="badge bg-light-primary text-primary px-2"> - {{ $reg->uf }}</span>
-                                            <small class="d-block text-muted">{{ $reg->created_at ? $reg->created_at->format('d/m/Y H:i') : 'N/A' }}</small>
+                                            <small class="d-block text-muted">Criada em: {{ $reg->created_at ? $reg->created_at->format('d/m/Y H:i') : 'N/A' }}</small>
                                         </td>
                                         <td>
                                             <span class="badge bg-light-info text-info fw-bold">{{ $reg->locais_count }}</span>
