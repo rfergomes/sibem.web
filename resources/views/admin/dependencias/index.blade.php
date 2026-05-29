@@ -47,10 +47,7 @@
                             <tbody>
                                 @foreach($dependencias as $dep)
                                     <tr>
-                                        <td>
-                                            <span class="fw-bold"></span>
-                                        </td>
-                                        <td>
+                                        <td class="text-start">
                                             <span class="fw-bold text-dark">{{ $dep->dependencia_id }} - {{ $dep->descricao }}</span>
                                             <small class="d-block text-muted">
                                                 Cadastrado em: {{ $dep->created_at->format('d/m/Y H:i') }}
