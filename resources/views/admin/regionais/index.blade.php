@@ -51,12 +51,11 @@
                                             <span class="fw-bold badge bg-light-primary text-primary px-2">{{ $reg->admrg_id }} - </span>
                                             <span class="fw-bold text-dark">{{ $reg->adm_regional }}</span>
                                             <span class="badge bg-light-primary text-primary px-2"> - {{ $reg->uf }}</span>
-                                            <small class="text-muted">{{ $reg->created_at ? $reg->created_at->format('d/m/Y H:i') : 'N/A' }}</small>
+                                            <small class="d-block text-muted">{{ $reg->created_at ? $reg->created_at->format('d/m/Y H:i') : 'N/A' }}</small>
                                         </td>
                                         <td>
                                             <span class="badge bg-light-info text-info fw-bold">{{ $reg->locais_count }}</span>
                                         </td>
-                                        <td><small>{{ $reg->created_at ? $reg->created_at->format('d/m/Y H:i') : 'N/A' }}</small></td>
                                         <td class="text-end">
                                             <div class="d-flex justify-content-end gap-1">
                                                 <a href="{{ route('admin.regionais.show', $reg->id) }}" class="btn btn-sm btn-icon btn-light-info" title="Ver Administrações Locais">
