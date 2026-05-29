@@ -750,8 +750,15 @@
 
             // Set Whatsapp button logic
             document.getElementById('btn-copiar-whatsapp').onclick = function() {
-                var msg = `*🙏 A Paz de Deus!*\n\n\n\n` +
-                            `*📋✨ AGENDAMENTO DE INVENTÁRIO - CCB*\n\n` +
+                var tipoHeader = 'AGENDAMENTO';
+                if (data.status === 'Reagendado') {
+                    tipoHeader = 'REAGENDAMENTO';
+                } else if (data.status === 'Cancelado') {
+                    tipoHeader = 'CANCELAMENTO';
+                }
+
+                var msg = `*🙏 A Paz de Deus!*\n\n` +
+                            `*📋✨ ${tipoHeader} DE INVENTÁRIO - CCB*\n\n` +
                             `🏛️ *Localidade:* ${data.igreja}\n` +
                             `📅 *Data:* ${data.data}\n` +
                             `⏰ *Horário:* ${data.horario}h\n\n` +
