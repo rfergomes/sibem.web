@@ -750,14 +750,26 @@
 
             // Set Whatsapp button logic
             document.getElementById('btn-copiar-whatsapp').onclick = function() {
-                var msg = `*📢 AGENDAMENTO DE INVENTÁRIO - CCB*\n\n` +
-                          `*Localidade:* ${data.igreja}\n` +
-                          `*Data:* ${data.data} às ${data.horario}h\n` +
-                          `*Inventariante:* ${data.responsavel}\n` +
-                          `*Responsável Local (Casa de Oração):* ${data.acompanhante || 'Não informado'}\n` +
-                          `*Telefone do Responsável Local:* ${data.telefone || 'Não informado'}\n\n` +
-                          `*Situação:* ${data.status}\n` +
-                          `_Registrado por: ${data.operador}_\n`;
+                var msg = `*🙏 A Paz de Deus!*\n\n\n\n` +
+                            `*📋✨ AGENDAMENTO DE INVENTÁRIO - CCB*\n\n` +
+                            `🏛️ *Localidade:* ${data.igreja}\n` +
+                            `📅 *Data:* ${data.data}\n` +
+                            `⏰ *Horário:* ${data.horario}h\n\n` +
+
+                            `👨‍💼 *Inventariante:* ${data.responsavel}\n` +
+                            `🤝 *Responsável Local:* ${data.acompanhante || 'Não informado'}\n` +
+                            `📞 *Telefone:* ${data.telefone || 'Não informado'}\n\n` +
+
+                            `📌 *Situação:* ${data.status}\n` +
+                            `🖊️ _Registrado por: ${data.operador}_\n\n` +
+
+                            
+                            `Contamos com a colaboração de todos para que o inventário seja realizado em ordem e com tranquilidade.\n\n` +
+
+                            `📖 “E tudo quanto fizerdes, fazei-o de todo o coração, como ao Senhor.”\n` +
+                            `_Colossenses 3:23_\n\n` +
+
+                            `✨ Deus abençoe grandemente a todos!`;
                           
                 if (data.status === 'Cancelado' && data.motivo) {
                     msg += `\n*Motivo do Cancelamento:* ${data.motivo}\n`;
