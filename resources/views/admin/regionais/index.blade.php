@@ -40,7 +40,7 @@
                                 <tr>
                                     <th>Administração Regional</th>
                                     <th class="text-center">Localidades</th>
-                                    <th class="text-end" style="min-width: 150px;">Ações</th>
+                                    <th class="text-center" style="min-width: 150px;">Ações</th>
                                 </tr>
                             </thead>
                             <tbody>
