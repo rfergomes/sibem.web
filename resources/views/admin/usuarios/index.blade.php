@@ -75,7 +75,7 @@
                                         </td>
                                         <td>
                                             <span class="d-block fw-bold">{{ $user->local->nome ?? 'Nenhum' }}</span>
-                                            <span class="d-block mt-1 badge align-items-center {{ $badgeClass }}">{{ $labelText }}</span>
+                                            <span class=" mt-1 badge align-items-center {{ $badgeClass }}">{{ $labelText }}</span>
                                         </td>
                                         <td class="align-items-center">
                                             
