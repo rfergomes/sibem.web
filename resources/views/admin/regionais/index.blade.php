@@ -38,7 +38,6 @@
                         <table class="table table-hover align-middle mb-0">
                             <thead class="table-light">
                                 <tr>
-                                    <th>ID Regional</th>
                                     <th>Administração Regional</th>
                                     <th>Locais Vinculados</th>
                                     <th>Cadastrada em</th>
@@ -49,13 +48,9 @@
                                 @foreach($regionais as $reg)
                                     <tr>
                                         <td>
-                                            <span class="fw-bold badge bg-light-primary text-primary px-2">{{ $reg->admrg_id }}</span>
-                                        </td>
-                                        <td>
-                                            <span class="fw-bold badge bg-light-primary text-primary px-2">{{ $reg->admrg_id }}</span>
-                                            <span class="fw-bold text-dark"> - {{ $reg->adm_regional }}
-                                                <span class="badge bg-light-primary text-primary px-2"> - {{ $reg->uf }}</span>
-                                            </span>
+                                            <span class="badge bg-light-primary text-primary px-2">{{ $reg->uf }}</span>
+                                            <span class="fw-bold badge bg-light-primary text-primary px-2">{{ $reg->admrg_id }} - </span>
+                                            <span class="fw-bold text-dark">{{ $reg->adm_regional }}</span>
                                         </td>
                                         <td>
                                             <span class="badge bg-light-info text-info fw-bold">{{ $reg->locais_count }}</span>
