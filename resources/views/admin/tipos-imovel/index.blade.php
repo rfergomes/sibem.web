@@ -49,7 +49,7 @@
                                 @foreach($tiposImovel as $tipo)
                                     <tr>
                                         <td>
-                                            <span class="fw-bold text-dark">{{ $tipo->nome }}</span>
+                                            <span class="fw-bold text-dark">{{ $tipo->id }} - {{ $tipo->nome }}</span>
                                             <small class="d-block text-muted"><i class="ti ti-info-calendar"></i>&nbsp;{{ $tipo->created_at ? $tipo->created_at->format('d/m/Y H:i') : 'N/A' }}</small>
                                         </td>
                                         <td>
