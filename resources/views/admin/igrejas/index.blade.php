@@ -76,7 +76,7 @@
                                         </td>
                                         <td>
                                             <span class="fw-bold text-dark">{{ $igreja->igreja }}</span>
-                                            <small class="d-block text-muted fw-bold text-dark"><span class="border border-secondary rounded p-1 mt-1"><i class="ti ti-building-community"></i>{{ $igreja->tipoImovel->nome ?? 'N/D' }} | Setor {{ $igreja->cod_setor ?? 'N/A'}} </span></small>
+                                            <small class="d-block text-muted fw-bold text-dark"><i class="ti ti-building-community"></i>&nbsp;{{ $igreja->tipoImovel->nome ?? 'N/D' }} | Setor {{ $igreja->cod_setor ?? 'N/A'}} </small>
                                         </td>
                                         <td>{{ $igreja->cidade ?? 'N/A' }} / {{ $igreja->uf ?? 'N/A' }}
                                             <small class="d-block text-muted fw-bold text-dark">{{ $igreja->local->adm_local ?? 'N/A' }}</small>
