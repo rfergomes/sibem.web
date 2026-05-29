@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Models\Agendamento;
 use App\Models\Igreja;
 use App\Models\Local;
+use App\Models\User;
 
 class AgendamentoController extends Controller
 {
@@ -118,6 +119,7 @@ class AgendamentoController extends Controller
                         'responsavel_nome' => $a->responsavel_nome,
                         'responsavel_telefone' => $a->responsavel_telefone,
                         'acompanhante_nome' => $a->acompanhante_nome,
+                        'admlc_id' => $a->admlc_id,
                         'status' => $a->status,
                         'observacao' => $a->observacao,
                         'motivo_cancelamento' => $a->motivo_cancelamento,
@@ -140,14 +142,16 @@ class AgendamentoController extends Controller
         // Fetch lists for select dropdowns in view (scoped to user's permission)
         $locais = $user->getAvailableLocais();
 
-        // Fetch churches scoped to user's permissions for the creation modal
+        // Fetch churches and users scoped to user's permissions for the creation modal
         if ($user->isAdminSistema() || $user->isAdminRegional()) {
             $igrejas = collect();
+            $usuarios = collect();
         } else {
             $igrejas = Igreja::where('admlc_id', $activeLocalId)->orderBy('igreja')->get();
+            $usuarios = User::where('admlc_id', $activeLocalId)->orderBy('name')->get();
         }
 
-        return view('agendamentos.index', compact('agendamentos', 'locais', 'igrejas', 'activeLocalId'));
+        return view('agendamentos.index', compact('agendamentos', 'locais', 'igrejas', 'usuarios', 'activeLocalId'));
     }
 
     /**
@@ -273,9 +277,9 @@ class AgendamentoController extends Controller
     }
 
     /**
-     * Get churches by administration local ID for AJAX populating.
+     * Get churches and users by administration local ID for AJAX populating.
      */
-    public function getIgrejasPorLocal($admlcId)
+    public function getDadosPorLocal($admlcId)
     {
         $user = Auth::user();
         
@@ -298,6 +302,13 @@ class AgendamentoController extends Controller
             ->orderBy('igreja')
             ->get(['id', 'igreja', 'cod_siga']);
 
-        return response()->json($igrejas);
+        $usuarios = User::where('admlc_id', $admlcId)
+            ->orderBy('name')
+            ->get(['id', 'name']);
+
+        return response()->json([
+            'igrejas' => $igrejas,
+            'usuarios' => $usuarios
+        ]);
     }
 }

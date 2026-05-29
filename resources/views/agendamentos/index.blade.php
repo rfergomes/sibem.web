@@ -92,8 +92,8 @@
                                         <tr>
                                             <th>Igreja / Localidade</th>
                                             <th>Data / Horário</th>
-                                            <th>Responsável</th>
-                                            <th>Acompanhante</th>
+                                            <th>Inventariante</th>
+                                            <th>Responsável Local / Contato</th>
                                             <th class="text-center">Status</th>
                                             <th class="text-center" style="min-width: 150px;">Ações</th>
                                         </tr>
@@ -105,7 +105,7 @@
                                                     <span class="fw-bold text-dark">{{ $a->igreja ? $a->igreja->igreja : 'Não identificada' }}</span>
                                                     <small class="d-block text-muted">
                                                         <i class="ti ti-building-community"></i> {{ $a->local->adm_local ?? 'N/A' }}
-                                                    </small>
+                                                     </small>
                                                 </td>
                                                 <td>
                                                     <span class="fw-bold"><i class="ti ti-calendar"></i> {{ date('d/m/Y', strtotime($a->data)) }}</span>
@@ -115,14 +115,14 @@
                                                 </td>
                                                 <td>
                                                     <span class="text-dark">{{ $a->responsavel_nome }}</span>
+                                                </td>
+                                                <td>
+                                                    <span class="text-dark">{{ $a->acompanhante_nome ?? '-' }}</span>
                                                     @if($a->responsavel_telefone)
                                                         <small class="d-block text-muted">
                                                             <i class="ti ti-phone"></i> {{ $a->responsavel_telefone }}
                                                         </small>
                                                     @endif
-                                                </td>
-                                                <td>
-                                                    <span class="text-dark">{{ $a->acompanhante_nome ?? '-' }}</span>
                                                 </td>
                                                 <td class="text-center">
                                                     @if($a->status === 'Confirmado')
@@ -143,6 +143,7 @@
                                                             data-id="{{ $a->id }}"
                                                             data-igreja="{{ $a->igreja ? $a->igreja->igreja : '' }}"
                                                             data-igreja-id="{{ $a->igreja_id }}"
+                                                            data-admlc-id="{{ $a->admlc_id }}"
                                                             data-data="{{ date('d/m/Y', strtotime($a->data)) }}"
                                                             data-data-raw="{{ $a->data }}"
                                                             data-horario="{{ substr($a->horario, 0, 5) }}"
@@ -220,16 +221,29 @@
                             </div>
                         @endif
                         <div class="col-md-6">
-                            <label for="responsavel_nome" class="form-label fw-bold">Responsável pela Casa de Oração</label>
-                            <input type="text" name="responsavel_nome" id="responsavel_nome" class="form-control" required placeholder="Nome do Ancião, Diácono ou Administrador">
+                            <label for="responsavel_nome" class="form-label fw-bold">Inventariante (Irmão que fará o inventário)</label>
+                            @if(Auth::user()->isAdminSistema() || Auth::user()->isAdminRegional())
+                                <select name="responsavel_nome" id="responsavel_nome" class="form-select no-choices" required disabled>
+                                    <option value="" disabled selected>-- Selecione primeiro a Administração --</option>
+                                </select>
+                            @else
+                                <select name="responsavel_nome" id="responsavel_nome" class="form-select no-choices" required>
+                                    <option value="" disabled {{ !collect($usuarios)->contains('name', Auth::user()->name) ? 'selected' : '' }}>-- Selecione o Inventariante --</option>
+                                    @foreach($usuarios as $usr)
+                                        <option value="{{ $usr->name }}" {{ Auth::user()->name === $usr->name ? 'selected' : '' }}>
+                                            {{ $usr->name }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                            @endif
                         </div>
                         <div class="col-md-6">
-                            <label for="responsavel_telefone" class="form-label fw-bold">Telefone do Responsável</label>
-                            <input type="text" name="responsavel_telefone" id="responsavel_telefone" class="form-control" placeholder="(00) 00000-0000">
-                        </div>
-                        <div class="col-md-6">
-                            <label for="acompanhante_nome" class="form-label fw-bold">Nome de quem acompanhará no dia</label>
+                            <label for="acompanhante_nome" class="form-label fw-bold">Responsável Local (Irmão que acompanhará)</label>
                             <input type="text" name="acompanhante_nome" id="acompanhante_nome" class="form-control" placeholder="Membro do conselho ou auxiliar">
+                        </div>
+                        <div class="col-md-6">
+                            <label for="responsavel_telefone" class="form-label fw-bold">Telefone do Responsável Local</label>
+                            <input type="text" name="responsavel_telefone" id="responsavel_telefone" class="form-control" placeholder="(00) 00000-0000">
                         </div>
                         <div class="col-md-3">
                             <label for="data" class="form-label fw-bold">Data Proposta/Agendada</label>
@@ -288,13 +302,13 @@
                                     <strong><i class="ti ti-clock text-muted"></i> Horário:</strong> <span id="det-horario">00:00</span>
                                 </div>
                                 <div class="col-sm-6">
-                                    <strong><i class="ti ti-user text-muted"></i> Responsável Casa:</strong> <span id="det-responsavel">Nome</span>
+                                    <strong><i class="ti ti-user text-muted"></i> Inventariante:</strong> <span id="det-responsavel">Nome</span>
                                 </div>
                                 <div class="col-sm-6">
-                                    <strong><i class="ti ti-phone text-muted"></i> Telefone Responsável:</strong> <span id="det-telefone">Não informado</span>
+                                    <strong><i class="ti ti-users text-muted"></i> Responsável Local:</strong> <span id="det-acompanhante">Não informado</span>
                                 </div>
                                 <div class="col-sm-6">
-                                    <strong><i class="ti ti-users text-muted"></i> Acompanhante no Dia:</strong> <span id="det-acompanhante">Não informado</span>
+                                    <strong><i class="ti ti-phone text-muted"></i> Telefone Responsável Local:</strong> <span id="det-telefone">Não informado</span>
                                 </div>
                                 <div class="col-sm-6">
                                     <strong><i class="ti ti-user-edit text-muted"></i> Registrado Por:</strong> <span id="det-operador">Nome</span>
@@ -376,16 +390,18 @@
                                 <h6 class="fw-bold text-info mb-3"><i class="ti ti-edit me-1"></i>Editar Dados de Contato</h6>
                                 <div class="row g-2">
                                     <div class="col-md-6">
-                                        <label for="edit_responsavel" class="form-label fw-bold small">Responsável</label>
-                                        <input type="text" name="responsavel_nome" id="edit_responsavel" class="form-control" required>
+                                        <label for="edit_responsavel" class="form-label fw-bold small">Inventariante</label>
+                                        <select name="responsavel_nome" id="edit_responsavel" class="form-select no-choices" required>
+                                            <option value="" disabled selected>Carregando inventariantes...</option>
+                                        </select>
                                     </div>
                                     <div class="col-md-6">
-                                        <label for="edit_telefone" class="form-label fw-bold small">Telefone</label>
-                                        <input type="text" name="responsavel_telefone" id="edit_telefone" class="form-control">
-                                    </div>
-                                    <div class="col-md-12">
-                                        <label for="edit_acompanhante" class="form-label fw-bold small">Acompanhante no Dia</label>
+                                        <label for="edit_acompanhante" class="form-label fw-bold small">Responsável Local</label>
                                         <input type="text" name="acompanhante_nome" id="edit_acompanhante" class="form-control">
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="edit_telefone" class="form-label fw-bold small">Telefone do Responsável Local</label>
+                                        <input type="text" name="responsavel_telefone" id="edit_telefone" class="form-control">
                                     </div>
                                     <div class="col-md-12">
                                         <label for="edit_observacao" class="form-label fw-bold small">Observações</label>
@@ -489,6 +505,64 @@
 
 <script>
     document.addEventListener('DOMContentLoaded', function() {
+        // --- Choices.js Manual Initialization ---
+        var choicesAdmlc = null;
+        var choicesIgreja = null;
+        var choicesResponsavel = null;
+        var choicesEditResponsavel = null;
+
+        var admlcEl = document.getElementById('modal_admlc_id');
+        if (admlcEl) {
+            choicesAdmlc = new Choices(admlcEl, {
+                searchEnabled: true,
+                itemSelectText: '',
+                noResultsText: 'Nenhum resultado encontrado',
+                noChoicesText: 'Sem opções disponíveis',
+                placeholderValue: 'Selecione a Administração Local...',
+                searchPlaceholderValue: 'Pesquisar...',
+                allowHTML: true
+            });
+        }
+
+        var igrejaEl = document.getElementById('igreja_id');
+        if (igrejaEl) {
+            choicesIgreja = new Choices(igrejaEl, {
+                searchEnabled: true,
+                itemSelectText: '',
+                noResultsText: 'Nenhum resultado encontrado',
+                noChoicesText: 'Sem opções disponíveis',
+                placeholderValue: 'Selecione a Localidade...',
+                searchPlaceholderValue: 'Pesquisar...',
+                allowHTML: true
+            });
+        }
+
+        var responsavelEl = document.getElementById('responsavel_nome');
+        if (responsavelEl) {
+            choicesResponsavel = new Choices(responsavelEl, {
+                searchEnabled: true,
+                itemSelectText: '',
+                noResultsText: 'Nenhum resultado encontrado',
+                noChoicesText: 'Sem opções disponíveis',
+                placeholderValue: 'Selecione o Inventariante...',
+                searchPlaceholderValue: 'Pesquisar...',
+                allowHTML: true
+            });
+        }
+
+        var editResponsavelEl = document.getElementById('edit_responsavel');
+        if (editResponsavelEl) {
+            choicesEditResponsavel = new Choices(editResponsavelEl, {
+                searchEnabled: true,
+                itemSelectText: '',
+                noResultsText: 'Nenhum resultado encontrado',
+                noChoicesText: 'Sem opções disponíveis',
+                placeholderValue: 'Selecione o Inventariante...',
+                searchPlaceholderValue: 'Pesquisar...',
+                allowHTML: true
+            });
+        }
+
         // --- FullCalendar Initialization ---
         var calendarEl = document.getElementById('calendar');
         var isAuditor = @json(Auth::user()->isAuditor());
@@ -536,6 +610,7 @@
                     id: arg.event.id,
                     igreja: props.igreja_nome,
                     igreja_id: props.igreja_id,
+                    admlc_id: props.admlc_id,
                     data: props.data,
                     data_raw: props.data_raw,
                     horario: props.horario,
@@ -566,6 +641,7 @@
                     id: ds.id,
                     igreja: ds.igreja,
                     igreja_id: ds.igrejaId,
+                    admlc_id: ds.admlcId,
                     data: ds.data,
                     data_raw: ds.dataRaw,
                     horario: ds.horario,
@@ -618,10 +694,51 @@
                 document.getElementById('form-excluir').action = `/agendamentos/${data.id}`;
                 
                 // Prefill form inputs for Edit
-                document.getElementById('edit_responsavel').value = data.responsavel;
                 document.getElementById('edit_telefone').value = data.telefone || '';
                 document.getElementById('edit_acompanhante').value = data.acompanhante || '';
                 document.getElementById('edit_observacao').value = data.observacao || '';
+
+                // Load active users dynamically for this administration local to populate choicesEditResponsavel
+                if (choicesEditResponsavel) {
+                    choicesEditResponsavel.disable();
+                    choicesEditResponsavel.setChoices([{ value: '', label: 'Carregando inventariantes...', disabled: true, selected: true }], 'value', 'label', true);
+                    
+                    fetch(`/agendamentos/dados-por-local/${data.admlc_id}`)
+                        .then(response => response.json())
+                        .then(resData => {
+                            var userChoices = [];
+                            var foundSelected = false;
+                            
+                            resData.usuarios.forEach(u => {
+                                var isSelected = (u.name === data.responsavel);
+                                if (isSelected) foundSelected = true;
+                                userChoices.push({
+                                    value: u.name,
+                                    label: u.name,
+                                    selected: isSelected
+                                });
+                            });
+                            
+                            // If the current saved responsavel is not in the active users list, keep it as selected option anyway
+                            if (!foundSelected && data.responsavel) {
+                                userChoices.unshift({
+                                    value: data.responsavel,
+                                    label: `${data.responsavel} (Inativo/Não cadastrado)`,
+                                    selected: true
+                                });
+                            }
+                            
+                            choicesEditResponsavel.clearStore();
+                            choicesEditResponsavel.setChoices(userChoices, 'value', 'label', true);
+                            choicesEditResponsavel.enable();
+                        })
+                        .catch(err => {
+                            console.error('Error fetching users for edit select:', err);
+                            choicesEditResponsavel.clearStore();
+                            choicesEditResponsavel.setChoices([{ value: data.responsavel, label: data.responsavel, selected: true }], 'value', 'label', true);
+                            choicesEditResponsavel.enable();
+                        });
+                }
 
                 // Prefill form inputs for Reagendar
                 document.getElementById('reagendar_data').value = data.data_raw;
@@ -633,24 +750,24 @@
 
             // Set Whatsapp button logic
             document.getElementById('btn-copiar-whatsapp').onclick = function() {
-                var msg = `*📢 AGENDAMENTO DE INVENTÁRIO CCB*\n\n` +
-                          `*Igreja/Localidade:* ${data.igreja}\n` +
-                          `*Data:* ${data.data}\n` +
-                          `*Horário:* ${data.horario}h\n` +
-                          `*Responsável Casa:* ${data.responsavel} ${data.telefone ? '(' + data.telefone + ')' : ''}\n` +
-                          `*Acompanhante no Dia:* ${data.acompanhante || 'Não informado'}\n` +
-                          `*Operador que Registrou:* ${data.operador}\n` +
-                          `*Situação:* ${data.status}\n`;
+                var msg = `*📢 AGENDAMENTO DE INVENTÁRIO - CCB*\n\n` +
+                          `*Localidade:* ${data.igreja}\n` +
+                          `*Data:* ${data.data} às ${data.horario}h\n` +
+                          `*Inventariante:* ${data.responsavel}\n` +
+                          `*Responsável Local (Casa de Oração):* ${data.acompanhante || 'Não informado'}\n` +
+                          `*Telefone do Responsável Local:* ${data.telefone || 'Não informado'}\n\n` +
+                          `*Situação:* ${data.status}\n` +
+                          `_Registrado por: ${data.operador}_\n`;
                           
                 if (data.status === 'Cancelado' && data.motivo) {
-                    msg += `*Motivo do Cancelamento:* ${data.motivo}\n`;
+                    msg += `\n*Motivo do Cancelamento:* ${data.motivo}\n`;
                 }
                 
                 if (data.observacao) {
                     msg += `\n*Observações:*\n${data.observacao}\n`;
                 }
                 
-                msg += `\n_Mensagem gerada automaticamente via SIBEM Web._`;
+                msg += `\n---\n*SIBEM Web* - _Sistema de Inventário de Bens Móveis_`;
 
                 navigator.clipboard.writeText(msg).then(() => {
                     Swal.fire({
@@ -744,34 +861,80 @@
             }
         }
 
-        // Dynamic loading of churches in Novo Agendamento modal for system/regional admins
+        // Dynamic loading of churches and users in Novo Agendamento modal for system/regional admins
         var modalAdmlc = document.getElementById('modal_admlc_id');
-        var selectIgreja = document.getElementById('igreja_id');
-        if (modalAdmlc && selectIgreja) {
+        if (modalAdmlc) {
             modalAdmlc.addEventListener('change', function() {
                 var admlcId = this.value;
-                selectIgreja.disabled = true;
-                selectIgreja.innerHTML = '<option value="" disabled selected>Carregando localidades...</option>';
+                if (!admlcId) return;
+
+                if (choicesIgreja) {
+                    choicesIgreja.disable();
+                    choicesIgreja.setChoices([{ value: '', label: 'Carregando localidades...', disabled: true, selected: true }], 'value', 'label', true);
+                }
+                if (choicesResponsavel) {
+                    choicesResponsavel.disable();
+                    choicesResponsavel.setChoices([{ value: '', label: 'Carregando inventariantes...', disabled: true, selected: true }], 'value', 'label', true);
+                }
                 
-                fetch(`/agendamentos/igrejas-por-local/${admlcId}`)
+                fetch(`/agendamentos/dados-por-local/${admlcId}`)
                     .then(response => {
                         if (!response.ok) throw new Error('Network response was not ok');
                         return response.json();
                     })
                     .then(data => {
-                        selectIgreja.innerHTML = '<option value="" disabled selected>-- Selecione a Localidade --</option>';
-                        if (data.length === 0) {
-                            selectIgreja.innerHTML = '<option value="" disabled>Nenhuma localidade cadastrada</option>';
-                        } else {
-                            data.forEach(ig => {
-                                selectIgreja.innerHTML += `<option value="${ig.id}">${ig.igreja} (SIGA: ${ig.cod_siga})</option>`;
+                        // Populate Churches
+                        if (choicesIgreja) {
+                            var igrejaChoices = [{ value: '', label: '-- Selecione a Localidade --', disabled: true, selected: true }];
+                            data.igrejas.forEach(ig => {
+                                igrejaChoices.push({
+                                    value: ig.id,
+                                    label: `${ig.igreja} (SIGA: ${ig.cod_siga})`
+                                });
                             });
-                            selectIgreja.disabled = false;
+                            choicesIgreja.clearStore();
+                            choicesIgreja.setChoices(igrejaChoices, 'value', 'label', true);
+                            choicesIgreja.enable();
+                        }
+
+                        // Populate Active Users (Inventariantes)
+                        if (choicesResponsavel) {
+                            var currentUserName = @json(Auth::user()->name);
+                            var hasPreselected = false;
+                            var userChoices = [];
+                            
+                            data.usuarios.forEach(u => {
+                                var isSelected = (u.name === currentUserName);
+                                if (isSelected) hasPreselected = true;
+                                userChoices.push({
+                                    value: u.name,
+                                    label: u.name,
+                                    selected: isSelected
+                                });
+                            });
+                            
+                            userChoices.unshift({
+                                value: '',
+                                label: '-- Selecione o Inventariante --',
+                                disabled: true,
+                                selected: !hasPreselected
+                            });
+
+                            choicesResponsavel.clearStore();
+                            choicesResponsavel.setChoices(userChoices, 'value', 'label', true);
+                            choicesResponsavel.enable();
                         }
                     })
                     .catch(err => {
-                        console.error('Error fetching churches:', err);
-                        selectIgreja.innerHTML = '<option value="" disabled>Erro ao carregar. Tente novamente.</option>';
+                        console.error('Error fetching dynamic data:', err);
+                        if (choicesIgreja) {
+                            choicesIgreja.clearStore();
+                            choicesIgreja.setChoices([{ value: '', label: 'Erro ao carregar. Tente novamente.', disabled: true, selected: true }], 'value', 'label', true);
+                        }
+                        if (choicesResponsavel) {
+                            choicesResponsavel.clearStore();
+                            choicesResponsavel.setChoices([{ value: '', label: 'Erro ao carregar. Tente novamente.', disabled: true, selected: true }], 'value', 'label', true);
+                        }
                     });
             });
         }
