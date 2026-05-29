@@ -177,8 +177,8 @@
 
             <!-- Card de Alteração de Senha -->
             <div class="card mb-4">
-                <div class="card-header bg-light">
-                    <h5 class="mb-0 text-dark fw-bold"><i class="ti ti-lock me-2"></i>Alterar Senha</h5>
+                <div class="card-header bg-dark text-white d-flex align-items-center justify-content-between">
+                    <h5 class="mb-0 text-white"><i class="ti ti-lock me-2"></i>Alterar Senha</h5>
                 </div>
                 <div class="card-body">
                     <div class="alert alert-info py-2">
