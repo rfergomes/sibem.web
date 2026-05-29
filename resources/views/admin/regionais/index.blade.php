@@ -48,12 +48,12 @@
                                     <tr>
                                         <td>                                           
                                             <span class="fw-bold text-primary">{{ $reg->admrg_id }} - </span>
-                                            <span class="fw-bold text-dark">{{ $reg->adm_regional }}</span>
-                                            <span class="badge bg-light-primary text-primary"> - {{ $reg->uf }}</span>
+                                            <span class="fw-bold text-dark">{{ $reg->adm_regional }} - </span>
+                                            <span class="badge bg-light-primary text-primary">{{ $reg->uf }}</span>
                                             <small class="d-block text-muted">Criada em: {{ $reg->created_at ? $reg->created_at->format('d/m/Y H:i') : 'N/A' }}</small>
                                         </td>
                                         <td>
-                                            <span class="badge bg-light-info text-info fw-bold">{{ $reg->locais_count }}</span>
+                                            <span class="badge bg-light-info text-info fw-bold text-center w-50">{{ $reg->locais_count }}</span>
                                         </td>
                                         <td class="text-end">
                                             <div class="d-flex justify-content-end gap-1">
