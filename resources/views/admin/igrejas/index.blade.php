@@ -76,7 +76,7 @@
                                         </td>
                                         <td>
                                             <span class="fw-bold text-dark">{{ $igreja->igreja }}</span>
-                                            <small class="d-block text-muted"><span class="rounded p-1 mt-1">TIPO: {{ $igreja->tipoImovel->nome ?? 'N/D' }} SETOR @if($igreja->cod_setor) {{$igreja->cod_setor}} </span>@else Não informado @endif</small>
+                                            <small class="d-block text-muted"><span class="rounded p-1 mt-1">{{ $igreja->tipoImovel->nome ?? 'N/D' }} | Setor {{ $igreja->cod_setor ?? 'N/A'}} </span></small>
                                         </td>
                                         <td>{{ $igreja->cidade ?? 'N/A' }} / {{ $igreja->uf ?? 'N/A' }}
                                             <small class="d-block text-muted">{{ $igreja->local->adm_local ?? 'N/A' }}</small>
