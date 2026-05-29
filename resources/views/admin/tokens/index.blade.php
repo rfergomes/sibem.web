@@ -9,7 +9,7 @@
         <div class="card">
             <div class="card-header bg-dark d-flex align-items-center justify-content-between">
                 <h4 class="mb-0 text-white"><i class="ti ti-list me-2"></i>Tokens Desktop Ativos</h4>
-                <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#gerarTokenModal">
+                <button type="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#gerarTokenModal">
                     <i class="ti ti-plus me-1"></i> Gerar Novo Token
                 </button>
             </div>
@@ -40,7 +40,7 @@
                             <thead class="table-light">
                                 <tr>
                                     <th>Usuário</th>
-                                    <th>Administração Local</th>
+                                    <th>Administração</th>
                                     <th>Token / Dispositivo</th>
                                     <th class="text-end" style="min-width: 280px;">Ações</th>
                                 </tr>

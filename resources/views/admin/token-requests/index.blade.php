@@ -65,12 +65,12 @@
                                                     @csrf
                                                     <div class="input-group input-group-sm">
                                                         <select name="admlc_id" class="form-select form-select-sm" style="max-width: 200px;" required>
-                                                            <option value="">Associar Admin Local...</option>
+                                                            <option value="">Associar Administração...</option>
                                                             @foreach($locais as $local)
                                                                 <option value="{{ $local->admlc_id }}">{{ $local->nome }}</option>
                                                             @endforeach
                                                         </select>
-                                                        <button type="submit" class="btn btn-sm btn-success d-flex align-items-center">
+                                                        <button type="submit" class="btn btn-sm btn-secondary d-flex align-items-center">
                                                             <i class="ti ti-check me-1"></i> Aprovar
                                                         </button>
                                                     </div>
