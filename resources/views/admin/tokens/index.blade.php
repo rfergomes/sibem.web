@@ -42,7 +42,6 @@
                                     <th>Usuário</th>
                                     <th>Administração Local</th>
                                     <th>Token / Dispositivo</th>
-                                    <th>Gerado em</th>
                                     <th class="text-end" style="min-width: 280px;">Ações</th>
                                 </tr>
                             </thead>
@@ -56,10 +55,7 @@
                                         <td>{{ $token->local->nome ?? 'Sem Localidade' }}</td>
                                         <td>
                                             <code class="d-block mt-1"><i class="ti ti-key me-1"></i>{{ $token->token }}</code>
-                                            <small class="d-block mt-1"><i class="ti ti-device-desktop me-1"></i>{{ $token->dispositivo }} - {{ $token->created_at ? $token->created_at->format('d/m/Y H:i') : 'N/A' }}</small>
-                                        </td>
-                                        <td>
-                                            <small>{{ $token->created_at ? $token->created_at->format('d/m/Y H:i') : 'N/A' }}</small>
+                                            <small class="d-block mt-1"><i class="ti ti-device-desktop me-1"></i>{{ $token->dispositivo }} - Gerado: {{ $token->created_at ? $token->created_at->format('d/m/Y H:i') : 'N/A' }}</small>
                                         </td>
                                         <td class="text-end">
                                             @if($token->user && $token->user->email)
