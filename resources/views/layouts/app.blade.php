@@ -62,7 +62,7 @@
                     <li class="pc-item {{ Request::routeIs('inventarios.concluidos') ? 'active' : '' }}">
                         <a href="{{ route('inventarios.concluidos') }}" class="pc-link">
                             <span class="pc-micon"><i class="ti ti-clipboard-list"></i></span>
-                            <span class="pc-mtext">Inventários Realizados</span>
+                            <span class="pc-mtext">Inventários</span>
                         </a>
                     </li>
 
@@ -91,7 +91,7 @@
                         <li class="pc-item {{ Request::routeIs('admin.token-requests.*') ? 'active' : '' }}">
                             <a href="{{ route('admin.token-requests.index') }}" class="pc-link">
                                 <span class="pc-micon"><i class="ti ti-mail-opened"></i></span>
-                                <span class="pc-mtext">Solicitações de Tokens</span>
+                                <span class="pc-mtext">Pedidos de Tokens</span>
                             </a>
                         </li>
                         @endif
@@ -133,7 +133,7 @@
                         <li class="pc-item {{ Request::routeIs('admin.igrejas.*') ? 'active' : '' }}">
                             <a href="{{ route('admin.igrejas.index') }}" class="pc-link">
                                 <span class="pc-micon"><i class="ti ti-building-community"></i></span>
-                                <span class="pc-mtext">Igrejas (CCB)</span>
+                                <span class="pc-mtext">Igrejas/Localidades</span>
                             </a>
                         </li>
 

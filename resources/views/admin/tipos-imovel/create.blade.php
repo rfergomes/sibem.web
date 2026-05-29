@@ -26,7 +26,7 @@
                         <a href="{{ route('admin.tipos-imovel.index') }}" class="btn btn-light-secondary">
                             <i class="ti ti-arrow-left me-1"></i> Voltar
                         </a>
-                        <button type="submit" class="btn btn-outline-info">
+                        <button type="submit" class="btn btn-primary">
                             <i class="ti ti-device-floppy me-1"></i> Salvar Tipo
                         </button>
                     </div>
