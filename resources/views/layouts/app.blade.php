@@ -69,7 +69,7 @@
                     <li class="pc-item {{ Request::routeIs('agendamentos.*') ? 'active' : '' }}">
                         <a href="{{ route('agendamentos.index') }}" class="pc-link">
                             <span class="pc-micon"><i class="ti ti-calendar-event"></i></span>
-                            <span class="pc-mtext">Cronograma de Visitas</span>
+                            <span class="pc-mtext">Agendamentos</span>
                         </a>
                     </li>
 
