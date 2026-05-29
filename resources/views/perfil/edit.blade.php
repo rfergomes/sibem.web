@@ -38,8 +38,8 @@
 
         <!-- Card de Informações Administrativas (Somente Leitura) -->
         <div class="card mb-4">
-            <div class="card-header bg-light">
-                <h5 class="mb-0 text-dark fw-bold"><i class="ti ti-shield-lock me-2"></i>Credenciais de Acesso</h5>
+            <div class="card-header bg-dark text-white d-flex align-items-center justify-content-between">
+                <h5 class="mb-0 text-white fw-bold"><i class="ti ti-shield-lock me-2"></i>Credenciais de Acesso</h5>
             </div>
             <div class="card-body p-0">
                 <div class="table-responsive">
@@ -70,8 +70,8 @@
 
         <!-- Card de Tokens Ativos -->
         <div class="card mb-4">
-            <div class="card-header bg-light">
-                <h5 class="mb-0 text-dark fw-bold"><i class="ti ti-key me-2"></i>Tokens Ativos (Desktop)</h5>
+            <div class="card-header bg-dark text-white d-flex align-items-center justify-content-between">
+                <h5 class="mb-0 text-white"><i class="ti ti-key me-2"></i>Tokens Ativos (Desktop)</h5>
             </div>
             <div class="card-body p-0">
                 @if($tokens->isEmpty())
