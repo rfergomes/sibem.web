@@ -64,33 +64,25 @@
                                 <tr>
                                     <th>Cód. SIGA</th>
                                     <th>Casa de Oração / Localidade</th>
-                                    <th>Tipo de Imóvel</th>
                                     <th>Cidade / UF</th>
-                                    <th class="text-end" style="min-width: 150px;">Ações</th>
+                                    <th class="text-center" style="min-width: 150px;">Ações</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 @foreach($igrejas as $igreja)
                                     <tr>
                                         <td>
-                                            <span class="badge bg-light-primary text-primary fw-bold" style="font-size: 0.9em;">{{ $igreja->cod_siga }}</span>
+                                            <span class="fw-bold text-dark">{{ $igreja->cod_siga }}</span>
                                         </td>
                                         <td>
                                             <span class="fw-bold text-dark">{{ $igreja->igreja }}</span>
-                                            <small class="d-block text-muted"><span class="bg-light-primary text-primary rounded p-1 mt-1"> SETOR @if($igreja->cod_setor) {{$igreja->cod_setor}} </span>@else Não informado @endif</small>
-                                        </td>
-                                        <td>
-                                            @if($igreja->tipoImovel)
-                                                <span class="badge bg-light-primary text-primary">{{ $igreja->tipoImovel->nome }}</span>
-                                            @else
-                                                <span class="text-muted">Não definido</span>
-                                            @endif
+                                            <small class="d-block text-muted"><span class="rounded p-1 mt-1">TIPO: {{ $igreja->tipoImovel->nome ?? 'N/D' }} SETOR @if($igreja->cod_setor) {{$igreja->cod_setor}} </span>@else Não informado @endif</small>
                                         </td>
                                         <td>{{ $igreja->cidade ?? 'N/A' }} / {{ $igreja->uf ?? 'N/A' }}
                                             <small class="d-block text-muted">{{ $igreja->local->adm_local ?? 'N/A' }}</small>
                                         </td>
-                                        <td class="text-end">
-                                            <div class="d-flex justify-content-end gap-1">
+                                        <td class="text-center">
+                                            <div class="d-flex justify-content-center gap-1">
                                                 <a href="{{ route('admin.igrejas.show', [$igreja->id, 'redirect_url' => request()->fullUrl()]) }}" class="btn btn-sm btn-icon btn-light-info" title="Ver Detalhes">
                                                     <i class="ti ti-eye"></i>
                                                 </a>
