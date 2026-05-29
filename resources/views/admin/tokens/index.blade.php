@@ -60,6 +60,7 @@
                                         </td>
                                         <td>
                                             <code>{{ $token->token }}</code>
+                                            <code>{{ $token->dispositivo }}</code>
                                         </td>
                                         <td>
                                             <small>{{ $token->created_at ? $token->created_at->format('d/m/Y H:i') : 'N/A' }}</small>
