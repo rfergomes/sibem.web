@@ -91,8 +91,7 @@ class AgendamentoController extends Controller
             });
         }
 
-        // For FullCalendar AJAX requests or JSON requests
-        if ($request->ajax() || $request->wantsJson()) {
+        if ($request->ajax() || $request->wantsJson() || ($request->has('start') && $request->has('end'))) {
             if ($request->filled('start') && $request->filled('end')) {
                 $query->whereBetween('data', [$request->start, $request->end]);
             }
