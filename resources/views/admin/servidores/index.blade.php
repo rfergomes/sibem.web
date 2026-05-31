@@ -124,27 +124,27 @@
                                         <div class="status-bar-indicator bg-secondary" id="card-indicator-{{ $servidor->id }}"></div>
                                         
                                         <div class="card-body p-4">
-                                            <div class="d-flex justify-content-between align-items-start mb-3">
-                                                <div>
-                                                    <span class="badge bg-light text-dark border mb-2 small" style="font-size: 10px;">
+                                            <div class="mb-3">
+                                                <div class="d-flex justify-content-between align-items-center mb-2">
+                                                    <span class="badge bg-light text-dark border small" style="font-size: 10px;">
                                                         ID #{{ $servidor->id }}
                                                     </span>
-                                                    <h5 class="card-title mb-1 fw-bold text-dark">{{ $servidor->descricao }}</h5>
-                                                    <p class="text-muted mb-0 small" style="line-height: 1.3;">
-                                                        <i class="ti ti-building me-1 text-primary"></i>
-                                                        <strong>{{ $servidor->local->adm_local ?? 'Local Não Associado' }}</strong>
-                                                    </p>
-                                                    @if($servidor->local && $servidor->local->regional)
-                                                        <span class="text-muted" style="font-size: 11px;">
-                                                            <i class="ti ti-map-pin me-1 text-secondary"></i>{{ $servidor->local->regional->adm_regional }}
-                                                        </span>
-                                                    @endif
+                                                    <!-- Connection Badge -->
+                                                    <span class="badge bg-secondary-subtle border border-secondary-subtle connection-badge" id="card-badge-{{ $servidor->id }}">
+                                                        <div class="spinner-border spinner-border-sm text-secondary me-1" role="status" style="width: 10px; height: 10px; border-width: 1.5px;"></div> Verificando
+                                                    </span>
                                                 </div>
                                                 
-                                                <!-- Connection Badge -->
-                                                <span class="badge bg-secondary-subtle border border-secondary-subtle connection-badge" id="card-badge-{{ $servidor->id }}">
-                                                    <div class="spinner-border spinner-border-sm text-secondary me-1" role="status" style="width: 10px; height: 10px; border-width: 1.5px;"></div> Verificando
-                                                </span>
+                                                <h5 class="card-title mb-2 fw-bold text-dark">{{ $servidor->descricao }}</h5>
+                                                <p class="text-muted mb-1 small" style="line-height: 1.3;">
+                                                    <i class="ti ti-building me-1 text-primary"></i>
+                                                    <strong>{{ $servidor->local->adm_local ?? 'Local Não Associado' }}</strong>
+                                                </p>
+                                                @if($servidor->local && $servidor->local->regional)
+                                                    <span class="text-muted d-block small" style="font-size: 11px;">
+                                                        <i class="ti ti-map-pin me-1 text-secondary"></i>{{ $servidor->local->regional->adm_regional }}
+                                                    </span>
+                                                @endif
                                             </div>
                                             
                                             <hr class="opacity-10 my-3">
