@@ -364,6 +364,29 @@ html, body {
         white-space: nowrap !important;
         word-break: normal !important;
     }
+
+    /* Ajuste responsivo dos cabeçalhos dos cartões com controles e ações no mobile */
+    .card-header.d-flex.align-items-center.justify-content-between {
+        flex-direction: column !important;
+        align-items: flex-start !important;
+        gap: 10px !important;
+    }
+
+    .card-header.d-flex.align-items-center.justify-content-between h4,
+    .card-header.d-flex.align-items-center.justify-content-between h5 {
+        width: 100% !important;
+        margin-bottom: 0 !important;
+        white-space: normal !important;
+        font-size: 1.15rem !important;
+    }
+
+    .card-header.d-flex.align-items-center.justify-content-between > div.d-flex,
+    .card-header.d-flex.align-items-center.justify-content-between > .d-flex {
+        width: 100% !important;
+        justify-content: space-between !important;
+        flex-wrap: wrap !important;
+        gap: 8px !important;
+    }
 }
 
 /* Layout View Switcher (Table vs Cards) */
@@ -400,5 +423,42 @@ html, body {
     }
     body.layout-pref-table .view-table {
         display: block !important;
+    }
+
+    /* Responsividade para o rodapé do modal de detalhes de agendamento */
+    #modalDetalhesAgendamento .modal-footer {
+        flex-direction: column !important;
+        align-items: stretch !important;
+        gap: 10px !important;
+        padding: 15px !important;
+    }
+    
+    #modalDetalhesAgendamento .modal-footer > div:first-child {
+        display: flex !important;
+        justify-content: center !important;
+        width: 100% !important;
+    }
+    
+    #modalDetalhesAgendamento .modal-footer #form-excluir {
+        width: 100% !important;
+    }
+
+    #modalDetalhesAgendamento .modal-footer #btn-excluir-agendamento {
+        width: 100% !important;
+    }
+
+    #modalDetalhesAgendamento .modal-footer #buttons-normal-container {
+        flex-direction: column !important;
+        width: 100% !important;
+        gap: 8px !important;
+    }
+
+    #modalDetalhesAgendamento .modal-footer #buttons-normal-container .btn,
+    #modalDetalhesAgendamento .modal-footer #buttons-normal-container .dropdown {
+        width: 100% !important;
+    }
+    
+    #modalDetalhesAgendamento .modal-footer #buttons-normal-container .dropdown .btn {
+        width: 100% !important;
     }
 }
