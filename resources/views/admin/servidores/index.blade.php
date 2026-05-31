@@ -71,18 +71,16 @@
                 <h4 class="mb-0 text-white d-flex align-items-center">
                     <i class="ti ti-server me-2"></i> Servidores de Banco de Dados (Tenants)
                 </h4>
-                
                 <div class="d-flex align-items-center gap-2">
-                    <div class="btn-group btn-group-sm" role="group" aria-label="Modo de Exibição">
-                        <button type="button" class="btn btn-outline-info text-white d-flex align-items-center px-3" id="btn-view-card" title="Exibição em Cards">
-                            <i class="ti ti-layout-grid me-1"></i>
+                    <div class="btn-group btn-group-sm me-2" role="group" aria-label="Visualização">
+                        <button type="button" class="btn btn-outline-info btn-view-table" title="Visualização em Tabela">
+                            <i class="ti ti-list"></i>
                         </button>
-                        <button type="button" class="btn btn-outline-info text-white d-flex align-items-center px-3" id="btn-view-table" title="Exibição em Tabela">
-                            <i class="ti ti-table me-1"></i>
+                        <button type="button" class="btn btn-outline-info btn-view-cards" title="Visualização em Cards">
+                            <i class="ti ti-layout-grid"></i>
                         </button>
                     </div>
-                    
-                    <a href="{{ route('admin.servidores.create') }}" class="btn btn-info btn-sm d-flex align-items-center ms-2 px-3 fw-bold">
+                    <a href="{{ route('admin.servidores.create') }}" class="btn btn-outline-info btn-sm d-flex align-items-center">
                         <i class="ti ti-plus me-1"></i> Novo Servidor
                     </a>
                 </div>

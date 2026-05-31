@@ -132,7 +132,7 @@
                                             <form action="{{ route('admin.tokens.send-email', $token->id) }}" method="POST" class="d-inline-block">
                                                 @csrf
                                                 <button type="submit" class="btn btn-sm btn-light-primary" title="Enviar por E-mail">
-                                                    <i class="ti ti-mail me-1"></i> E-mail
+                                                    <i class="ti ti-mail me-1"></i>
                                                 </button>
                                             </form>
                                         @endif
@@ -148,7 +148,7 @@
                                             @endphp
                                             @if(strlen($telefoneLimpo) > 0)
                                                 <a href="https://wa.me/{{ $telefoneLimpo }}?text={{ $msgUrl }}" target="_blank" class="btn btn-sm btn-light-success" title="Enviar por WhatsApp">
-                                                    <i class="fab fa-whatsapp me-1"></i> WhatsApp
+                                                    <i class="fab fa-whatsapp me-1"></i>
                                                 </a>
                                             @endif
                                         @endif
@@ -157,7 +157,7 @@
                                             @csrf
                                             @method('DELETE')
                                             <button type="submit" class="btn btn-sm btn-light-danger" title="Revogar Token">
-                                                <i class="ti ti-power me-1"></i> Revogar
+                                                <i class="ti ti-power me-1"></i>
                                             </button>
                                         </form>
                                     </div>
