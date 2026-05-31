@@ -115,7 +115,7 @@
                     <!-- ============================================== -->
                     <!-- CARD DISPLAY MODE -->
                     <!-- ============================================== -->
-                    <div id="view-mode-card" class="d-none">
+                    <div class="view-cards">
                         <div class="row">
                             @foreach($servidores as $servidor)
                                 <div class="col-md-6 col-lg-4 mb-4 server-item-container" data-server-id="{{ $servidor->id }}">
@@ -242,7 +242,7 @@
                     <!-- ============================================== -->
                     <!-- TABLE DISPLAY MODE -->
                     <!-- ============================================== -->
-                    <div id="view-mode-table" class="d-none">
+                    <div class="view-table">
                         <div class="table-responsive border rounded">
                             <table class="table table-hover align-middle mb-0">
                                 <thead class="table-light">
@@ -341,51 +341,7 @@
 @section('scripts')
 <script>
     document.addEventListener('DOMContentLoaded', function () {
-        // ----------------------------------------------------
-        // VIEW TOGGLE LOGIC
-        // ----------------------------------------------------
-        const btnCard = document.getElementById('btn-view-card');
-        const btnTable = document.getElementById('btn-view-table');
-        const viewCard = document.getElementById('view-mode-card');
-        const viewTable = document.getElementById('view-mode-table');
 
-        function setViewMode(mode) {
-            if (mode === 'table') {
-                if (viewCard) viewCard.classList.add('d-none');
-                if (viewTable) viewTable.classList.remove('d-none');
-                
-                if (btnTable) {
-                    btnTable.classList.add('active', 'btn-light');
-                    btnTable.classList.remove('btn-outline-light');
-                }
-                if (btnCard) {
-                    btnCard.classList.remove('active', 'btn-light');
-                    btnCard.classList.add('btn-outline-light');
-                }
-            } else {
-                if (viewTable) viewTable.classList.add('d-none');
-                if (viewCard) viewCard.classList.remove('d-none');
-                
-                if (btnCard) {
-                    btnCard.classList.add('active', 'btn-light');
-                    btnCard.classList.remove('btn-outline-light');
-                }
-                if (btnTable) {
-                    btnTable.classList.remove('active', 'btn-light');
-                    btnTable.classList.add('btn-outline-light');
-                }
-            }
-            localStorage.setItem('servidores_view_mode', mode);
-        }
-
-        if (btnCard && btnTable) {
-            btnCard.addEventListener('click', () => setViewMode('card'));
-            btnTable.addEventListener('click', () => setViewMode('table'));
-
-            // Load saved preference
-            const savedMode = localStorage.getItem('servidores_view_mode') || 'card';
-            setViewMode(savedMode);
-        }
 
         // ----------------------------------------------------
         // ASYNC HEALTH CHECK & AUTO-SYNC ENGINE
