@@ -9,10 +9,10 @@
             <div class="card-header bg-dark d-flex align-items-center justify-content-between">
                 <h4 class="mb-0 text-white"><i class="ti ti-key me-2"></i>Solicitações de Tokens (Acesso Desktop)</h4>
                 <div class="btn-group btn-group-sm" role="group" aria-label="Visualização">
-                    <button type="button" class="btn btn-outline-light btn-view-table" title="Visualização em Tabela">
+                    <button type="button" class="btn btn-outline-info btn-view-table" title="Visualização em Tabela">
                         <i class="ti ti-list"></i>
                     </button>
-                    <button type="button" class="btn btn-outline-light btn-view-cards" title="Visualização em Cards">
+                    <button type="button" class="btn btn-outline-info btn-view-cards" title="Visualização em Cards">
                         <i class="ti ti-layout-grid"></i>
                     </button>
                 </div>

@@ -10,10 +10,10 @@
                 <h4 class="mb-0 text-white"><i class="ti ti-users me-2"></i>Usuários do Sistema</h4>
                 <div class="d-flex align-items-center gap-2">
                     <div class="btn-group btn-group-sm me-2" role="group" aria-label="Visualização">
-                        <button type="button" class="btn btn-outline-light btn-view-table" title="Visualização em Tabela">
+                        <button type="button" class="btn btn-outline-info btn-view-table" title="Visualização em Tabela">
                             <i class="ti ti-list"></i>
                         </button>
-                        <button type="button" class="btn btn-outline-light btn-view-cards" title="Visualização em Cards">
+                        <button type="button" class="btn btn-outline-info btn-view-cards" title="Visualização em Cards">
                             <i class="ti ti-layout-grid"></i>
                         </button>
                     </div>

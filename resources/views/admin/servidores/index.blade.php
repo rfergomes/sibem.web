@@ -74,10 +74,10 @@
                 
                 <div class="d-flex align-items-center gap-2">
                     <div class="btn-group btn-group-sm" role="group" aria-label="Modo de Exibição">
-                        <button type="button" class="btn btn-outline-light text-white d-flex align-items-center px-3" id="btn-view-card" title="Exibição em Cards">
+                        <button type="button" class="btn btn-outline-info text-white d-flex align-items-center px-3" id="btn-view-card" title="Exibição em Cards">
                             <i class="ti ti-layout-grid me-1"></i>
                         </button>
-                        <button type="button" class="btn btn-outline-light text-white d-flex align-items-center px-3" id="btn-view-table" title="Exibição em Tabela">
+                        <button type="button" class="btn btn-outline-info text-white d-flex align-items-center px-3" id="btn-view-table" title="Exibição em Tabela">
                             <i class="ti ti-table me-1"></i>
                         </button>
                     </div>
