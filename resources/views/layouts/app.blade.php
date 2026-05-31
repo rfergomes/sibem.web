@@ -28,7 +28,12 @@
     <script>
         // Apply layout preference immediately to prevent flickering
         (function() {
-            const pref = localStorage.getItem('sibem-layout-pref') || 'table';
+            let pref = 'table';
+            try {
+                pref = localStorage.getItem('sibem-layout-pref') || 'table';
+            } catch(e) {
+                console.warn('Storage preference loading failed:', e);
+            }
             document.documentElement.classList.add('layout-pref-' + pref);
             document.addEventListener('DOMContentLoaded', function() {
                 document.body.classList.add('layout-pref-' + pref);
@@ -449,7 +454,10 @@
                 }
             }
 
-            const currentPref = localStorage.getItem('sibem-layout-pref') || 'table';
+            let currentPref = 'table';
+            try {
+                currentPref = localStorage.getItem('sibem-layout-pref') || 'table';
+            } catch(e) {}
             updateActiveButtons(currentPref);
 
             btnTable.forEach(btn => {
@@ -458,7 +466,9 @@
                     document.body.classList.add('layout-pref-table');
                     document.documentElement.classList.remove('layout-pref-cards');
                     document.documentElement.classList.add('layout-pref-table');
-                    localStorage.setItem('sibem-layout-pref', 'table');
+                    try {
+                        localStorage.setItem('sibem-layout-pref', 'table');
+                    } catch(e) {}
                     updateActiveButtons('table');
                 });
             });
@@ -469,7 +479,9 @@
                     document.body.classList.add('layout-pref-cards');
                     document.documentElement.classList.remove('layout-pref-table');
                     document.documentElement.classList.add('layout-pref-cards');
-                    localStorage.setItem('sibem-layout-pref', 'cards');
+                    try {
+                        localStorage.setItem('sibem-layout-pref', 'cards');
+                    } catch(e) {}
                     updateActiveButtons('cards');
                 });
             });

@@ -43,6 +43,7 @@
                         <i class="ti ti-map text-muted" style="font-size: 48px;"></i>
                         <h5 class="mt-3">Nenhuma regional cadastrada ou encontrada</h5>
                     </div>
+                @else
                     <!-- Visualização Desktop -->
                     <div class="table-responsive view-table">
                         <table class="table table-hover align-middle mb-0">

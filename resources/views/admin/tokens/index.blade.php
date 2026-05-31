@@ -232,6 +232,8 @@
         </div>
     </div>
 </div>
+@endsection
+
 @section('styles')
 <style>
     /* Evita que a tabela oculte o dropdown do Choices.js no desktop */

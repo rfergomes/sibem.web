@@ -8,11 +8,21 @@
         <div class="card">
             <div class="card-header bg-dark d-flex align-items-center justify-content-between">
                 <h4 class="mb-0 text-white"><i class="ti ti-folders me-2"></i>Tipos de Imóvel</h4>
-                @if(Auth::user()->isAdminSistema())
-                    <a href="{{ route('admin.tipos-imovel.create') }}" class="btn btn-outline-info btn-sm d-flex align-items-center">
-                        <i class="ti ti-plus me-1"></i> Novo Tipo
-                    </a>
-                @endif
+                <div class="d-flex align-items-center gap-2">
+                    <div class="btn-group btn-group-sm me-2" role="group" aria-label="Visualização">
+                        <button type="button" class="btn btn-outline-light btn-view-table" title="Visualização em Tabela">
+                            <i class="ti ti-list"></i>
+                        </button>
+                        <button type="button" class="btn btn-outline-light btn-view-cards" title="Visualização em Cards">
+                            <i class="ti ti-layout-grid"></i>
+                        </button>
+                    </div>
+                    @if(Auth::user()->isAdminSistema())
+                        <a href="{{ route('admin.tipos-imovel.create') }}" class="btn btn-outline-info btn-sm d-flex align-items-center">
+                            <i class="ti ti-plus me-1"></i> Novo Tipo
+                        </a>
+                    @endif
+                </div>
             </div>
             
             <div class="card-body">
@@ -36,7 +46,8 @@
                         <h5 class="mt-3">Nenhum tipo de imóvel cadastrado ou encontrado</h5>
                     </div>
                 @else
-                    <div class="table-responsive">
+                    <!-- Visualização Desktop -->
+                    <div class="table-responsive view-table">
                         <table class="table table-sm table-hover align-middle mb-0">
                             <thead class="table-light">
                                 <tr>
@@ -78,6 +89,43 @@
                                 @endforeach
                             </tbody>
                         </table>
+                    </div>
+
+                    <!-- Visualização Mobile -->
+                    <div class="view-cards py-2">
+                        @foreach($tiposImovel as $tipo)
+                            <div class="card mb-3 border border-light-subtle shadow-sm rounded">
+                                <div class="card-body p-3">
+                                    <div class="d-flex justify-content-between align-items-start mb-2">
+                                        <h5 class="card-title fw-bold mb-0 text-primary">{{ $tipo->nome }}</h5>
+                                        <span class="badge bg-light-info text-info">ID: {{ $tipo->id }}</span>
+                                    </div>
+                                    
+                                    <div class="mb-3 small text-dark">
+                                        <div class="mb-1"><strong>Igrejas Vinculadas:</strong> <span class="badge bg-light-primary text-dark fw-bold">{{ $tipo->igrejas_count }}</span></div>
+                                        <small class="d-block text-muted"><i class="ti ti-calendar me-1"></i>Cadastrado em: {{ $tipo->created_at ? $tipo->created_at->format('d/m/Y H:i') : 'N/A' }}</small>
+                                    </div>
+
+                                    <div class="border-top pt-2 mt-2 d-flex justify-content-end gap-1">
+                                        <a href="{{ route('admin.tipos-imovel.show', $tipo->id) }}" class="btn btn-sm btn-light-info" title="Ver Detalhes e Igrejas">
+                                            <i class="ti ti-eye me-1"></i> Detalhes
+                                        </a>
+                                        @if(Auth::user()->isAdminSistema())
+                                            <a href="{{ route('admin.tipos-imovel.edit', $tipo->id) }}" class="btn btn-sm btn-light-primary" title="Editar Tipo">
+                                                <i class="ti ti-edit me-1"></i> Editar
+                                            </a>
+                                            <form action="{{ route('admin.tipos-imovel.destroy', $tipo->id) }}" method="POST" class="d-inline-block delete-type-form">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit" class="btn btn-sm btn-light-danger" title="Excluir Tipo">
+                                                    <i class="ti ti-trash me-1"></i> Excluir
+                                                </button>
+                                            </form>
+                                        @endif
+                                    </div>
+                                </div>
+                            </div>
+                        @endforeach
                     </div>
 
                     <div class="card-footer d-flex justify-content-end border-top-0 bg-transparent">
