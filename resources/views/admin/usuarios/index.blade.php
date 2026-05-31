@@ -8,9 +8,19 @@
         <div class="card">
             <div class="card-header bg-dark d-flex align-items-center justify-content-between">
                 <h4 class="mb-0 text-white"><i class="ti ti-users me-2"></i>Usuários do Sistema</h4>
-                <a href="{{ route('admin.usuarios.create') }}" class="btn btn-outline-info btn-sm d-flex align-items-center">
-                    <i class="ti ti-plus me-1"></i> Novo Usuário
-                </a>
+                <div class="d-flex align-items-center gap-2">
+                    <div class="btn-group btn-group-sm me-2" role="group" aria-label="Visualização">
+                        <button type="button" class="btn btn-outline-light btn-view-table" title="Visualização em Tabela">
+                            <i class="ti ti-list"></i>
+                        </button>
+                        <button type="button" class="btn btn-outline-light btn-view-cards" title="Visualização em Cards">
+                            <i class="ti ti-layout-grid"></i>
+                        </button>
+                    </div>
+                    <a href="{{ route('admin.usuarios.create') }}" class="btn btn-outline-info btn-sm d-flex align-items-center">
+                        <i class="ti ti-plus me-1"></i> Novo Usuário
+                    </a>
+                </div>
             </div>
             
             <div class="card-body">
@@ -35,7 +45,7 @@
                     </div>
                 @else
                     <!-- Visualização Desktop -->
-                    <div class="table-responsive d-none d-md-block">
+                    <div class="table-responsive view-table">
                         <table class="table table-hover align-middle mb-0">
                             <thead class="table-light">
                                 <tr>
@@ -105,7 +115,7 @@
                     </div>
 
                     <!-- Visualização Mobile -->
-                    <div class="d-md-none py-2">
+                    <div class="view-cards py-2">
                         @foreach($usuarios as $user)
                             @php
                                 $badgeClass = match($user->tipo) {

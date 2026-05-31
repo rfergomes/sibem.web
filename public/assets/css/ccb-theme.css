@@ -365,3 +365,40 @@ html, body {
         word-break: normal !important;
     }
 }
+
+/* Layout View Switcher (Table vs Cards) */
+.view-table, .view-cards {
+    transition: opacity 0.25s ease-in-out;
+}
+
+@media (min-width: 768px) {
+    .view-cards {
+        display: none !important;
+    }
+    .view-table {
+        display: block !important;
+    }
+    
+    body.layout-pref-cards .view-cards {
+        display: block !important;
+    }
+    body.layout-pref-cards .view-table {
+        display: none !important;
+    }
+}
+
+@media (max-width: 767.98px) {
+    .view-cards {
+        display: block !important;
+    }
+    .view-table {
+        display: none !important;
+    }
+    
+    body.layout-pref-table .view-cards {
+        display: none !important;
+    }
+    body.layout-pref-table .view-table {
+        display: block !important;
+    }
+}

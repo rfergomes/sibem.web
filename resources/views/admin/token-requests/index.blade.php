@@ -8,6 +8,14 @@
         <div class="card">
             <div class="card-header bg-dark d-flex align-items-center justify-content-between">
                 <h4 class="mb-0 text-white"><i class="ti ti-key me-2"></i>Solicitações de Tokens (Acesso Desktop)</h4>
+                <div class="btn-group btn-group-sm" role="group" aria-label="Visualização">
+                    <button type="button" class="btn btn-outline-light btn-view-table" title="Visualização em Tabela">
+                        <i class="ti ti-list"></i>
+                    </button>
+                    <button type="button" class="btn btn-outline-light btn-view-cards" title="Visualização em Cards">
+                        <i class="ti ti-layout-grid"></i>
+                    </button>
+                </div>
             </div>
             
             <div class="card-body p-0">
@@ -19,7 +27,7 @@
                     </div>
                 @else
                     <!-- Visualização Desktop -->
-                    <div class="table-responsive d-none d-md-block">
+                    <div class="table-responsive view-table">
                         <table class="table table-hover mb-0">
                             <thead class="table-light">
                                 <tr>
@@ -91,7 +99,7 @@
                     </div>
 
                     <!-- Visualização Mobile -->
-                    <div class="d-md-none p-3">
+                    <div class="view-cards p-3">
                         @foreach($solicitacoes as $solicitacao)
                             <div class="card mb-3 border border-light-subtle shadow-sm rounded">
                                 <div class="card-body p-3">

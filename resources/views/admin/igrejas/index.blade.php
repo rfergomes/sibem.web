@@ -8,11 +8,21 @@
         <div class="card">
             <div class="card-header bg-dark d-flex align-items-center justify-content-between">
                 <h4 class="mb-0 text-white"><i class="ti ti-building-community me-2"></i>Igrejas Cadastradas (CCB)</h4>
-                @if(Auth::user()->isAdminSistema() || Auth::user()->isAdminRegional() || Auth::user()->isAdminLocal())
-                    <a href="{{ route('admin.igrejas.create') }}" class="btn btn-outline-info btn-sm d-flex align-items-center">
-                        <i class="ti ti-plus me-1"></i> Nova Igreja
-                    </a>
-                @endif
+                <div class="d-flex align-items-center gap-2">
+                    <div class="btn-group btn-group-sm me-2" role="group" aria-label="Visualização">
+                        <button type="button" class="btn btn-outline-light btn-view-table" title="Visualização em Tabela">
+                            <i class="ti ti-list"></i>
+                        </button>
+                        <button type="button" class="btn btn-outline-light btn-view-cards" title="Visualização em Cards">
+                            <i class="ti ti-layout-grid"></i>
+                        </button>
+                    </div>
+                    @if(Auth::user()->isAdminSistema() || Auth::user()->isAdminRegional() || Auth::user()->isAdminLocal())
+                        <a href="{{ route('admin.igrejas.create') }}" class="btn btn-outline-info btn-sm d-flex align-items-center">
+                            <i class="ti ti-plus me-1"></i> Nova Igreja
+                        </a>
+                    @endif
+                </div>
             </div>
             
             <div class="card-body">
@@ -57,8 +67,8 @@
                         <i class="ti ti-building-community text-muted" style="font-size: 48px;"></i>
                         <h5 class="mt-3">Nenhuma igreja cadastrada ou encontrada</h5>
                     </div>
-                @else
-                    <div class="table-responsive">
+                    <!-- Visualização Desktop -->
+                    <div class="table-responsive view-table">
                         <table class="table table-sm table-hover align-middle mb-0">
                             <thead class="table-light">
                                 <tr>
@@ -104,6 +114,44 @@
                                 @endforeach
                             </tbody>
                         </table>
+                    </div>
+
+                    <!-- Visualização Mobile -->
+                    <div class="view-cards py-2">
+                        @foreach($igrejas as $igreja)
+                            <div class="card mb-3 border border-light-subtle shadow-sm rounded">
+                                <div class="card-body p-3">
+                                    <div class="d-flex justify-content-between align-items-start mb-2">
+                                        <h5 class="card-title fw-bold mb-0 text-primary">{{ $igreja->igreja }}</h5>
+                                        <span class="badge bg-light-info text-info">SIGA: {{ $igreja->cod_siga }}</span>
+                                    </div>
+                                    
+                                    <div class="mb-3 small text-dark">
+                                        <div class="mb-1"><i class="ti ti-building-community text-muted me-1"></i><strong>Tipo:</strong> {{ $igreja->tipoImovel->nome ?? 'N/D' }} | Setor {{ $igreja->cod_setor ?? 'N/A' }}</div>
+                                        <div class="mb-1"><i class="ti ti-map-pin text-muted me-1"></i><strong>Cidade:</strong> {{ $igreja->cidade ?? 'N/A' }} / {{ $igreja->uf ?? 'N/A' }}</div>
+                                        <div class="mb-1"><i class="ti ti-building text-muted me-1"></i><strong>Administração Local:</strong> {{ $igreja->local->adm_local ?? 'N/A' }}</div>
+                                    </div>
+
+                                    <div class="border-top pt-2 mt-2 d-flex justify-content-end gap-1">
+                                        <a href="{{ route('admin.igrejas.show', [$igreja->id, 'redirect_url' => request()->fullUrl()]) }}" class="btn btn-sm btn-light-info" title="Ver Detalhes">
+                                            <i class="ti ti-eye me-1"></i> Detalhes
+                                        </a>
+                                        @if(Auth::user()->isAdminSistema() || Auth::user()->isAdminRegional() || Auth::user()->isAdminLocal())
+                                            <a href="{{ route('admin.igrejas.edit', [$igreja->id, 'redirect_url' => request()->fullUrl()]) }}" class="btn btn-sm btn-light-primary" title="Editar Igreja">
+                                                <i class="ti ti-edit me-1"></i> Editar
+                                            </a>
+                                            <form action="{{ route('admin.igrejas.destroy', $igreja->id) }}" method="POST" class="d-inline-block delete-igreja-form">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit" class="btn btn-sm btn-light-danger" title="Excluir Igreja">
+                                                    <i class="ti ti-trash me-1"></i> Excluir
+                                                </button>
+                                            </form>
+                                        @endif
+                                    </div>
+                                </div>
+                            </div>
+                        @endforeach
                     </div>
 
                     <div class="card-footer d-flex justify-content-end border-top-0 bg-transparent">

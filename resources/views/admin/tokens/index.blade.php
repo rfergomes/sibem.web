@@ -9,9 +9,19 @@
         <div class="card">
             <div class="card-header bg-dark d-flex align-items-center justify-content-between">
                 <h4 class="mb-0 text-white"><i class="ti ti-list me-2"></i>Tokens Desktop Ativos</h4>
-                <button type="button" class="btn btn-outline-info" data-bs-toggle="modal" data-bs-target="#gerarTokenModal">
-                    <i class="ti ti-plus me-1"></i> Gerar Novo Token
-                </button>
+                <div class="d-flex align-items-center gap-2">
+                    <div class="btn-group btn-group-sm me-2" role="group" aria-label="Visualização">
+                        <button type="button" class="btn btn-outline-light btn-view-table" title="Visualização em Tabela">
+                            <i class="ti ti-list"></i>
+                        </button>
+                        <button type="button" class="btn btn-outline-light btn-view-cards" title="Visualização em Cards">
+                            <i class="ti ti-layout-grid"></i>
+                        </button>
+                    </div>
+                    <button type="button" class="btn btn-outline-info btn-sm d-flex align-items-center" data-bs-toggle="modal" data-bs-target="#gerarTokenModal">
+                        <i class="ti ti-plus me-1"></i> Gerar Novo Token
+                    </button>
+                </div>
             </div>
             
             <div class="card-body">
@@ -36,7 +46,7 @@
                     </div>
                 @else
                     <!-- Visualização Desktop -->
-                    <div class="table-responsive d-none d-md-block">
+                    <div class="table-responsive view-table">
                         <table class="table table-hover align-middle mb-0">
                             <thead class="table-light">
                                 <tr>
@@ -99,7 +109,7 @@
                     </div>
 
                     <!-- Visualização Mobile -->
-                    <div class="d-md-none py-2">
+                    <div class="view-cards py-2">
                         @foreach($tokens as $token)
                             <div class="card mb-3 border border-light-subtle shadow-sm rounded">
                                 <div class="card-body p-3">

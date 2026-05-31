@@ -81,6 +81,14 @@
         <div class="card h-100">
             <div class="card-header bg-light d-flex justify-content-between align-items-center">
                 <h5 class="mb-0"><i class="ti ti-list me-2"></i>Registros de Inventários</h5>
+                <div class="btn-group btn-group-sm" role="group" aria-label="Visualização">
+                    <button type="button" class="btn btn-outline-secondary btn-view-table" title="Visualização em Tabela">
+                        <i class="ti ti-list"></i>
+                    </button>
+                    <button type="button" class="btn btn-outline-secondary btn-view-cards" title="Visualização em Cards">
+                        <i class="ti ti-layout-grid"></i>
+                    </button>
+                </div>
             </div>
             <div class="card-body p-0">
                 @if($inventarios->isEmpty())
@@ -91,7 +99,7 @@
                     </div>
                 @else
                     <!-- Visualização Desktop -->
-                    <div class="table-responsive d-none d-md-block">
+                    <div class="table-responsive view-table">
                         <table class="table table-hover align-middle mb-0">
                             <thead class="table-light">
                                 <tr>
@@ -130,7 +138,7 @@
                     </div>
 
                     <!-- Visualização Mobile -->
-                    <div class="d-md-none py-2 px-3">
+                    <div class="view-cards py-2 px-3">
                         @foreach($inventarios as $inv)
                             <div class="card mb-3 border border-light-subtle shadow-sm rounded">
                                 <div class="card-body p-3">

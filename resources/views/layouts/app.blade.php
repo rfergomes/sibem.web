@@ -25,6 +25,17 @@
     <!-- SweetAlert2 -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
     
+    <script>
+        // Apply layout preference immediately to prevent flickering
+        (function() {
+            const pref = localStorage.getItem('sibem-layout-pref') || 'table';
+            document.documentElement.classList.add('layout-pref-' + pref);
+            document.addEventListener('DOMContentLoaded', function() {
+                document.body.classList.add('layout-pref-' + pref);
+            });
+        })();
+    </script>
+    
     @yield('styles')
 </head>
 
@@ -422,6 +433,47 @@
         layout_sidebar_change('dark');
         layout_header_change('dark');
         preset_change("preset-10");
+
+        // Layout View Switcher (Table vs Cards)
+        document.addEventListener('DOMContentLoaded', function () {
+            const btnTable = document.querySelectorAll('.btn-view-table');
+            const btnCards = document.querySelectorAll('.btn-view-cards');
+            
+            function updateActiveButtons(pref) {
+                if (pref === 'cards') {
+                    btnTable.forEach(b => b.classList.remove('active'));
+                    btnCards.forEach(b => b.classList.add('active'));
+                } else {
+                    btnTable.forEach(b => b.classList.add('active'));
+                    btnCards.forEach(b => b.classList.remove('active'));
+                }
+            }
+
+            const currentPref = localStorage.getItem('sibem-layout-pref') || 'table';
+            updateActiveButtons(currentPref);
+
+            btnTable.forEach(btn => {
+                btn.addEventListener('click', function() {
+                    document.body.classList.remove('layout-pref-cards');
+                    document.body.classList.add('layout-pref-table');
+                    document.documentElement.classList.remove('layout-pref-cards');
+                    document.documentElement.classList.add('layout-pref-table');
+                    localStorage.setItem('sibem-layout-pref', 'table');
+                    updateActiveButtons('table');
+                });
+            });
+
+            btnCards.forEach(btn => {
+                btn.addEventListener('click', function() {
+                    document.body.classList.remove('layout-pref-table');
+                    document.body.classList.add('layout-pref-cards');
+                    document.documentElement.classList.remove('layout-pref-table');
+                    document.documentElement.classList.add('layout-pref-cards');
+                    localStorage.setItem('sibem-layout-pref', 'cards');
+                    updateActiveButtons('cards');
+                });
+            });
+        });
     </script>
     
     <!-- Modal Sobre o Projeto -->
