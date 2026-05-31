@@ -35,7 +35,8 @@
                         <h5 class="mt-3">Nenhum token ativo cadastrado ou encontrado</h5>
                     </div>
                 @else
-                    <div class="table-responsive">
+                    <!-- Visualização Desktop -->
+                    <div class="table-responsive d-none d-md-block">
                         <table class="table table-hover align-middle mb-0">
                             <thead class="table-light">
                                 <tr>
@@ -95,6 +96,64 @@
                                 @endforeach
                             </tbody>
                         </table>
+                    </div>
+
+                    <!-- Visualização Mobile -->
+                    <div class="d-md-none py-2">
+                        @foreach($tokens as $token)
+                            <div class="card mb-3 border border-light-subtle shadow-sm rounded">
+                                <div class="card-body p-3">
+                                    <div class="d-flex justify-content-between align-items-start mb-2">
+                                        <h5 class="card-title fw-bold mb-0 text-dark">{{ $token->user->name ?? 'N/A' }}</h5>
+                                        <small class="text-muted"><i class="ti ti-calendar"></i> {{ $token->created_at ? $token->created_at->format('d/m/Y') : 'N/A' }}</small>
+                                    </div>
+                                    
+                                    <div class="mb-3 small text-dark">
+                                        <div class="mb-1"><i class="ti ti-mail text-muted me-1"></i>{{ $token->user->email ?? 'N/A' }}</div>
+                                        <div class="mb-1"><i class="ti ti-building text-muted me-1"></i><strong>Local:</strong> {{ $token->local->nome ?? 'Sem Localidade' }}</div>
+                                        <div class="mb-1"><i class="ti ti-device-desktop text-muted me-1"></i><strong>Máquina:</strong> {{ $token->dispositivo }}</div>
+                                        <div class="mt-2 bg-light p-2 rounded text-center">
+                                            <code class="text-primary fw-bold" style="font-size: 14px;"><i class="ti ti-key me-1"></i>{{ $token->token }}</code>
+                                        </div>
+                                    </div>
+
+                                    <div class="border-top pt-2 mt-2 d-flex justify-content-end gap-1">
+                                        @if($token->user && $token->user->email)
+                                            <form action="{{ route('admin.tokens.send-email', $token->id) }}" method="POST" class="d-inline-block">
+                                                @csrf
+                                                <button type="submit" class="btn btn-sm btn-light-primary" title="Enviar por E-mail">
+                                                    <i class="ti ti-mail me-1"></i> E-mail
+                                                </button>
+                                            </form>
+                                        @endif
+
+                                        @if($token->user && $token->user->telefone)
+                                            @php
+                                                $telefoneLimpo = preg_replace('/\D/', '', $token->user->telefone);
+                                                if (strlen($telefoneLimpo) > 0 && !str_starts_with($telefoneLimpo, '55') && strlen($telefoneLimpo) <= 11) {
+                                                    $telefoneLimpo = '55' . $telefoneLimpo;
+                                                }
+                                                $msg = "A Paz de Deus!\nSegue token para acesso ao sistema de inventários SIBEM CCB\n\n" . $token->token;
+                                                $msgUrl = rawurlencode($msg);
+                                            @endphp
+                                            @if(strlen($telefoneLimpo) > 0)
+                                                <a href="https://wa.me/{{ $telefoneLimpo }}?text={{ $msgUrl }}" target="_blank" class="btn btn-sm btn-light-success" title="Enviar por WhatsApp">
+                                                    <i class="fab fa-whatsapp me-1"></i> WhatsApp
+                                                </a>
+                                            @endif
+                                        @endif
+
+                                        <form action="{{ route('admin.tokens.destroy', $token->id) }}" method="POST" class="d-inline-block revoke-token-form">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit" class="btn btn-sm btn-light-danger" title="Revogar Token">
+                                                <i class="ti ti-power me-1"></i> Revogar
+                                            </button>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        @endforeach
                     </div>
 
                     <div class="card-footer d-flex justify-content-end border-top-0 bg-transparent">
@@ -163,6 +222,23 @@
         </div>
     </div>
 </div>
+@section('styles')
+<style>
+    /* Evita que a tabela oculte o dropdown do Choices.js no desktop */
+    @media (min-width: 768px) {
+        .table-responsive {
+            overflow: visible !important;
+        }
+    }
+    
+    /* Z-index para sobrepor menus do Choices.js sobre outros elementos */
+    .choices {
+        z-index: 1050 !important;
+    }
+    .choices__list--dropdown {
+        z-index: 1050 !important;
+    }
+</style>
 @endsection
 
 @section('scripts')

@@ -34,7 +34,8 @@
                         <h5 class="mt-3">Nenhum usuário cadastrado ou encontrado</h5>
                     </div>
                 @else
-                    <div class="table-responsive">
+                    <!-- Visualização Desktop -->
+                    <div class="table-responsive d-none d-md-block">
                         <table class="table table-hover align-middle mb-0">
                             <thead class="table-light">
                                 <tr>
@@ -101,6 +102,66 @@
                                 @endforeach
                             </tbody>
                         </table>
+                    </div>
+
+                    <!-- Visualização Mobile -->
+                    <div class="d-md-none py-2">
+                        @foreach($usuarios as $user)
+                            @php
+                                $badgeClass = match($user->tipo) {
+                                    'admin_sistema' => 'bg-light-danger text-danger',
+                                    'admin_regional' => 'bg-light-primary text-primary',
+                                    'admin_local' => 'bg-light-success text-success',
+                                    'operador' => 'bg-light-info text-info',
+                                    default => 'bg-light-secondary text-secondary'
+                                };
+                                $labelText = match($user->tipo) {
+                                    'admin_sistema' => 'Super Admin',
+                                    'admin_regional' => 'Admin Regional',
+                                    'admin_local' => 'Admin Local',
+                                    'operador' => 'Operador',
+                                    'auditor' => 'Auditor',
+                                    default => $user->tipo
+                                };
+                            @endphp
+                            <div class="card mb-3 border border-light-subtle shadow-sm rounded">
+                                <div class="card-body p-3">
+                                    <div class="d-flex justify-content-between align-items-start mb-2">
+                                        <h5 class="card-title fw-bold mb-0 text-dark">{{ $user->name }}</h5>
+                                        <span class="badge {{ $badgeClass }}">{{ $labelText }}</span>
+                                    </div>
+                                    
+                                    <div class="mb-3 small text-dark">
+                                        @if($user->igreja || $user->cidade)
+                                            <div class="mb-1"><i class="ti ti-map-pin text-muted me-1"></i>{{ $user->igreja ?? 'N/A' }} | {{ $user->cidade ?? 'N/A' }}</div>
+                                        @endif
+                                        <div class="mb-1"><i class="ti ti-mail text-muted me-1"></i>{{ $user->email }}</div>
+                                        @if($user->telefone)
+                                            <div class="mb-1"><i class="ti ti-brand-whatsapp text-muted me-1"></i>{{ $user->telefone }}</div>
+                                        @endif
+                                        <div class="mb-1"><i class="ti ti-building text-muted me-1"></i><strong>Local:</strong> {{ $user->local->nome ?? 'Nenhum' }}</div>
+                                    </div>
+
+                                    <div class="border-top pt-2 mt-2 d-flex justify-content-end gap-1">
+                                        <a href="{{ route('admin.usuarios.show', $user->id) }}" class="btn btn-sm btn-light-info" title="Visualizar Detalhes e Tokens">
+                                            <i class="ti ti-eye me-1"></i> Detalhes
+                                        </a>
+                                        <a href="{{ route('admin.usuarios.edit', $user->id) }}" class="btn btn-sm btn-light-primary" title="Editar Usuário">
+                                            <i class="ti ti-edit me-1"></i> Editar
+                                        </a>
+                                        @if($user->id !== Auth::user()->id)
+                                            <form action="{{ route('admin.usuarios.destroy', $user->id) }}" method="POST" class="d-inline-block delete-user-form">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit" class="btn btn-sm btn-light-danger" title="Excluir Usuário">
+                                                    <i class="ti ti-trash me-1"></i> Excluir
+                                                </button>
+                                            </form>
+                                        @endif
+                                    </div>
+                                </div>
+                            </div>
+                        @endforeach
                     </div>
 
                     <div class="card-footer d-flex justify-content-end border-top-0 bg-transparent">

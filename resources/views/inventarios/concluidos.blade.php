@@ -90,8 +90,9 @@
                         <p class="text-muted text-sm">Altere os filtros acima para pesquisar outros registros.</p>
                     </div>
                 @else
-                    <div class="table-responsive">
-                        <table class="table table-sm table-hover align-middle mb-0">
+                    <!-- Visualização Desktop -->
+                    <div class="table-responsive d-none d-md-block">
+                        <table class="table table-hover align-middle mb-0">
                             <thead class="table-light">
                                 <tr>
                                     <th>Localidade</th>
@@ -126,6 +127,44 @@
                                 @endforeach
                             </tbody>
                         </table>
+                    </div>
+
+                    <!-- Visualização Mobile -->
+                    <div class="d-md-none py-2 px-3">
+                        @foreach($inventarios as $inv)
+                            <div class="card mb-3 border border-light-subtle shadow-sm rounded">
+                                <div class="card-body p-3">
+                                    <div class="d-flex justify-content-between align-items-center mb-2">
+                                        <small class="text-muted fw-bold"><i class="ti ti-calendar"></i> {{ $inv->data ? date('d/m/Y H:i', strtotime($inv->data)) : 'N/A' }}</small>
+                                        
+                                        @if($inv->status === 'aberto')
+                                            <span class="badge bg-light-warning text-warning">Aberto</span>
+                                        @elseif($inv->status === 'fechado')
+                                            <span class="badge bg-light-success text-success">Fechado</span>
+                                        @else
+                                            <span class="badge bg-light-primary text-primary">Auditado</span>
+                                        @endif
+                                    </div>
+                                    <h5 class="card-title fw-bold mb-1 text-dark">{{ $inv->igreja->nome ?? 'Não identificada' }}</h5>
+                                    
+                                    <div class="mb-2 small text-dark">
+                                        @if(isset($inv->igreja->setor))
+                                            <div class="mb-1"><strong>Setor:</strong> {{ $inv->igreja->setor }}</div>
+                                        @endif
+                                        <div class="mb-1"><strong>Código:</strong> <code>{{ $inv->codigo_unico }}</code></div>
+                                    </div>
+
+                                    <div class="border-top pt-2 mt-2 d-flex justify-content-between align-items-center">
+                                        <span class="small text-muted">Status SIGA:</span>
+                                        @if($inv->siga_ok) 
+                                            <span class="badge bg-light-success text-success"><i class="ti ti-check me-1"></i> Atualizado</span>
+                                        @else 
+                                            <span class="badge bg-light-danger text-danger"><i class="ti ti-x me-1"></i> Pendente</span>
+                                        @endif
+                                    </div>
+                                </div>
+                            </div>
+                        @endforeach
                     </div>
                     
                     <div class="card-footer d-flex justify-content-end bg-transparent border-top-0">
