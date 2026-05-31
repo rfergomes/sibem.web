@@ -139,6 +139,7 @@ Route::middleware(['auth', 'tenant'])->group(function () {
     // Agendamentos de Inventários
     Route::resource('agendamentos', AgendamentoController::class)->names('agendamentos');
     Route::get('agendamentos/dados-por-local/{admlc_id}', [AgendamentoController::class, 'getDadosPorLocal'])->name('agendamentos.dados_por_local');
+    Route::get('agendamentos/proximos-confirmados/{admlc_id}', [AgendamentoController::class, 'getProximosConfirmados'])->name('agendamentos.proximos_confirmados');
     Route::put('agendamentos/{id}/reagendar', [AgendamentoController::class, 'reagendar'])->name('agendamentos.reagendar');
     Route::put('agendamentos/{id}/cancelar', [AgendamentoController::class, 'cancelar'])->name('agendamentos.cancelar');
 

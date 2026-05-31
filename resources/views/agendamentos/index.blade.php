@@ -144,6 +144,7 @@
                                                             data-igreja="{{ $a->igreja ? $a->igreja->igreja : '' }}"
                                                             data-igreja-id="{{ $a->igreja_id }}"
                                                             data-admlc-id="{{ $a->admlc_id }}"
+                                                            data-local="{{ $a->local->adm_local ?? 'N/A' }}"
                                                             data-data="{{ date('d/m/Y', strtotime($a->data)) }}"
                                                             data-data-raw="{{ $a->data }}"
                                                             data-horario="{{ substr($a->horario, 0, 5) }}"
@@ -432,9 +433,23 @@
                 </div>
                 
                 <div class="d-flex gap-1" id="buttons-normal-container">
-                    <button type="button" class="btn btn-success text-white" id="btn-copiar-whatsapp">
-                        <i class="ti ti-brand-whatsapp"></i> Enviar WhatsApp
-                    </button>
+                    <div class="dropdown d-inline-block">
+                        <button type="button" class="btn btn-success text-white dropdown-toggle" id="btn-whatsapp-dropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="ti ti-brand-whatsapp"></i> Enviar WhatsApp
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="btn-whatsapp-dropdown">
+                            <li>
+                                <button type="button" class="dropdown-item" id="btn-whatsapp-individual">
+                                    <i class="ti ti-user me-2 text-success"></i> Individual (Resumida)
+                                </button>
+                            </li>
+                            <li>
+                                <button type="button" class="dropdown-item" id="btn-whatsapp-lista">
+                                    <i class="ti ti-list me-2 text-success"></i> Lista de Próximos
+                                </button>
+                            </li>
+                        </ul>
+                    </div>
                     @if(!Auth::user()->isAuditor())
                         <button type="button" class="btn btn-info text-white" id="btn-toggle-editar">
                             <i class="ti ti-edit"></i> Editar Contatos
@@ -611,6 +626,7 @@
                     igreja: props.igreja_nome,
                     igreja_id: props.igreja_id,
                     admlc_id: props.admlc_id,
+                    local_nome: props.local_nome,
                     data: props.data,
                     data_raw: props.data_raw,
                     horario: props.horario,
@@ -642,6 +658,7 @@
                     igreja: ds.igreja,
                     igreja_id: ds.igrejaId,
                     admlc_id: ds.admlcId,
+                    local_nome: ds.local,
                     data: ds.data,
                     data_raw: ds.dataRaw,
                     horario: ds.horario,
@@ -748,8 +765,8 @@
             // Close active containers and show main button layout
             fecharAcoesContainers();
 
-            // Set Whatsapp button logic
-            document.getElementById('btn-copiar-whatsapp').onclick = function() {
+            // Set Whatsapp button logic - Individual (Resumida)
+            document.getElementById('btn-whatsapp-individual').onclick = function() {
                 var tipoHeader = 'AGENDAMENTO';
                 if (data.status === 'Reagendado') {
                     tipoHeader = 'REAGENDAMENTO';
@@ -759,30 +776,22 @@
 
                 var msg = `*🙏 A Paz de Deus!*\n\n` +
                             `*📋✨ ${tipoHeader} DE INVENTÁRIO - CCB*\n\n` +
-                            `🏛️ *Localidade:* ${data.igreja}\n` +
-                            `📅 *Data:* ${data.data}\n` +
-                            `⏰ *Horário:* ${data.horario}h\n\n` +
-
+                            `🏛️ *Comum:* ${data.igreja}\n` +
+                            `📅 *Data/Hora:* ${data.data} às ${data.horario}h\n` +
                             `👨‍💼 *Inventariante:* ${data.responsavel}\n` +
-                            `🤝 *Responsável Local:* ${data.acompanhante || 'Não informado'}\n` +
-                            `📞 *Telefone:* ${data.telefone || 'Não informado'}\n\n` +
-
-                            `📌 *Situação:* ${data.status}\n` +
-                            `🖊️ _Registrado por: ${data.operador}_\n\n`;
+                            `🤝 *Resp. Local:* ${data.acompanhante || 'Não informado'}\n` +
+                            `📞 *Telefone:* ${data.telefone || 'Não informado'}\n` +
+                            `📌 *Status:* ${data.status}\n\n`;
                           
                 if (data.status === 'Cancelado' && data.motivo) {
-                    msg += `❌ *Motivo do Cancelamento:* ${data.motivo}\n\n`;
+                    msg += `❌ *Motivo:* ${data.motivo}\n\n`;
                 }
                 
                 if (data.observacao) {
-                    msg += `📝 *Observações:*\n${data.observacao}\n\n`;
+                    msg += `📝 *Obs:* ${data.observacao}\n\n`;
                 }
                 
-                msg += `Contamos com a colaboração de todos para que o inventário seja realizado em ordem e com tranquilidade.\n\n` +
-                            `📖 “E tudo quanto fizerdes, fazei-o de todo o coração, como ao Senhor.”\n` +
-                            `_Colossenses 3:23_\n\n` +
-                            `✨ Deus abençoe grandemente a todos!\n\n` +
-                            `---\n*SIBEM Web* - _Sistema de Inventário de Bens Móveis_`;
+                msg += `Deus abençoe!`;
 
                 navigator.clipboard.writeText(msg).then(() => {
                     Swal.fire({
@@ -798,6 +807,64 @@
                     var encoded = encodeURIComponent(msg);
                     window.open(`https://api.whatsapp.com/send?text=${encoded}`, '_blank');
                 });
+            };
+
+            // Set Whatsapp button logic - Lista de Próximos
+            document.getElementById('btn-whatsapp-lista').onclick = function() {
+                fetch(`/agendamentos/proximos-confirmados/${data.admlc_id}`)
+                    .then(response => response.json())
+                    .then(resData => {
+                        if (!resData.proximos || resData.proximos.length === 0) {
+                            Swal.fire({
+                                icon: 'info',
+                                title: 'Nenhum agendamento futuro confirmado.',
+                                confirmButtonText: 'OK'
+                            });
+                            return;
+                        }
+
+                        var localName = data.local_nome || 'CCB';
+                        var msg = `*🙏 A Paz de Deus!*\n\n` +
+                                   `*📋✨ CRONOGRAMA DE INVENTÁRIOS*\n` +
+                                   `🏛️ *Administração:* ${localName}\n\n` +
+                                   `📅 *Próximas Visitas Confirmadas:*\n\n`;
+
+                        resData.proximos.forEach(p => {
+                            var dateParts = p.data.split('-');
+                            var formattedDate = dateParts[2] + '/' + dateParts[1] + '/' + dateParts[0];
+                            var formattedTime = p.horario.substring(0, 5);
+                            var igrejaName = p.igreja ? p.igreja.igreja : 'Não identificada';
+
+                            msg += `• *${formattedDate}* às *${formattedTime}h* - *${igrejaName}*\n` +
+                                   `  👨‍💼 Inventariante: ${p.responsavel_nome}\n` +
+                                   `  🤝 Resp. Local: ${p.acompanhante_nome || 'Não informado'}\n\n`;
+                        });
+
+                        msg += `Deus abençoe grandemente!`;
+
+                        navigator.clipboard.writeText(msg).then(() => {
+                            Swal.fire({
+                                toast: true,
+                                position: 'top-end',
+                                icon: 'success',
+                                title: 'Lista copiada para a Área de Transferência!',
+                                showConfirmButton: false,
+                                timer: 2500
+                            });
+
+                            var encoded = encodeURIComponent(msg);
+                            window.open(`https://api.whatsapp.com/send?text=${encoded}`, '_blank');
+                        });
+                    })
+                    .catch(err => {
+                        console.error(err);
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Erro ao carregar a lista de inventários.',
+                            text: 'Por favor, tente novamente.',
+                            confirmButtonText: 'OK'
+                        });
+                    });
             };
 
             // Show the modal

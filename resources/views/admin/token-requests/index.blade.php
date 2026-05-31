@@ -18,7 +18,8 @@
                         <p class="text-muted">Novas solicitações enviadas pelo aplicativo desktop aparecerão aqui.</p>
                     </div>
                 @else
-                    <div class="table-responsive">
+                    <!-- Visualização Desktop -->
+                    <div class="table-responsive d-none d-md-block">
                         <table class="table table-hover mb-0">
                             <thead class="table-light">
                                 <tr>
@@ -88,6 +89,53 @@
                             </tbody>
                         </table>
                     </div>
+
+                    <!-- Visualização Mobile -->
+                    <div class="d-md-none p-3">
+                        @foreach($solicitacoes as $solicitacao)
+                            <div class="card mb-3 border border-light-subtle shadow-sm rounded">
+                                <div class="card-body p-3">
+                                    <div class="d-flex justify-content-between align-items-center mb-2">
+                                        <small class="text-muted fw-bold"><i class="ti ti-calendar"></i> {{ $solicitacao->created_at->format('d/m/Y H:i') }}</small>
+                                        <span class="badge bg-light-warning text-warning">Pendente</span>
+                                    </div>
+                                    <h5 class="card-title fw-bold mb-2 text-primary">{{ $solicitacao->user->name ?? 'Usuário Desconhecido' }}</h5>
+                                    
+                                    <div class="mb-3 small text-dark">
+                                        <div class="mb-1"><i class="ti ti-mail text-muted me-1"></i><strong>E-mail:</strong> {{ $solicitacao->user->email ?? 'N/A' }}</div>
+                                        @if($solicitacao->user && $solicitacao->user->telefone)
+                                            <div class="mb-1"><i class="ti ti-phone text-muted me-1"></i><strong>Tel:</strong> {{ $solicitacao->user->telefone }}</div>
+                                        @endif
+                                        <div class="mb-1"><i class="ti ti-building-community text-muted me-1"></i><strong>Localidade:</strong> {{ $solicitacao->user->igreja ?? 'N/A' }}@if($solicitacao->user && $solicitacao->user->cidade) ({{ $solicitacao->user->cidade }})@endif</div>
+                                        <div class="mb-1"><i class="ti ti-device-laptop text-muted me-1"></i><strong>Máquina:</strong> <code>{{ $solicitacao->dispositivo }}</code></div>
+                                    </div>
+
+                                    <div class="border-top pt-3 mt-2">
+                                        <form action="{{ route('admin.token-requests.approve', $solicitacao->id) }}" method="POST" class="approve-form mb-2">
+                                            @csrf
+                                            <div class="d-flex flex-column gap-2">
+                                                <select name="admlc_id" class="form-select form-select-sm" required>
+                                                    <option value="">Associar Administração...</option>
+                                                    @foreach($locais as $local)
+                                                        <option value="{{ $local->admlc_id }}">{{ $local->nome }}</option>
+                                                    @endforeach
+                                                </select>
+                                                <button type="submit" class="btn btn-sm btn-secondary w-100 d-flex align-items-center justify-content-center">
+                                                    <i class="ti ti-check me-1"></i> Aprovar Solicitação
+                                                </button>
+                                            </div>
+                                        </form>
+                                        <form action="{{ route('admin.token-requests.reject', $solicitacao->id) }}" method="POST" class="reject-form mt-2">
+                                            @csrf
+                                            <button type="submit" class="btn btn-sm btn-outline-danger w-100 d-flex align-items-center justify-content-center">
+                                                <i class="ti ti-x me-1"></i> Rejeitar Solicitação
+                                            </button>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        @endforeach
+                    </div>
                     
                     <div class="card-footer d-flex justify-content-end border-top-0 bg-transparent">
                         {{ $solicitacoes->links() }}
@@ -97,6 +145,24 @@
         </div>
     </div>
 </div>
+
+@section('styles')
+<style>
+    /* Evita que a tabela oculte o dropdown do Choices.js no desktop */
+    @media (min-width: 768px) {
+        .table-responsive {
+            overflow: visible !important;
+        }
+    }
+    
+    /* Z-index para sobrepor menus do Choices.js sobre outros elementos */
+    .choices {
+        z-index: 1050 !important;
+    }
+    .choices__list--dropdown {
+        z-index: 1050 !important;
+    }
+</style>
 @endsection
 
 @section('scripts')

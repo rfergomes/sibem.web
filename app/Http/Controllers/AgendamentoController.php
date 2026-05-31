@@ -120,6 +120,7 @@ class AgendamentoController extends Controller
                         'responsavel_telefone' => $a->responsavel_telefone,
                         'acompanhante_nome' => $a->acompanhante_nome,
                         'admlc_id' => $a->admlc_id,
+                        'local_nome' => $a->local ? $a->local->adm_local : 'N/A',
                         'status' => $a->status,
                         'observacao' => $a->observacao,
                         'motivo_cancelamento' => $a->motivo_cancelamento,
@@ -309,6 +310,41 @@ class AgendamentoController extends Controller
         return response()->json([
             'igrejas' => $igrejas,
             'usuarios' => $usuarios
+        ]);
+    }
+
+    /**
+     * Get next confirmed schedules for a specific local administration.
+     */
+    public function getProximosConfirmados($admlcId)
+    {
+        $user = Auth::user();
+        
+        // Scope security check
+        if (!$user->isAdminSistema()) {
+            if ($user->isAdminRegional()) {
+                $local = Local::find($admlcId);
+                if (!$local || $local->admrg_id != $user->regional_id) {
+                    return response()->json([], 403);
+                }
+            } else {
+                $activeLocalId = session()->get('active_admlc_id') ?? $user->admlc_id;
+                if ($admlcId != $activeLocalId) {
+                    return response()->json([], 403);
+                }
+            }
+        }
+
+        $proximos = Agendamento::with('igreja')
+            ->where('admlc_id', $admlcId)
+            ->where('status', 'Confirmado')
+            ->where('data', '>=', date('Y-m-d'))
+            ->orderBy('data', 'asc')
+            ->orderBy('horario', 'asc')
+            ->get();
+
+        return response()->json([
+            'proximos' => $proximos
         ]);
     }
 }
