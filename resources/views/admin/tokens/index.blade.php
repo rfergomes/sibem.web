@@ -131,8 +131,8 @@
                                         @if($token->user && $token->user->email)
                                             <form action="{{ route('admin.tokens.send-email', $token->id) }}" method="POST" class="d-inline-block">
                                                 @csrf
-                                                <button type="submit" class="btn btn-sm btn-light-primary" title="Enviar por E-mail">
-                                                    <i class="ti ti-mail me-1"></i>
+                                                <button type="submit" class="btn btn-sm btn-icon btn-light-primary" title="Enviar por E-mail">
+                                                    <i class="ti ti-mail"></i>
                                                 </button>
                                             </form>
                                         @endif
@@ -147,8 +147,8 @@
                                                 $msgUrl = rawurlencode($msg);
                                             @endphp
                                             @if(strlen($telefoneLimpo) > 0)
-                                                <a href="https://wa.me/{{ $telefoneLimpo }}?text={{ $msgUrl }}" target="_blank" class="btn btn-sm btn-light-success" title="Enviar por WhatsApp">
-                                                    <i class="fab fa-whatsapp me-1"></i>
+                                                <a href="https://wa.me/{{ $telefoneLimpo }}?text={{ $msgUrl }}" target="_blank" class="btn btn-sm btn-icon btn-light-success" title="Enviar por WhatsApp">
+                                                    <i class="fab fa-whatsapp"></i>
                                                 </a>
                                             @endif
                                         @endif
@@ -156,8 +156,8 @@
                                         <form action="{{ route('admin.tokens.destroy', $token->id) }}" method="POST" class="d-inline-block revoke-token-form">
                                             @csrf
                                             @method('DELETE')
-                                            <button type="submit" class="btn btn-sm btn-light-danger" title="Revogar Token">
-                                                <i class="ti ti-power me-1"></i>
+                                            <button type="submit" class="btn btn-sm btn-icon btn-light-danger" title="Revogar Token">
+                                                <i class="ti ti-power"></i>
                                             </button>
                                         </form>
                                     </div>

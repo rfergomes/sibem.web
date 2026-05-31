@@ -210,12 +210,12 @@
                                         <!-- Card Footer Actions -->
                                         <div class="card-footer bg-light border-top-0 d-flex justify-content-between align-items-center p-3">
                                             <div class="d-flex gap-1">
-                                                <button type="button" class="btn btn-sm btn-outline-secondary px-3 py-1 btn-test-connection" data-id="{{ $servidor->id }}">
-                                                    <i class="ti ti-refresh me-1"></i> Testar
+                                                <button type="button" class="btn btn-sm btn-icon btn-light-secondary btn-test-connection" data-id="{{ $servidor->id }}" title="Testar Conectividade">
+                                                    <i class="ti ti-refresh"></i>
                                                 </button>
                                                 
-                                                <button type="button" class="btn btn-sm btn-outline-info px-3 py-1 btn-provision {{ $servidor->provisionado ? 'd-none' : '' }}" data-id="{{ $servidor->id }}" id="card-provision-btn-{{ $servidor->id }}">
-                                                    <i class="ti ti-database-import me-1"></i> Provisionar
+                                                <button type="button" class="btn btn-sm btn-icon btn-light-info btn-provision {{ $servidor->provisionado ? 'd-none' : '' }}" data-id="{{ $servidor->id }}" id="card-provision-btn-{{ $servidor->id }}" title="Provisionar Tabelas">
+                                                    <i class="ti ti-database-import"></i>
                                                 </button>
                                             </div>
                                             

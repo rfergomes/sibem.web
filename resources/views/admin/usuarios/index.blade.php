@@ -153,18 +153,18 @@
                                     </div>
 
                                     <div class="border-top pt-2 mt-2 d-flex justify-content-end gap-1">
-                                        <a href="{{ route('admin.usuarios.show', $user->id) }}" class="btn btn-sm btn-light-info" title="Visualizar Detalhes e Tokens">
-                                            <i class="ti ti-eye me-1"></i> Detalhes
+                                        <a href="{{ route('admin.usuarios.show', $user->id) }}" class="btn btn-sm btn-icon btn-light-info" title="Visualizar Detalhes e Tokens">
+                                            <i class="ti ti-eye"></i>
                                         </a>
-                                        <a href="{{ route('admin.usuarios.edit', $user->id) }}" class="btn btn-sm btn-light-primary" title="Editar Usuário">
-                                            <i class="ti ti-edit me-1"></i> Editar
+                                        <a href="{{ route('admin.usuarios.edit', $user->id) }}" class="btn btn-sm btn-icon btn-light-primary" title="Editar Usuário">
+                                            <i class="ti ti-edit"></i>
                                         </a>
                                         @if($user->id !== Auth::user()->id)
                                             <form action="{{ route('admin.usuarios.destroy', $user->id) }}" method="POST" class="d-inline-block delete-user-form">
                                                 @csrf
                                                 @method('DELETE')
-                                                <button type="submit" class="btn btn-sm btn-light-danger" title="Excluir Usuário">
-                                                    <i class="ti ti-trash me-1"></i> Excluir
+                                                <button type="submit" class="btn btn-sm btn-icon btn-light-danger" title="Excluir Usuário">
+                                                    <i class="ti ti-trash"></i>
                                                 </button>
                                             </form>
                                         @endif

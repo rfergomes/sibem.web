@@ -106,17 +106,17 @@
                                     </div>
 
                                     <div class="border-top pt-2 mt-2 d-flex justify-content-end gap-1">
-                                        <a href="{{ route('admin.regionais.show', $reg->id) }}" class="btn btn-sm btn-light-info" title="Ver Administrações Locais">
-                                            <i class="ti ti-eye me-1"></i> Localidades
+                                        <a href="{{ route('admin.regionais.show', $reg->id) }}" class="btn btn-sm btn-icon btn-light-info" title="Ver Administrações Locais">
+                                            <i class="ti ti-eye"></i>
                                         </a>
-                                        <a href="{{ route('admin.regionais.edit', $reg->id) }}" class="btn btn-sm btn-light-primary" title="Editar Regional">
-                                            <i class="ti ti-edit me-1"></i> Editar
+                                        <a href="{{ route('admin.regionais.edit', $reg->id) }}" class="btn btn-sm btn-icon btn-light-primary" title="Editar Regional">
+                                            <i class="ti ti-edit"></i>
                                         </a>
                                         <form action="{{ route('admin.regionais.destroy', $reg->id) }}" method="POST" class="d-inline-block delete-regional-form">
                                             @csrf
                                             @method('DELETE')
-                                            <button type="submit" class="btn btn-sm btn-light-danger" title="Excluir Regional">
-                                                <i class="ti ti-trash me-1"></i> Excluir
+                                            <button type="submit" class="btn btn-sm btn-icon btn-light-danger" title="Excluir Regional">
+                                                <i class="ti ti-trash"></i>
                                             </button>
                                         </form>
                                     </div>

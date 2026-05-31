@@ -107,18 +107,18 @@
                                     </div>
 
                                     <div class="border-top pt-2 mt-2 d-flex justify-content-end gap-1">
-                                        <a href="{{ route('admin.tipos-imovel.show', $tipo->id) }}" class="btn btn-sm btn-light-info" title="Ver Detalhes e Igrejas">
-                                            <i class="ti ti-eye me-1"></i> Detalhes
+                                        <a href="{{ route('admin.tipos-imovel.show', $tipo->id) }}" class="btn btn-sm btn-icon btn-light-info" title="Ver Detalhes e Igrejas">
+                                            <i class="ti ti-eye"></i>
                                         </a>
                                         @if(Auth::user()->isAdminSistema())
-                                            <a href="{{ route('admin.tipos-imovel.edit', $tipo->id) }}" class="btn btn-sm btn-light-primary" title="Editar Tipo">
-                                                <i class="ti ti-edit me-1"></i> Editar
+                                            <a href="{{ route('admin.tipos-imovel.edit', $tipo->id) }}" class="btn btn-sm btn-icon btn-light-primary" title="Editar Tipo">
+                                                <i class="ti ti-edit"></i>
                                             </a>
                                             <form action="{{ route('admin.tipos-imovel.destroy', $tipo->id) }}" method="POST" class="d-inline-block delete-type-form">
                                                 @csrf
                                                 @method('DELETE')
-                                                <button type="submit" class="btn btn-sm btn-light-danger" title="Excluir Tipo">
-                                                    <i class="ti ti-trash me-1"></i> Excluir
+                                                <button type="submit" class="btn btn-sm btn-icon btn-light-danger" title="Excluir Tipo">
+                                                    <i class="ti ti-trash"></i>
                                                 </button>
                                             </form>
                                         @endif
