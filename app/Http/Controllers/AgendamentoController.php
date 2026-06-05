@@ -265,6 +265,25 @@ class AgendamentoController extends Controller
     }
 
     /**
+     * Confirm a schedule.
+     */
+    public function confirmar($id)
+    {
+        $agendamento = Agendamento::findOrFail($id);
+        $this->checkAccess('edit', $agendamento->admlc_id);
+
+        $agendamento->status = 'Confirmado';
+        
+        $timestamp = date('d/m/Y H:i');
+        $user = Auth::user()->name;
+        $log = "\n[{$timestamp} - Confirmado por {$user}]";
+        $agendamento->observacao = $agendamento->observacao . $log;
+        $agendamento->save();
+
+        return redirect()->route('agendamentos.index')->with('success', 'Agendamento confirmado com sucesso.');
+    }
+
+    /**
      * Remove the specified resource from storage.
      */
     public function destroy($id)

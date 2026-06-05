@@ -142,6 +142,7 @@ Route::middleware(['auth', 'tenant'])->group(function () {
     Route::get('agendamentos/proximos-confirmados/{admlc_id}', [AgendamentoController::class, 'getProximosConfirmados'])->name('agendamentos.proximos_confirmados');
     Route::put('agendamentos/{id}/reagendar', [AgendamentoController::class, 'reagendar'])->name('agendamentos.reagendar');
     Route::put('agendamentos/{id}/cancelar', [AgendamentoController::class, 'cancelar'])->name('agendamentos.cancelar');
+    Route::put('agendamentos/{id}/confirmar', [AgendamentoController::class, 'confirmar'])->name('agendamentos.confirmar');
 
     // Dynamic Tenant Chaveamento (Selection)
     Route::post('/tenant/select', [TenantSelectionController::class, 'select'])->name('tenant.select');

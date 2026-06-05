@@ -139,6 +139,15 @@
                                                 </td>
                                                 <td class="text-center">
                                                     <div class="d-flex justify-content-center gap-1">
+                                                        @if(!Auth::user()->isAuditor() && $a->status !== 'Confirmado')
+                                                            <form action="{{ route('agendamentos.confirmar', $a->id) }}" method="POST" class="d-inline form-confirmar-rapido">
+                                                                @csrf
+                                                                @method('PUT')
+                                                                <button type="submit" class="btn btn-sm btn-icon btn-light-success" title="Confirmar Agendamento">
+                                                                    <i class="ti ti-check"></i>
+                                                                </button>
+                                                            </form>
+                                                        @endif
                                                         <button type="button" class="btn btn-sm btn-icon btn-light-info btn-ver-detalhes" 
                                                             data-id="{{ $a->id }}"
                                                             data-igreja="{{ $a->igreja ? $a->igreja->igreja : '' }}"
@@ -451,6 +460,13 @@
                         </ul>
                     </div>
                     @if(!Auth::user()->isAuditor())
+                        <form action="" method="POST" id="form-confirmar" class="d-inline-block d-none">
+                            @csrf
+                            @method('PUT')
+                            <button type="submit" class="btn btn-success text-white" id="btn-confirmar-agendamento">
+                                <i class="ti ti-check"></i> Confirmar Agenda
+                            </button>
+                        </form>
                         <button type="button" class="btn btn-info text-white" id="btn-toggle-editar">
                             <i class="ti ti-edit"></i> Editar Contatos
                         </button>
@@ -705,6 +721,15 @@
 
             // Set Form Actions targets
             if (!isAuditor) {
+                var formConfirmar = document.getElementById('form-confirmar');
+                if (formConfirmar) {
+                    formConfirmar.action = `/agendamentos/${data.id}/confirmar`;
+                    if (data.status !== 'Confirmado') {
+                        formConfirmar.classList.remove('d-none');
+                    } else {
+                        formConfirmar.classList.add('d-none');
+                    }
+                }
                 document.getElementById('form-reagendar').action = `/agendamentos/${data.id}/reagendar`;
                 document.getElementById('form-cancelar').action = `/agendamentos/${data.id}/cancelar`;
                 document.getElementById('form-editar').action = `/agendamentos/${data.id}`;
@@ -916,6 +941,50 @@
             document.querySelectorAll('.btn-cancelar-acao').forEach(btn => {
                 btn.addEventListener('click', function() {
                     fecharAcoesContainers();
+                });
+            });
+
+            // SweetAlert for Confirm schedule
+            var btnConfirmar = document.getElementById('btn-confirmar-agendamento');
+            var formConfirmar = document.getElementById('form-confirmar');
+            if (btnConfirmar && formConfirmar) {
+                formConfirmar.addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    Swal.fire({
+                        title: 'Confirmar Agendamento?',
+                        text: "Deseja confirmar a visita e alterar o status para Confirmado?",
+                        icon: 'question',
+                        showCancelButton: true,
+                        confirmButtonColor: '#2ecc71',
+                        cancelButtonColor: '#6c757d',
+                        confirmButtonText: 'Sim, confirmar!',
+                        cancelButtonText: 'Voltar'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            formConfirmar.submit();
+                        }
+                    });
+                });
+            }
+
+            // SweetAlert for Quick Confirm from table list
+            document.querySelectorAll('.form-confirmar-rapido').forEach(form => {
+                form.addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    Swal.fire({
+                        title: 'Confirmar Agendamento?',
+                        text: "Deseja confirmar a visita e alterar o status para Confirmado?",
+                        icon: 'question',
+                        showCancelButton: true,
+                        confirmButtonColor: '#2ecc71',
+                        cancelButtonColor: '#6c757d',
+                        confirmButtonText: 'Sim, confirmar!',
+                        cancelButtonText: 'Voltar'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            form.submit();
+                        }
+                    });
                 });
             });
 
