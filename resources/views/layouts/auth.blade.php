@@ -39,7 +39,7 @@
             <div class="auth-sidecontent">
                 <div class="text-start px-3 px-md-5">
                     <a href="/" class="d-block mt-5">
-                        <img src="{{ asset('assets/images/logo-white.svg') }}" alt="logo" class="img-fluid" style="max-height: 50px;">
+                        <img src="{{ asset('assets/images/logo_white.png') }}" alt="logo" class="img-fluid" style="max-height: 60px;">
                     </a>
                     <p class="text-white mt-2 mt-md-4">@yield('sidebar_text', 'SIBEM CCB - Sistema para Inventário de Bens Móveis. Gerenciamento unificado e controle de acesso integrado.')</p>
                 </div>
